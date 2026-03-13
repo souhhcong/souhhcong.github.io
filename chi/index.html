@@ -630,25 +630,59 @@
   /*********************
    * Slideshow background (faint)
    *********************/
-  (function(){
-    var idx = 0;
-    var el = document.getElementById('slideshow');
+(function () {
+  var idx = 0;
+  var el = document.getElementById('slideshow');
 
-    // sanitize / fallback: if array empty, use subtle gradient
-    if (!slideshowImages || slideshowImages.length === 0) {
-      el.style.background = 'linear-gradient(135deg,#111,#444)';
-      return;
-    }
-    function setBg(i) {
-      el.style.backgroundImage = 'url("' + slideshowImages[i] + '")';
-    }
-    setBg(idx);
-    setInterval(function(){
-      idx = (idx + 1) % slideshowImages.length;
-      // fade via toggling background-image — CSS transition handles smoothness
-      setBg(idx);
-    }, 8000);
-  })();
+  if (!slideshowImages || slideshowImages.length === 0) {
+    el.style.background = 'linear-gradient(135deg,#111,#444)';
+    return;
+  }
+
+  // Two layers sit stacked; we crossfade between them
+  el.style.position = 'relative';
+  el.style.overflow = 'hidden';
+
+  function makeLayer(src) {
+    var d = document.createElement('div');
+    d.style.cssText = [
+      'position:absolute', 'inset:0',
+      'background-size:cover', 'background-position:center',
+      'background-image:url("' + src + '")',
+      'transition:opacity 1s ease-in-out',
+    ].join(';');
+    el.appendChild(d);
+    return d;
+  }
+
+  var current = makeLayer(slideshowImages[0]);
+  current.style.opacity = '1';
+
+  var next = makeLayer(slideshowImages[1 % slideshowImages.length]);
+  next.style.opacity = '0';
+
+  setInterval(function () {
+    idx = (idx + 1) % slideshowImages.length;
+    var incoming = (idx + 1) % slideshowImages.length;
+
+    // Pre-load the image that will be needed after this one
+    next.style.backgroundImage = 'url("' + slideshowImages[idx] + '")';
+
+    // Crossfade: bring next to front and fade it in, fade current out
+    next.style.zIndex   = '2';
+    current.style.zIndex = '1';
+    next.style.opacity  = '1';
+    current.style.opacity = '0';
+
+    // Swap references so the roles flip next time
+    var tmp = current;
+    current = next;
+    next = tmp;
+
+    // Quietly update the hidden layer with the upcoming image
+    next.style.backgroundImage = 'url("' + slideshowImages[incoming] + '")';
+  }, 8000);
+})();
 
   /*********************
    * Accessibility: keyboard support for checking puzzle
