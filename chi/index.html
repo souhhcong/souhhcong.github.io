@@ -131,13 +131,13 @@
     gap: 0;
     font-size: 0.8rem;
     text-align: center;
-    margin-left: 3.4em;
+    margin-left: 4em;
   }
   
   .puzzle .clues-left {
     display: grid;
     grid-template-rows: repeat(var(--rows), 28px);
-    gap: 2px;
+    gap: 3px;
     font-size: 0.8rem;
     text-align: right;
     padding-right: 6px;
@@ -557,7 +557,7 @@
       solvedSequence();
     } else {
       var status = document.getElementById('status');
-      status.innerText = "Not correct yet — keep trying!";
+      status.innerText = "Chưa đúng nha!";
       setTimeout(function(){ status.innerText = ""; }, 2500);
     }
   });
@@ -573,7 +573,7 @@
       state[r][c] = solution[r][c] ? 1 : 0;
       updateCell(gridTable.rows[r].cells[c], state[r][c]);
     }
-    document.getElementById('status').innerText = "Revealed (cheated).";
+    document.getElementById('status').innerText = "Hiện luôn.";
     setTimeout(function(){ solvedSequence(); }, 500);
   });
 
