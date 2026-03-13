@@ -507,7 +507,7 @@
   for (var r=0;r<ROWS;r++) {
     var div = document.createElement('div');
     div.style.padding = '4px 6px';
-    div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join(' ');
+    div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join('   ');
     cluesLeft.appendChild(div);
   }
 
