@@ -21,6 +21,8 @@
   /* faint running background (slideshow) */
   #slideshow {
     height: 100vh;
+    inset: 0;
+    z-index: -1;
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -662,28 +664,33 @@
   var next = makeLayer(slideshowImages[1 % slideshowImages.length]);
   next.style.opacity = '0';
 
-  setInterval(function () {
-    idx = (idx + 1) % slideshowImages.length;
-    var incoming = (idx + 1) % slideshowImages.length;
+setInterval(function () {
+  idx = (idx + 1) % slideshowImages.length;
 
-    // Pre-load the image that will be needed after this one
-    next.style.backgroundImage = 'url("' + slideshowImages[idx] + '")';
+  // Load current image into the hidden layer, then crossfade
+  next.style.backgroundImage = 'url("' + slideshowImages[idx] + '")';
 
-    // Crossfade: bring next to front and fade it in, fade current out
-    next.style.zIndex   = '2';
-    current.style.zIndex = '1';
-    next.style.opacity  = '1';
-    current.style.opacity = '0';
+  // Small delay to let the browser paint the new background before fading in
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      next.style.zIndex    = '2';
+      current.style.zIndex = '1';
+      next.style.opacity   = '1';
+      current.style.opacity = '0';
 
-    // Swap references so the roles flip next time
-    var tmp = current;
-    current = next;
-    next = tmp;
+      var tmp = current;
+      current = next;
+      next = tmp;
 
-    // Quietly update the hidden layer with the upcoming image
-    next.style.backgroundImage = 'url("' + slideshowImages[incoming] + '")';
-  }, 8000);
-})();
+      // Now safely pre-load the NEXT image into the hidden layer
+      // after the transition duration (1s) has elapsed
+      var preloadIdx = (idx + 1) % slideshowImages.length;
+      setTimeout(function () {
+        next.style.backgroundImage = 'url("' + slideshowImages[preloadIdx] + '")';
+      }, 1100); // just over the 1s transition
+    });
+  });
+}, 8000);
 
   /*********************
    * Accessibility: keyboard support for checking puzzle
