@@ -424,7 +424,9 @@
   var slideshowImages = [
     // Example placeholders — replace with your own images (URLs or data URIs)
     "https://media.discordapp.net/attachments/345101164406112266/1482128092527857685/IMG_8514.JPG?ex=69b5d2d9&is=69b48159&hm=6fd02acec44063ac6b74f96a84d56bc58ae4f5b6b04d6626ed19ca799b789253&=&format=webp&width=1188&height=790",
-    "https://media.discordapp.net/attachments/345101164406112266/1482128090984353852/IMG_8221.HEIC?ex=69b5d2d9&is=69b48159&hm=410edc0103a507dd3804bda0542c673356d7a22ab6c92da94df942f61b290340&"
+    "https://media.discordapp.net/attachments/345101164406112266/1482129010132517086/IMG_8221.jpg?ex=69b5d3b4&is=69b48234&hm=3a8412820178d2b88cc592cbd0308ab14311b923f6d0a36a397a0c19cade5e4c&=&format=webp&width=1053&height=790",
+   "https://media.discordapp.net/attachments/345101164406112266/1482129011311382761/IMG_8322.jpg?ex=69b5d3b4&is=69b48234&hm=863e1b73443fd3251b68ae5306806b6588b09ea9847ed72d9a5c2a9f0015a6df&=&format=webp&width=1053&height=790",
+   "https://media.discordapp.net/attachments/345101164406112266/1482129012292845680/IMG_8539.jpg?ex=69b5d3b5&is=69b48235&hm=0bbadfda5638885d2391d4e453ca70d90abc29340ec141af9418843d18addddd&=&format=webp&width=592&height=790"
   ];
 
   // The text that the letter modal will display — change this to your custom message.
@@ -503,7 +505,7 @@
   cluesLeft.innerHTML = '';
   for (var r=0;r<ROWS;r++) {
     var div = document.createElement('div');
-    div.style.padding = '2px 6px';
+    div.style.padding = '1px 6px';
     div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join('   ');
     cluesLeft.appendChild(div);
   }
