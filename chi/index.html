@@ -1,53 +1,667 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nonogram Puzzle</title>
-    <style>
-        body {
-            background-color: rgba(255, 255, 255, 0.8);
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .puzzle {
-            margin: 20px;
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 2px;
-        }
-        .cell {
-            width: 30px;
-            height: 30px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-        }
-        .animated {
-            animation: slideshow 3s infinite;
-        }
-        @keyframes slideshow {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; }
-            100% { opacity: 0.9; }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Welcome to the Nonogram Puzzle</h1>
-    </header>
-    <main class="animated">
-        <div class="puzzle">
-            <!-- Puzzle cells go here -->
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <!-- Repeat for more cells -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> I Love You — Nonogram Gate </TITLE>
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <!-- Nice script/font for the revealed letter -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+  /* --- Page layout --- */
+  html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background: #000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #fff;
+  }
+  /* faint running background (slideshow) */
+  #slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.12; /* faint — change to taste */
+    pointer-events: none;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+    filter: blur(1px) saturate(90%);
+  }
+
+  /* your existing canvas */
+  canvas#pinkboard {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* main app container, hidden until puzzle solved */
+  #main {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: none; /* shown only after puzzle solved */
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* content box inside main area */
+  .content {
+    position: relative;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    max-width: 800px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    text-align: center;
+  }
+
+  .content h1 {
+    font-family: "Playfair Display", serif;
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* letter modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+  }
+  .modal .letter-box {
+    background: rgba(255,255,255,0.96);
+    color: #111;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 80%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    transform: translateY(-5px);
+  }
+  .modal .letter-box .letter-text {
+    font-family: "Great Vibes", cursive;
+    font-size: 4.5rem;
+    line-height: 1;
+    text-align: center;
+    color: #c22;
+  }
+  .modal .close {
+    margin-top: 1rem;
+    display:inline-block;
+    padding: 0.5rem 1rem;
+    background:#111;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+  }
+
+  /* puzzle overlay */
+  #puzzleOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.8));
+    padding: 2rem;
+  }
+  .puzzle {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    color: #fff;
+    user-select: none;
+  }
+  .puzzle .clues-top {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: 2px;
+    transform: translateY(0);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .puzzle .clues-left {
+    display: grid;
+    grid-template-rows: repeat(var(--rows), 1fr);
+    gap: 2px;
+    font-size: 0.8rem;
+    text-align: right;
+    padding-right: 8px;
+    min-width: 3.4em;
+  }
+  .grid-wrap {
+    background: rgba(255,255,255,0.02);
+    padding: 6px;
+    border-radius: 8px;
+  }
+  table.nonogram {
+    border-collapse: collapse;
+    background: rgba(0,0,0,0.2);
+  }
+  table.nonogram td {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: background 0.12s, transform 0.06s;
+    vertical-align: middle;
+    text-align:center;
+  }
+  table.nonogram td.empty { background: transparent; }
+  table.nonogram td.filled { background: #ea80b0; box-shadow: inset 0 -3px 6px rgba(0,0,0,0.15); }
+  table.nonogram td.crossed { background: transparent; color: rgba(255,255,255,0.4); }
+  table.nonogram td.crossed::after {
+    content: '✕';
+    font-size: 14px;
+    display: inline-block;
+  }
+  .puzzle-controls {
+    display:flex;
+    flex-direction:column;
+    gap:0.6rem;
+    margin-left: 0.6rem;
+  }
+  .btn {
+    display:inline-block;
+    padding: 0.5rem 0.9rem;
+    background:#ea80b0;
+    color:#111;
+    border-radius:6px;
+    font-weight:700;
+    cursor:pointer;
+    border:none;
+  }
+  .btn.secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+  }
+  .hint {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+    max-width: 260px;
+  }
+  .solved-banner {
+    margin-top: 1rem;
+    color: #8fffb0;
+    font-weight:700;
+  }
+
+  /* small responsive */
+  @media (max-width:700px) {
+    table.nonogram td { width: 22px; height: 22px; }
+    .puzzle { gap: 0.6rem; flex-direction: column; align-items: center; }
+    .puzzle-controls { flex-direction: row; }
+  }
+  </style>
+ </HEAD>
+
+ <BODY>
+  <!-- faint slideshow background (customize images in the script) -->
+  <div id="slideshow" aria-hidden="true"></div>
+
+  <!-- your original heart particle canvas (kept and unchanged) -->
+  <canvas id="pinkboard"></canvas>
+
+  <!-- puzzle overlay (blocks the main content until solved) -->
+  <div id="puzzleOverlay" role="dialog" aria-modal="true">
+    <div class="puzzle" id="puzzleArea" aria-label="Nonogram puzzle">
+      <div>
+        <!-- top clues will be inserted here -->
+        <div class="clues-top" id="cluesTop" style="--cols:10"></div>
+
+        <div style="display:flex; align-items:flex-start; gap:6px; margin-top:6px;">
+          <div class="clues-left" id="cluesLeft" style="--rows:10"></div>
+          <div class="grid-wrap">
+            <table class="nonogram" id="nonogramGrid" aria-label="Puzzle grid"></table>
+          </div>
         </div>
-    </main>
-    <footer>
-        <p>Updated on 2026-03-13 20:15:34 UTC</p>
-    </footer>
-</body>
-</html>
+      </div>
+
+      <div class="puzzle-controls" role="region" aria-label="Puzzle controls">
+        <div class="hint">
+          Solve the puzzle to reveal the page. Left-click cycles through: empty → filled → cross. Right click toggles cross.
+        </div>
+        <button class="btn" id="checkBtn">Check</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
+        <button class="btn secondary" id="revealBtn">(Cheat) Reveal</button>
+        <div id="status" class="solved-banner" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- main content (hidden until solved) -->
+  <div id="main">
+    <div class="content">
+      <h1>I Love You</h1>
+      <p>Welcome — the secret page has been revealed. Click the letter button to display a message.</p>
+      <button class="btn" id="showLetterBtn">Open Letter</button>
+      <div style="margin-top:1rem;">
+        <small style="opacity:0.8">Background images and letter text are customizable in the script comments.</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal for beautiful letter -->
+  <div class="modal" id="letterModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="letter-box" role="document">
+      <div class="letter-text" id="letterTextNode">...</div>
+      <div style="text-align:center">
+        <button class="close" id="closeModalBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Existing heart particle script (kept as-is from your original file) -->
+  <script>
+  /*
+   * Settings (kept your settings with small tweak)
+   */
+  var settings = {
+    particles: {
+      length:   500,
+      duration:   2,
+      velocity: 100,
+      effect: -0.75,
+      size:      30,
+    },
+  };
+
+  (function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
+
+  var Point = (function() {
+    function Point(x, y) { this.x = (typeof x !== 'undefined') ? x : 0; this.y = (typeof y !== 'undefined') ? y : 0; }
+    Point.prototype.clone = function() { return new Point(this.x, this.y); };
+    Point.prototype.length = function(length) { if (typeof length == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y); this.normalize(); this.x *= length; this.y *= length; return this; };
+    Point.prototype.normalize = function() { var length = this.length(); this.x /= length; this.y /= length; return this; };
+    return Point;
+  })();
+
+  var Particle = (function() {
+    function Particle() { this.position = new Point(); this.velocity = new Point(); this.acceleration = new Point(); this.age = 0; }
+    Particle.prototype.initialize = function(x, y, dx, dy) {
+      this.position.x = x; this.position.y = y; this.velocity.x = dx; this.velocity.y = dy;
+      this.acceleration.x = dx * settings.particles.effect; this.acceleration.y = dy * settings.particles.effect; this.age = 0;
+    };
+    Particle.prototype.update = function(deltaTime) {
+      this.position.x += this.velocity.x * deltaTime; this.position.y += this.velocity.y * deltaTime;
+      this.velocity.x += this.acceleration.x * deltaTime; this.velocity.y += this.acceleration.y * deltaTime;
+      this.age += deltaTime;
+    };
+    Particle.prototype.draw = function(context, image) {
+      function ease(t) { return (--t) * t * t + 1; }
+      var size = image.width * ease(this.age / settings.particles.duration);
+      context.globalAlpha = 1 - this.age / settings.particles.duration;
+      context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
+    };
+    return Particle;
+  })();
+
+  var ParticlePool = (function() {
+    var particles, firstActive = 0, firstFree = 0, duration = settings.particles.duration;
+    function ParticlePool(length) {
+      particles = new Array(length);
+      for (var i = 0; i < particles.length; i++) particles[i] = new Particle();
+    }
+    ParticlePool.prototype.add = function(x, y, dx, dy) {
+      particles[firstFree].initialize(x, y, dx, dy);
+      firstFree++; if (firstFree == particles.length) firstFree = 0;
+      if (firstActive == firstFree) firstActive++;
+      if (firstActive == particles.length) firstActive = 0;
+    };
+    ParticlePool.prototype.update = function(deltaTime) {
+      var i;
+      if (firstActive < firstFree) {
+        for (i = firstActive; i < firstFree; i++) particles[i].update(deltaTime);
+      }
+      if (firstFree < firstActive) {
+        for (i = firstActive; i < particles.length; i++) particles[i].update(deltaTime);
+        for (i = 0; i < firstFree; i++) particles[i].update(deltaTime);
+      }
+      while (particles[firstActive].age >= duration && firstActive != firstFree) {
+        firstActive++;
+        if (firstActive == particles.length) firstActive = 0;
+      }
+    };
+    ParticlePool.prototype.draw = function(context, image) {
+      if (firstActive < firstFree) {
+        for (i = firstActive; i < firstFree; i++) particles[i].draw(context, image);
+      }
+      if (firstFree < firstActive) {
+        for (i = firstActive; i < particles.length; i++) particles[i].draw(context, image);
+        for (i = 0; i < firstFree; i++) particles[i].draw(context, image);
+      }
+    };
+    return ParticlePool;
+  })();
+
+  (function(canvas) {
+    var context = canvas.getContext('2d'),
+        particles = new ParticlePool(settings.particles.length),
+        particleRate = settings.particles.length / settings.particles.duration,
+        time;
+
+    function pointOnHeart(t) {
+      return new Point(
+        160 * Math.pow(Math.sin(t), 3),
+        130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+      );
+    }
+
+    var image = (function() {
+      var canvas  = document.createElement('canvas'),
+          context = canvas.getContext('2d');
+      canvas.width  = settings.particles.size;
+      canvas.height = settings.particles.size;
+      function to(t) {
+        var point = pointOnHeart(t);
+        point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
+        point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+        return point;
+      }
+      context.beginPath();
+      var t = -Math.PI;
+      var point = to(t);
+      context.moveTo(point.x, point.y);
+      while (t < Math.PI) {
+        t += 0.01;
+        point = to(t);
+        context.lineTo(point.x, point.y);
+      }
+      context.closePath();
+      context.fillStyle = '#ea80b0';
+      context.fill();
+      var image = new Image();
+      image.src = canvas.toDataURL();
+      return image;
+    })();
+
+    function render() {
+      requestAnimationFrame(render);
+      var newTime   = new Date().getTime() / 1000,
+          deltaTime = newTime - (time || newTime);
+      time = newTime;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var amount = particleRate * deltaTime;
+      for (var i = 0; i < amount; i++) {
+        var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+        var dir = pos.clone().length(settings.particles.velocity);
+        particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+      }
+      particles.update(deltaTime);
+      particles.draw(context, image);
+    }
+
+    function onResize() {
+      canvas.width  = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    }
+    window.onresize = onResize;
+    setTimeout(function() { onResize(); render(); }, 10);
+  })(document.getElementById('pinkboard'));
+  </script>
+
+  <!-- Nonogram puzzle + slideshow + UI script -->
+  <script>
+  /*********************
+   * CUSTOMIZATION AREA
+   *
+   * - Replace strings in slideshowImages with your picture URLs.
+   * - Change letterText to whatever you want to reveal.
+   * - You can adjust the grid size or pixel-art by editing "solution" below
+   *********************/
+  var slideshowImages = [
+    // Example placeholders — replace with your own images (URLs or data URIs)
+    "https://images.unsplash.com/photo-1503264116251-35a269479413?w=1600&q=60&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=1600&q=60&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=60&auto=format&fit=crop"
+  ];
+
+  // The text that the letter modal will display — change this to your custom message.
+  var letterText = "My dearest,\n\nYou are the reason my heart beats.";
+
+  /*********************
+   * NONOGRAM SOLUTION (10x10)
+   * 1 = filled cell, 0 = empty cell
+   *
+   * This pixel-art forms a simple heart. To change the image,
+   * change this array (must be rows × cols).
+   *********************/
+  var solution = [
+    [0,1,1,0,0,0,0,1,1,0],
+    [1,1,1,1,0,0,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0]
+  ];
+
+  var ROWS = solution.length;
+  var COLS = solution[0].length;
+
+  /*********************
+   * Generate nonogram clues from 'solution' array
+   *********************/
+  function computeClues(matrix) {
+    var rows = matrix.map(function(row) {
+      var runs = [], count = 0;
+      row.forEach(function(cell) {
+        if (cell) count++; else { if (count>0) { runs.push(count); count=0; } }
+      });
+      if (count>0) runs.push(count);
+      if (runs.length === 0) runs = [0];
+      return runs;
+    });
+    var cols = [];
+    for (var c=0;c<COLS;c++) {
+      var runs = [], count = 0;
+      for (var r=0;r<ROWS;r++) {
+        if (matrix[r][c]) count++; else { if (count>0) { runs.push(count); count=0; } }
+      }
+      if (count>0) runs.push(count);
+      if (runs.length === 0) runs = [0];
+      cols.push(runs);
+    }
+    return {rows: rows, cols: cols};
+  }
+
+  /*********************
+   * Build UI
+   *********************/
+  var clues = computeClues(solution);
+  var cluesTop = document.getElementById('cluesTop');
+  var cluesLeft = document.getElementById('cluesLeft');
+  var gridTable = document.getElementById('nonogramGrid');
+  document.getElementById('cluesTop').style.setProperty('--cols', COLS);
+  document.getElementById('cluesLeft').style.setProperty('--rows', ROWS);
+
+  // Render top clues (columns) — show each column's runs as vertical stack
+  cluesTop.innerHTML = '';
+  for (var c=0;c<COLS;c++) {
+    var cell = document.createElement('div');
+    // show runs separated by line breaks
+    cell.innerHTML = clues.cols[c].map(function(n){ return n>0? n : ""; }).join('<br>');
+    cell.style.padding = '2px 4px';
+    cluesTop.appendChild(cell);
+  }
+
+  // Render left clues (rows)
+  cluesLeft.innerHTML = '';
+  for (var r=0;r<ROWS;r++) {
+    var div = document.createElement('div');
+    div.style.padding = '3px 6px';
+    div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join(' ');
+    cluesLeft.appendChild(div);
+  }
+
+  // Build grid
+  gridTable.innerHTML = '';
+  var state = []; // 0 empty, 1 filled, 2 crossed
+  for (var r=0;r<ROWS;r++) {
+    var tr = document.createElement('tr');
+    state[r] = [];
+    for (var c=0;c<COLS;c++) {
+      state[r][c] = 0;
+      var td = document.createElement('td');
+      td.className = 'empty';
+      td.dataset.r = r;
+      td.dataset.c = c;
+      td.setAttribute('role','button');
+      // Left click cycle: empty -> filled -> crossed -> empty
+      td.addEventListener('click', function(ev){
+        var rr = +this.dataset.r, cc = +this.dataset.c;
+        state[rr][cc] = (state[rr][cc] + 1) % 3;
+        updateCell(this, state[rr][cc]);
+      });
+      // Right click toggles cross (prevent context menu)
+      td.addEventListener('contextmenu', function(ev){
+        ev.preventDefault();
+        var rr = +this.dataset.r, cc = +this.dataset.c;
+        state[rr][cc] = state[rr][cc] === 2 ? 0 : 2;
+        updateCell(this, state[rr][cc]);
+        return false;
+      });
+      tr.appendChild(td);
+    }
+    gridTable.appendChild(tr);
+  }
+
+  function updateCell(td, st) {
+    td.classList.remove('empty','filled','crossed');
+    if (st===0) td.classList.add('empty');
+    else if (st===1) td.classList.add('filled');
+    else td.classList.add('crossed');
+  }
+
+  // Buttons
+  document.getElementById('checkBtn').addEventListener('click', function(){
+    if (checkSolution()) {
+      solvedSequence();
+    } else {
+      var status = document.getElementById('status');
+      status.innerText = "Not correct yet — keep trying!";
+      setTimeout(function(){ status.innerText = ""; }, 2500);
+    }
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++) { state[r][c]=0; updateCell(gridTable.rows[r].cells[c], 0); }
+    document.getElementById('status').innerText = "";
+  });
+
+  document.getElementById('revealBtn').addEventListener('click', function(){
+    // quick reveal for convenience
+    for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++) {
+      state[r][c] = solution[r][c] ? 1 : 0;
+      updateCell(gridTable.rows[r].cells[c], state[r][c]);
+    }
+    document.getElementById('status').innerText = "Revealed (cheated).";
+    setTimeout(function(){ solvedSequence(); }, 500);
+  });
+
+  function checkSolution() {
+    for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++) {
+      var want = solution[r][c] ? 1 : 0;
+      if ((state[r][c] === 1 ? 1 : 0) !== want) return false;
+    }
+    return true;
+  }
+
+  /*********************
+   * On solved: reveal main content with small animation
+   *********************/
+  function solvedSequence() {
+    var overlay = document.getElementById('puzzleOverlay');
+    var status = document.getElementById('status');
+    status.innerText = "Solved — welcome!";
+    // fade out overlay
+    overlay.style.transition = 'opacity 0.8s ease';
+    overlay.style.opacity = '0';
+    setTimeout(function(){
+      overlay.style.display = 'none';
+      document.getElementById('main').style.display = 'flex';
+    }, 850);
+  }
+
+  /*********************
+   * Letter modal logic
+   *********************/
+  var showBtn = document.getElementById('showLetterBtn');
+  var modal = document.getElementById('letterModal');
+  var letterNode = document.getElementById('letterTextNode');
+  var closeModalBtn = document.getElementById('closeModalBtn');
+
+  // format letter text (allow newlines)
+  function formatLetterText(text) {
+    return text.split('\n').map(function(line){
+      return '<div>'+line.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+    }).join('');
+  }
+
+  showBtn.addEventListener('click', function(){
+    letterNode.innerHTML = formatLetterText(letterText);
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+  });
+  closeModalBtn.addEventListener('click', function(){
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+  });
+  modal.addEventListener('click', function(e){
+    if (e.target === modal) { modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }
+  });
+
+  /*********************
+   * Slideshow background (faint)
+   *********************/
+  (function(){
+    var idx = 0;
+    var el = document.getElementById('slideshow');
+
+    // sanitize / fallback: if array empty, use subtle gradient
+    if (!slideshowImages || slideshowImages.length === 0) {
+      el.style.background = 'linear-gradient(135deg,#111,#444)';
+      return;
+    }
+    function setBg(i) {
+      el.style.backgroundImage = 'url("' + slideshowImages[i] + '")';
+    }
+    setBg(idx);
+    setInterval(function(){
+      idx = (idx + 1) % slideshowImages.length;
+      // fade via toggling background-image — CSS transition handles smoothness
+      setBg(idx);
+    }, 8000);
+  })();
+
+  /*********************
+   * Accessibility: keyboard support for checking puzzle
+   *********************/
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') document.getElementById('checkBtn').click();
+    if (e.key === 'r') document.getElementById('resetBtn').click();
+  });
+
+  /*********************
+   * Done — the page is ready.
+   *********************/
+  </script>
+ </BODY>
+</HTML>
