@@ -246,9 +246,9 @@
   <!-- main content (hidden until solved) -->
   <div id="main">
     <div class="content">
-      <h1>Chúc mừng ngày Valentine trắng</h1>
-      <p>Bấm nút để hiện bất ngờ nha.</p>
-      <button class="btn" id="showLetterBtn">Mở nút</button>
+      <h1>Chúc em ngày Valentine trắng vui vẻ</h1>
+      <p>Người yêu anh hoàn thành game giỏi quá. Bấm nút để nhận phần thưởng nha.</p>
+      <button class="btn" id="showLetterBtn">Mở</button>
       <!-- <div style="margin-top:1rem;">
         <small style="opacity:0.8">Background images and letter text are customizable in the script comments.</small>
       </div> -->
@@ -431,7 +431,7 @@
   ];
 
   // The text that the letter modal will display — change this to your custom message.
-  var letterText = "My dearest,\n\nYou are the reason my heart beats.";
+  var letterText = "Gửi người yêu,\n\nĐến đây chắc em biết câu trả lời rùi nhỉ. Valentine đầu tiên mà không cô độc, anh đã rất hạnh phúc khi nhận được tấm lòng của em từ những que socola ngon tuyệt. Một tháng qua anh và em tuy xa mà gần, anh nhớ em nhiều lắm. Dù là học, chơi game, xem phim hay thậm chí là trong mơ, hình bóng của em luôn hiện hữu trong tâm trí anh. Đọc được những dòng này thì chắc em cũng vừa dậy. Vậy anh chúc Chi ăn sáng ngon miệng và đánh pick vui vẻ nha. Yêu emmmmmmmmmmmmmmmmm";
 
   /*********************
    * NONOGRAM SOLUTION (10x10)
@@ -498,7 +498,7 @@
     var cell = document.createElement('div');
     // show runs separated by line breaks
     cell.innerHTML = clues.cols[c].map(function(n){ return n>0? n : ""; }).join('<br>');
-    cell.style.padding = '2px 4px';
+    cell.style.padding = '2px 3px';
     cluesTop.appendChild(cell);
   }
 
@@ -506,7 +506,7 @@
   cluesLeft.innerHTML = '';
   for (var r=0;r<ROWS;r++) {
     var div = document.createElement('div');
-    div.style.padding = '3px 6px';
+    div.style.padding = '4px 6px';
     div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join(' ');
     cluesLeft.appendChild(div);
   }
