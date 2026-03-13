@@ -245,8 +245,8 @@
   <div id="main">
     <div class="content">
       <h1>Chúc em ngày Valentine trắng vui vẻ</h1>
-      <p>Người yêu anh hoàn thành game giỏi quá. Bấm nút để nhận phần thưởng nha.</p>
-      <button class="btn" id="showLetterBtn">Mở</button>
+      <p>Người yêu anh chơi game giỏi quá!!! Bấm nút để nhận phần thưởng nha</p>
+      <button class="btn" id="showLetterBtn">Phần thưởng</button>
       <!-- <div style="margin-top:1rem;">
         <small style="opacity:0.8">Background images and letter text are customizable in the script comments.</small>
       </div> -->
@@ -504,7 +504,7 @@
   cluesLeft.innerHTML = '';
   for (var r=0;r<ROWS;r++) {
     var div = document.createElement('div');
-    div.style.padding = '4px 6px';
+    div.style.padding = '3px 6px';
     div.innerText = clues.rows[r].map(function(n){ return n>0? n : ""; }).join('   ');
     cluesLeft.appendChild(div);
   }
@@ -570,7 +570,7 @@
       state[r][c] = solution[r][c] ? 1 : 0;
       updateCell(gridTable.rows[r].cells[c], state[r][c]);
     }
-    document.getElementById('status').innerText = "Hiện luôn.";
+    document.getElementById('status').innerText = "Hoàn thiện!";
     setTimeout(function(){ solvedSequence(); }, 500);
   });
 
@@ -588,7 +588,7 @@
   function solvedSequence() {
     var overlay = document.getElementById('puzzleOverlay');
     var status = document.getElementById('status');
-    status.innerText = "Solved — welcome!";
+    status.innerText = "Hoàn thiện!";
     // fade out overlay
     overlay.style.transition = 'opacity 0.8s ease';
     overlay.style.opacity = '0';
