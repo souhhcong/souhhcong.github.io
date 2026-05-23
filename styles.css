@@ -366,6 +366,10 @@ input:focus {
   margin-top: 16px;
 }
 
+.source-block {
+  margin-top: 16px;
+}
+
 .differentials {
   display: grid;
   gap: 8px;
@@ -391,6 +395,20 @@ input:focus {
   margin-top: 2px;
   color: #3b4743;
   font-size: 0.92rem;
+}
+
+.sources {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.sources a {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .pearls {

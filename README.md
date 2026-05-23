@@ -18,4 +18,13 @@ The `.nojekyll` file is included so GitHub Pages serves the static assets exactl
 
 ## Notes
 
-The cases are educational prompts only and are not medical advice.
+The cases are educational prompts only and are not medical advice. Vignettes are fictional and adapted from the clinical features, diagnostic patterns, and management principles in the references shown inside each case result.
+
+## Case References
+
+- CDC: Clinical Care of Dengue
+- CDC: Symptoms of Dengue and Testing
+- CDC: Clinical Guidelines for Post-Streptococcal Glomerulonephritis
+- MSD Manual Professional: Pulmonary Embolism, Acute Pancreatitis, Infective Endocarditis, Diabetic Ketoacidosis, Anti-GBM Disease, Postpartum Endometritis, Subarachnoid Hemorrhage, Clostridioides difficile Infection
+- NIDDK: Anti-GBM (Goodpasture's) Disease
+- IDSA/SHEA: 2021 Clinical Practice Guideline Update for Clostridioides difficile Infection

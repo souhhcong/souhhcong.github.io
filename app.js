@@ -205,6 +205,74 @@ const MAX_ATTEMPTS = 6;
 const STORAGE_KEY = "chanle-stats-v1";
 const STATE_KEY = "chanle-daily-state-v1";
 
+const SOURCE_REFERENCES = {
+  cdcDengueClinical: {
+    title: "CDC - Clinical Care of Dengue",
+    url: "https://www.cdc.gov/dengue/hcp/clinical-care/index.html"
+  },
+  cdcDengueSymptoms: {
+    title: "CDC - Symptoms of Dengue and Testing",
+    url: "https://www.cdc.gov/dengue/signs-symptoms/index.html"
+  },
+  msdPulmonaryEmbolism: {
+    title: "MSD Manual Professional - Pulmonary Embolism",
+    url: "https://www.msdmanuals.com/professional/pulmonary-disorders/pulmonary-embolism/pulmonary-embolism-pe"
+  },
+  msdAcutePancreatitis: {
+    title: "MSD Manual Professional - Acute Pancreatitis",
+    url: "https://www.msdmanuals.com/professional/gastrointestinal-disorders/pancreatitis/acute-pancreatitis"
+  },
+  cdcPSGN: {
+    title: "CDC - Clinical Guidelines for Post-Streptococcal Glomerulonephritis",
+    url: "https://www.cdc.gov/group-a-strep/hcp/clinical-guidance/post-streptococcal-glomerulonephritis.html"
+  },
+  msdEndocarditis: {
+    title: "MSD Manual Professional - Infective Endocarditis",
+    url: "https://www.msdmanuals.com/professional/cardiovascular-disorders/endocarditis/infective-endocarditis"
+  },
+  msdDKA: {
+    title: "MSD Manual Professional - Diabetic Ketoacidosis",
+    url: "https://www.msdmanuals.com/professional/endocrine-and-metabolic-disorders/diabetes-mellitus-and-disorders-of-carbohydrate-metabolism/diabetic-ketoacidosis-dka"
+  },
+  msdAntiGBM: {
+    title: "MSD Manual Professional - Anti-GBM Disease",
+    url: "https://www.msdmanuals.com/professional/pulmonary-disorders/diffuse-alveolar-hemorrhage-and-pulmonary-renal-syndrome/goodpasture-syndrome"
+  },
+  niddkAntiGBM: {
+    title: "NIDDK - Anti-GBM (Goodpasture's) Disease",
+    url: "https://www.niddk.nih.gov/health-information/kidney-disease/glomerular-disease/anti-gbm-goodpastures-disease"
+  },
+  msdPostpartumEndometritis: {
+    title: "MSD Manual Professional - Postpartum Endometritis",
+    url: "https://www.msdmanuals.com/professional/gynecology-and-obstetrics/postpartum-care-and-associated-disorders/postpartum-endometritis"
+  },
+  msdSubarachnoidHemorrhage: {
+    title: "MSD Manual Professional - Subarachnoid Hemorrhage",
+    url: "https://www.msdmanuals.com/professional/neurologic-disorders/stroke/subarachnoid-hemorrhage"
+  },
+  msdCDiff: {
+    title: "MSD Manual Professional - Clostridioides difficile Infection",
+    url: "https://www.msdmanuals.com/professional/infectious-diseases/anaerobic-bacteria/clostridioides-formerly-clostridium-difficile-induced-diarrhea"
+  },
+  idsaCDiff: {
+    title: "IDSA/SHEA - 2021 C. difficile Guideline Update",
+    url: "https://www.idsociety.org/practice-guideline/clostridioides-difficile-2021-focused-update/"
+  }
+};
+
+const CASE_SOURCES = {
+  1: ["cdcDengueClinical", "cdcDengueSymptoms"],
+  2: ["msdPulmonaryEmbolism"],
+  3: ["msdAcutePancreatitis"],
+  4: ["cdcPSGN"],
+  5: ["msdEndocarditis"],
+  6: ["msdDKA"],
+  7: ["msdAntiGBM", "niddkAntiGBM"],
+  8: ["msdPostpartumEndometritis"],
+  9: ["msdSubarachnoidHemorrhage"],
+  10: ["msdCDiff", "idsaCDiff"]
+};
+
 const DIFFERENTIALS = {
   1: [
     ["Sốt rét", "Cần hỏi vùng dịch tễ và lam máu/test nhanh; thường có cơn rét run theo chu kỳ."],
@@ -284,6 +352,7 @@ const elements = {
   summary: $("#summary"),
   differentials: $("#differentials"),
   pearls: $("#pearls"),
+  sources: $("#sources"),
   played: $("#played"),
   solved: $("#solved"),
   streak: $("#streak"),
@@ -441,6 +510,14 @@ function showResult() {
     .join("");
   elements.pearls.innerHTML = Object.entries(currentCase.pearls)
     .map(([term, detail]) => `<div><dt>${term}</dt><dd>${detail}</dd></div>`)
+    .join("");
+  elements.sources.innerHTML = (CASE_SOURCES[currentCase.id] || [])
+    .map((sourceId) => SOURCE_REFERENCES[sourceId])
+    .filter(Boolean)
+    .map(
+      (source) =>
+        `<li><a href="${source.url}" target="_blank" rel="noreferrer">${source.title}</a></li>`
+    )
     .join("");
 }
 
