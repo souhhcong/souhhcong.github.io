@@ -2,6 +2,8 @@
 
 `chanle` is a Vietnamese clinical diagnosis guessing game for medical students. It currently includes 100 fictional sample cards and is designed to run on GitHub Pages at `https://souhhcong.github.io/`.
 
+Vietnamese diagnosis labels are normalized toward ICD-10 names from the Vietnam ICD lookup at `https://icd.kcb.vn/icd-10/icd10`; common classroom names remain accepted as aliases.
+
 ## Local use
 
 Open `index.html` in a browser, or serve the folder with any static file server.

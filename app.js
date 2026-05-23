@@ -298,6 +298,111 @@ const SAMPLE_CARDS = [
 
 CASES.push(...SAMPLE_CARDS.map(createSampleCase));
 
+const ICD10_NAMES = {
+  1: ["A91", "Sốt xuất huyết do Dengue"],
+  2: ["I26.9", "Nghẽn mạch phổi không có tâm phế cấp"],
+  3: ["K85.9", "Viêm tụy cấp, không đặc hiệu"],
+  4: ["N00.9", "Hội chứng viêm thận cấp, không đặc hiệu"],
+  5: ["I33.0", "Viêm nội tâm mạc nhiễm khuẩn cấp và bán cấp"],
+  6: ["E10.1", "Đái tháo đường phụ thuộc insulin, có nhiễm toan ceton"],
+  7: ["M31.0", "Viêm mạch quá mẫn"],
+  8: ["O86.1", "Nhiễm khuẩn khác của đường sinh dục sau đẻ"],
+  9: ["I60.9", "Chảy máu dưới nhện, không đặc hiệu"],
+  10: ["A04.7", "Viêm ruột do Clostridium difficile"],
+  11: ["K35.9", "Viêm ruột thừa cấp, không đặc hiệu"],
+  12: ["K81.0", "Viêm túi mật cấp"],
+  13: ["C25.0", "U ác của đầu tụy"],
+  14: ["K22.6", "Hội chứng rách thực quản - dạ dày do chảy máu"],
+  15: ["I85.0", "Giãn tĩnh mạch thực quản có chảy máu"],
+  16: ["K27.9", "Loét dạ dày - tá tràng, không xác định là cấp hay mạn, không chảy máu hoặc thủng"],
+  17: ["A03.9", "Lỵ trực khuẩn, không đặc hiệu"],
+  18: ["A00.9", "Bệnh tả, không đặc hiệu"],
+  19: ["E73.9", "Không dung nạp lactose, không đặc hiệu"],
+  20: ["K80.5", "Sỏi ống mật không có viêm đường mật hoặc viêm túi mật"],
+  21: ["I20.8", "Cơn đau thắt ngực khác"],
+  22: ["I21.3", "Nhồi máu cơ tim cấp xuyên thành, vị trí không xác định"],
+  23: ["I50.1", "Suy thất trái"],
+  24: ["I48", "Rung nhĩ và cuồng nhĩ"],
+  25: ["I35.0", "Hẹp van động mạch chủ"],
+  26: ["I71.0", "Phình tách động mạch chủ"],
+  27: ["I30.9", "Viêm màng ngoài tim cấp, không đặc hiệu"],
+  28: ["I50.9", "Suy tim, không đặc hiệu"],
+  29: ["E26.0", "Cường aldosteron tiên phát"],
+  30: ["D35.0", "U lành tuyến thượng thận"],
+  31: ["J18.9", "Viêm phổi, không đặc hiệu"],
+  32: ["J45.9", "Hen, không đặc hiệu"],
+  33: ["J44.9", "Bệnh phổi tắc nghẽn mạn tính, không đặc hiệu"],
+  34: ["J93.9", "Tràn khí màng phổi, không đặc hiệu"],
+  35: ["A15.0", "Lao phổi, xác nhận bằng soi đờm có hoặc không nuôi cấy"],
+  36: ["J85.2", "Áp xe phổi không kèm viêm phổi"],
+  37: ["J84.1", "Bệnh phổi kẽ khác có xơ hóa"],
+  38: ["G47.3", "Ngưng thở khi ngủ"],
+  39: ["J81", "Phù phổi"],
+  40: ["D70", "Mất bạch cầu hạt"],
+  41: ["M51.2", "Thoát vị đĩa đệm gian đốt sống khác, xác định"],
+  42: ["I63.9", "Nhồi máu não, không đặc hiệu"],
+  43: ["G40.6", "Cơn động kinh lớn, không đặc hiệu"],
+  44: ["G20", "Bệnh Parkinson"],
+  45: ["G70.0", "Nhược cơ"],
+  46: ["G61.0", "Hội chứng Guillain-Barré"],
+  47: ["G44.0", "Hội chứng đau đầu từng chuỗi"],
+  48: ["G43.9", "Migraine, không đặc hiệu"],
+  49: ["A39.0", "Viêm màng não do não mô cầu"],
+  50: ["S06.4", "Chảy máu ngoài màng cứng"],
+  51: ["E10.9", "Đái tháo đường phụ thuộc insulin, không có biến chứng"],
+  52: ["E03.9", "Suy giáp, không đặc hiệu"],
+  53: ["E05.0", "Nhiễm độc giáp với bướu giáp lan tỏa"],
+  54: ["E24.9", "Hội chứng Cushing, không đặc hiệu"],
+  55: ["E27.1", "Suy thượng thận nguyên phát"],
+  56: ["E22.0", "Bệnh to cực và chứng khổng lồ tuyến yên"],
+  57: ["E21.0", "Cường cận giáp tiên phát"],
+  58: ["E83.5", "Rối loạn chuyển hóa calci"],
+  59: ["E23.2", "Đái tháo nhạt"],
+  60: ["E16.2", "Hạ glucose máu, không đặc hiệu"],
+  61: ["N04.9", "Hội chứng thận hư, không đặc hiệu"],
+  62: ["N20.1", "Sỏi niệu quản"],
+  63: ["N10", "Viêm ống thận - mô kẽ cấp"],
+  64: ["N30.0", "Viêm bàng quang cấp"],
+  65: ["D55.0", "Thiếu máu do thiếu glucose-6-phosphate dehydrogenase"],
+  66: ["C90.0", "Đa u tủy"],
+  67: ["D69.3", "Ban xuất huyết giảm tiểu cầu tự phát"],
+  68: ["D50.9", "Thiếu máu thiếu sắt, không đặc hiệu"],
+  69: ["M32.9", "Lupus ban đỏ hệ thống, không đặc hiệu"],
+  70: ["M06.9", "Viêm khớp dạng thấp, không đặc hiệu"],
+  71: ["M10.9", "Gút, không đặc hiệu"],
+  72: ["M45", "Viêm cột sống dính khớp"],
+  73: ["M33.9", "Viêm da cơ - đa cơ, không đặc hiệu"],
+  74: ["M34.9", "Xơ cứng toàn thể, không đặc hiệu"],
+  75: ["M35.2", "Bệnh Behçet"],
+  76: ["D69.0", "Ban xuất huyết dị ứng"],
+  77: ["B86", "Ghẻ"],
+  78: ["L40.9", "Bệnh vảy nến, không đặc hiệu"],
+  79: ["B02.9", "Zona không có biến chứng"],
+  80: ["T78.2", "Sốc phản vệ, không đặc hiệu"],
+  81: ["O00.9", "Thai ngoài tử cung, không đặc hiệu"],
+  82: ["O44.1", "Nhau tiền đạo có chảy máu"],
+  83: ["O45.9", "Nhau bong non, không đặc hiệu"],
+  84: ["O14.9", "Tiền sản giật, không đặc hiệu"],
+  85: ["O15.9", "Sản giật, không đặc hiệu thời điểm"],
+  86: ["N80.9", "Lạc nội mạc tử cung, không đặc hiệu"],
+  87: ["N76.0", "Viêm âm đạo cấp"],
+  88: ["B37.3", "Nhiễm Candida âm hộ và âm đạo"],
+  89: ["N73.9", "Bệnh viêm vùng chậu nữ, không đặc hiệu"],
+  90: ["N44", "Xoắn tinh hoàn"],
+  91: ["J05.0", "Viêm thanh quản - khí quản tắc nghẽn cấp"],
+  92: ["J05.1", "Viêm nắp thanh quản cấp"],
+  93: ["A37.9", "Ho gà, không đặc hiệu"],
+  94: ["B08.3", "Ban đỏ nhiễm khuẩn"],
+  95: ["B01.9", "Thủy đậu không có biến chứng"],
+  96: ["B05.9", "Sởi không có biến chứng"],
+  97: ["B08.4", "Viêm miệng có mụn nước do enterovirus kèm phát ban"],
+  98: ["M30.3", "Hội chứng hạch bạch huyết niêm mạc da"],
+  99: ["J21.9", "Viêm tiểu phế quản cấp, không đặc hiệu"],
+  100: ["Q40.0", "Hẹp phì đại môn vị bẩm sinh"]
+};
+
+applyIcdNaming();
+
 const MAX_ATTEMPTS = MAX_CLUES;
 const STORAGE_KEY = "chanle-stats-v1";
 const STATE_KEY = "chanle-daily-state-v1";
@@ -382,6 +487,20 @@ function createSampleCase([id, title, diagnosis, aliases, clues, summary]) {
       "Mục tiêu ôn tập": "Nhận diện mẫu bệnh cảnh kinh điển và tự kiểm tra lại bằng tài liệu học tập chính thức."
     }
   };
+}
+
+function applyIcdNaming() {
+  CASES.forEach((caseData) => {
+    const icd = ICD10_NAMES[caseData.id];
+    if (!icd) return;
+
+    const [code, name] = icd;
+    const previousDiagnosis = caseData.diagnosis;
+    caseData.icdCode = code;
+    caseData.diagnosis = name;
+    caseData.aliases = [...new Set([previousDiagnosis, code, ...caseData.aliases])];
+    caseData.summary = caseData.summary.replace(previousDiagnosis, name);
+  });
 }
 
 const elements = {
@@ -553,7 +672,9 @@ function finish(solved) {
 
 function showResult() {
   elements.result.classList.remove("hidden");
-  elements.answer.textContent = currentCase.diagnosis;
+  elements.answer.textContent = currentCase.icdCode
+    ? `${currentCase.icdCode} - ${currentCase.diagnosis}`
+    : currentCase.diagnosis;
   elements.summary.textContent = currentCase.summary;
   const differentials = DIFFERENTIALS[currentCase.id] || [];
   elements.differentialBlock.classList.toggle("hidden", differentials.length === 0);
