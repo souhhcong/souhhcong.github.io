@@ -358,15 +358,15 @@ input:focus {
   display: none;
 }
 
+.differential-block.hidden {
+  display: none;
+}
+
 .result h2 {
   color: var(--green-dark);
 }
 
 .differential-block {
-  margin-top: 16px;
-}
-
-.source-block {
   margin-top: 16px;
 }
 
@@ -395,34 +395,6 @@ input:focus {
   margin-top: 2px;
   color: #3b4743;
   font-size: 0.92rem;
-}
-
-.sources {
-  display: grid;
-  gap: 6px;
-  margin: 8px 0 0;
-  padding-left: 18px;
-}
-
-.citation-notes {
-  display: grid;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.citation-note {
-  margin: 0;
-  border-left: 4px solid var(--green);
-  padding-left: 10px;
-  color: #3b4743;
-  font-size: 0.92rem;
-}
-
-.sources a {
-  color: var(--blue);
-  font-weight: 800;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
 }
 
 .pearls {

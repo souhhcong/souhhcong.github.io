@@ -1,6 +1,6 @@
 # chanle
 
-`chanle` is a Vietnamese clinical diagnosis guessing game for medical students. It is a static site designed to run on GitHub Pages at `https://souhhcong.github.io/`.
+`chanle` is a Vietnamese clinical diagnosis guessing game for medical students. It currently includes 100 fictional sample cards and is designed to run on GitHub Pages at `https://souhhcong.github.io/`.
 
 ## Local use
 
@@ -18,15 +18,4 @@ The `.nojekyll` file is included so GitHub Pages serves the static assets exactl
 
 ## Notes
 
-The cases are educational prompts only and are not medical advice. Vignettes are fictional and adapted from the clinical features, diagnostic patterns, and management principles in the references shown inside each case result.
-
-## Case References
-
-- CDC: Clinical Care of Dengue
-- CDC: Symptoms of Dengue and Testing
-- CDC: Clinical Guidelines for Post-Streptococcal Glomerulonephritis
-- MSD Manual Professional: Pulmonary Embolism, Acute Pancreatitis, Infective Endocarditis, Acute Complications of Diabetes Mellitus, Anti-GBM Disease, Postpartum Endometritis, Subarachnoid Hemorrhage, Clostridioides difficile Infection
-- NIDDK: Anti-GBM (Goodpasture's) Disease
-- IDSA/SHEA: 2021 Clinical Practice Guideline Update for Clostridioides difficile Infection
-
-Source review date: 2026-05-23.
+The cases are fictional prompts for entertainment and study practice only. They are not medical advice and must not be used to diagnose, advise, or treat real patients.
