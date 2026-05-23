@@ -201,6 +201,8 @@ const CASES = [
   }
 ];
 
+const MAX_CLUES = 6;
+
 const SAMPLE_CARDS = [
   [11, "Đau hố chậu phải cấp", "Viêm ruột thừa cấp", ["viem ruot thua cap", "appendicitis"], ["Nam 19 tuổi đau quanh rốn rồi khu trú hố chậu phải.", "Buồn nôn, sốt nhẹ, chán ăn.", "Điểm McBurney đau, phản ứng thành bụng nhẹ.", "Bạch cầu tăng, CRP tăng."], "Đau di chuyển về hố chậu phải kèm sốt nhẹ và bạch cầu tăng gợi ý viêm ruột thừa cấp."],
   [12, "Đau quặn hạ sườn phải sau ăn", "Viêm túi mật cấp", ["viem tui mat cap", "acute cholecystitis"], ["Nữ 46 tuổi đau hạ sườn phải sau bữa ăn nhiều dầu mỡ.", "Sốt nhẹ, buồn nôn.", "Murphy dương tính.", "Siêu âm thấy sỏi túi mật và thành túi mật dày."], "Đau hạ sườn phải, Murphy dương tính và siêu âm bất thường gợi ý viêm túi mật cấp."],
@@ -296,7 +298,7 @@ const SAMPLE_CARDS = [
 
 CASES.push(...SAMPLE_CARDS.map(createSampleCase));
 
-const MAX_ATTEMPTS = 6;
+const MAX_ATTEMPTS = MAX_CLUES;
 const STORAGE_KEY = "chanle-stats-v1";
 const STATE_KEY = "chanle-daily-state-v1";
 
@@ -362,12 +364,18 @@ let finished = false;
 const $ = (selector) => document.querySelector(selector);
 
 function createSampleCase([id, title, diagnosis, aliases, clues, summary]) {
+  const paddedClues = [
+    ...clues,
+    `Các dữ kiện nổi bật nhất đang cùng hướng về ${diagnosis}.`,
+    "Hãy so sánh với các chẩn đoán phân biệt gần giống trước khi chốt đáp án."
+  ].slice(0, MAX_CLUES);
+
   return {
     id,
     title,
     diagnosis,
     aliases,
-    clues,
+    clues: paddedClues,
     summary,
     pearls: {
       "Gợi ý chính": summary,
