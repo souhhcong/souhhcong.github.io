@@ -1,19 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Demo</title>
-</head>
-<body>
-    <h1>Welcome to the HTML Demo</h1>
-    <p>This is a simple HTML document to demonstrate basic structure and elements.</p>
-    <h2>List of Items</h2>
-    <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Chanle - trò chơi chẩn đoán lâm sàng hằng ngày bằng tiếng Việt cho sinh viên y khoa."
+    />
+    <meta name="theme-color" content="#f7f3ea" />
+    <link rel="canonical" href="https://souhhcong.github.io/" />
+    <meta property="og:title" content="chanle - chẩn đoán mỗi ngày" />
+    <meta
+      property="og:description"
+      content="Đọc ca bệnh, đoán chẩn đoán, mở thêm dữ kiện khi cần."
+    />
+    <meta property="og:url" content="https://souhhcong.github.io/" />
+    <meta property="og:type" content="website" />
+    <title>chanle | chẩn đoán mỗi ngày</title>
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="chanle trang chủ">
+          <img src="assets/logo.svg" alt="" width="40" height="40" />
+          <span>
+            <strong>chanle</strong>
+            <small>chẩn đoán mỗi ngày</small>
+          </span>
+        </a>
+        <nav class="nav" aria-label="Chế độ chơi">
+          <button class="nav-button active" type="button" data-mode="daily">Hôm nay</button>
+          <button class="nav-button" type="button" data-mode="practice">Luyện tập</button>
+          <button class="icon-button" type="button" data-open="help" aria-label="Hướng dẫn">?</button>
+        </nav>
+      </header>
 
-    </ul>
-</body>
+      <main>
+        <section class="hero" aria-labelledby="title">
+          <div class="hero-copy">
+            <p class="eyebrow">Cho sinh viên y khoa Việt Nam</p>
+            <h1 id="title">chanle</h1>
+            <p>
+              Một ca bệnh ngắn, nhiều mảnh dữ kiện, một chẩn đoán cần gọi tên.
+              Hãy đoán sớm nếu bạn đủ tự tin.
+            </p>
+          </div>
+          <div class="case-badge" aria-live="polite">
+            <span id="case-number">Ca #001</span>
+            <strong id="mode-label">Ca hằng ngày</strong>
+          </div>
+        </section>
+
+        <section class="game-layout" aria-label="Khu vực chơi">
+          <article class="panel case-panel">
+            <div class="panel-header">
+              <div>
+                <p class="kicker">Ca bệnh</p>
+                <h2 id="case-title">Đang tải ca bệnh</h2>
+              </div>
+              <div class="score" aria-label="Số lượt còn lại">
+                <span id="attempts-left">6</span>
+                <small>lượt</small>
+              </div>
+            </div>
+
+            <ol class="clue-list" id="clue-list"></ol>
+
+            <form class="guess-form" id="guess-form" autocomplete="off">
+              <label for="guess-input">Chẩn đoán</label>
+              <div class="guess-row">
+                <input
+                  id="guess-input"
+                  name="guess"
+                  type="text"
+                  list="diagnosis-list"
+                  placeholder="Nhập chẩn đoán..."
+                  required
+                />
+                <button type="submit">Đoán</button>
+              </div>
+              <datalist id="diagnosis-list"></datalist>
+              <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+            </form>
+
+            <div class="actions">
+              <button class="secondary" type="button" id="reveal-button">Mở thêm dữ kiện</button>
+              <button class="secondary" type="button" id="new-case-button">Ca khác</button>
+            </div>
+          </article>
+
+          <aside class="panel side-panel" aria-label="Tiến trình và ôn tập">
+            <div>
+              <p class="kicker">Lịch sử đoán</p>
+              <ul class="history" id="history"></ul>
+            </div>
+
+            <div class="result hidden" id="result">
+              <p class="kicker">Đáp án</p>
+              <h2 id="answer"></h2>
+              <p id="summary"></p>
+              <div class="differential-block">
+                <p class="kicker">Chẩn đoán phân biệt</p>
+                <ul class="differentials" id="differentials"></ul>
+              </div>
+              <dl class="pearls" id="pearls"></dl>
+              <div class="actions compact">
+                <button class="secondary" type="button" id="copy-share">Chia sẻ</button>
+                <button class="secondary" type="button" id="copy-anki">Thẻ Anki</button>
+              </div>
+            </div>
+
+            <div class="stats">
+              <div>
+                <strong id="played">0</strong>
+                <span>đã chơi</span>
+              </div>
+              <div>
+                <strong id="solved">0</strong>
+                <span>đúng</span>
+              </div>
+              <div>
+                <strong id="streak">0</strong>
+                <span>chuỗi</span>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="notes" aria-label="Ghi chú giáo dục">
+          <p>
+            chanle là công cụ học tập và giải trí, không dùng để chẩn đoán hay
+            điều trị người bệnh thật. Nội dung nên được kiểm tra lại với tài
+            liệu, giảng viên và hướng dẫn lâm sàng hiện hành.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="help">
+      <div class="modal">
+        <button class="icon-button close" type="button" data-close="help" aria-label="Đóng">×</button>
+        <h2>Cách chơi</h2>
+        <p>
+          Mỗi ca bắt đầu bằng một dữ kiện lâm sàng. Bạn có 6 lượt để nhập chẩn
+          đoán. Mỗi lần sai hoặc khi bấm mở thêm dữ kiện, ca bệnh sẽ hé lộ thêm
+          thông tin giúp thu hẹp chẩn đoán phân biệt.
+        </p>
+        <p>
+          Hệ thống chấp nhận một số tên gọi tương đương và bỏ qua dấu tiếng
+          Việt khi so khớp, nên bạn có thể nhập nhanh trong lúc ôn bài.
+        </p>
+      </div>
+    </dialog>
+
+    <script src="app.js" defer></script>
+  </body>
 </html>
