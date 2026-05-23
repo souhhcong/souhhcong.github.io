@@ -60,9 +60,19 @@
                 <p class="kicker">Ca bệnh</p>
                 <h2 id="case-title">Đang tải ca bệnh</h2>
               </div>
-              <div class="score" aria-label="Số lượt còn lại">
-                <span id="attempts-left">6</span>
-                <small>lượt</small>
+              <div class="panel-tools">
+                <label class="difficulty-control" for="difficulty-select">
+                  <span>Độ khó</span>
+                  <select id="difficulty-select" name="difficulty">
+                    <option value="easy">Dễ</option>
+                    <option value="medium">Vừa</option>
+                    <option value="hard">Khó</option>
+                  </select>
+                </label>
+                <div class="score" aria-label="Số lượt còn lại">
+                  <span id="attempts-left">6</span>
+                  <small>lượt</small>
+                </div>
               </div>
             </div>
 
@@ -150,6 +160,10 @@
         <p>
           Hệ thống chấp nhận một số tên gọi tương đương và bỏ qua dấu tiếng
           Việt khi so khớp, nên bạn có thể nhập nhanh trong lúc ôn bài.
+        </p>
+        <p>
+          Chế độ Vừa tắt gợi ý tự động. Chế độ Khó ẩn tiêu đề ca bệnh và chỉ
+          chấp nhận tên chẩn đoán ICD hoặc mã ICD.
         </p>
       </div>
     </dialog>

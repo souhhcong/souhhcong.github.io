@@ -3,10 +3,17 @@ const MAX_CLUES = 6;
 const MAX_ATTEMPTS = MAX_CLUES;
 const STORAGE_KEY = "chanle-stats-v1";
 const STATE_KEY = "chanle-daily-state-v1";
+const DIFFICULTY_KEY = "chanle-difficulty-v1";
+const DIFFICULTY_LABELS = {
+  easy: "Dễ",
+  medium: "Vừa",
+  hard: "Khó"
+};
 
 let CASES = [];
 
 let mode = "daily";
+let difficulty = localStorage.getItem(DIFFICULTY_KEY) || "easy";
 let currentCase;
 let revealed = 1;
 let attempts = [];
@@ -108,6 +115,7 @@ const elements = {
   caseNumber: $("#case-number"),
   modeLabel: $("#mode-label"),
   caseTitle: $("#case-title"),
+  difficulty: $("#difficulty-select"),
   attemptsLeft: $("#attempts-left"),
   clueList: $("#clue-list"),
   form: $("#guess-form"),
@@ -178,6 +186,7 @@ function saveDailyState() {
     JSON.stringify({
       date: todayKey(),
       caseId: currentCase.id,
+      difficulty,
       revealed,
       attempts,
       finished
@@ -187,7 +196,14 @@ function saveDailyState() {
 
 function loadDailyState(caseData) {
   const saved = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
-  if (!saved || saved.date !== todayKey() || saved.caseId !== caseData.id) return false;
+  if (
+    !saved ||
+    saved.date !== todayKey() ||
+    saved.caseId !== caseData.id ||
+    saved.difficulty !== difficulty
+  ) {
+    return false;
+  }
   revealed = saved.revealed;
   attempts = saved.attempts || [];
   finished = Boolean(saved.finished);
@@ -195,7 +211,10 @@ function loadDailyState(caseData) {
 }
 
 function isCorrect(guess) {
-  const accepted = [currentCase.diagnosis, ...currentCase.aliases].map(normalize);
+  const accepted =
+    difficulty === "hard"
+      ? [currentCase.diagnosis, currentCase.icdCode]
+      : [currentCase.diagnosis, currentCase.icdCode, ...currentCase.aliases];
   return accepted.includes(normalize(guess));
 }
 
@@ -208,8 +227,15 @@ function setCase(caseData, restore = false) {
   if (restore) loadDailyState(caseData);
 
   elements.caseNumber.textContent = `Ca #${String(caseData.id).padStart(3, "0")}`;
-  elements.modeLabel.textContent = mode === "daily" ? "Ca hằng ngày" : "Luyện tập";
-  elements.caseTitle.textContent = caseData.title;
+  elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"} · ${DIFFICULTY_LABELS[difficulty]}`;
+  elements.caseTitle.textContent = difficulty === "hard" && !finished ? "Ca bệnh chưa đặt tên" : caseData.title;
+  if (difficulty === "easy") {
+    elements.input.setAttribute("list", "diagnosis-list");
+  } else {
+    elements.input.removeAttribute("list");
+  }
+  elements.input.placeholder =
+    difficulty === "hard" ? "Nhập tên ICD tiếng Việt hoặc mã ICD..." : "Nhập chẩn đoán...";
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
   elements.input.value = "";
@@ -219,6 +245,8 @@ function setCase(caseData, restore = false) {
 
 function render() {
   elements.attemptsLeft.textContent = Math.max(0, MAX_ATTEMPTS - attempts.length);
+  elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"} · ${DIFFICULTY_LABELS[difficulty]}`;
+  elements.caseTitle.textContent = difficulty === "hard" && !finished ? "Ca bệnh chưa đặt tên" : currentCase.title;
   elements.clueList.innerHTML = currentCase.clues
     .map((clue, index) => {
       const visible = index < revealed;
@@ -353,7 +381,7 @@ function shareText() {
     .map((item) => (item.correct ? "🟩" : "⬜"))
     .concat(Array(Math.max(0, MAX_ATTEMPTS - attempts.length)).fill("⬛"))
     .join("");
-  return `chanle #${String(currentCase.id).padStart(3, "0")} ${solvedAt || "X"}/${MAX_ATTEMPTS}\n${marks}\nhttps://souhhcong.github.io/`;
+  return `chanle #${String(currentCase.id).padStart(3, "0")} ${DIFFICULTY_LABELS[difficulty]} ${solvedAt || "X"}/${MAX_ATTEMPTS}\n${marks}\nhttps://souhhcong.github.io/`;
 }
 
 function ankiText() {
@@ -369,6 +397,14 @@ function switchMode(nextMode) {
     button.classList.toggle("active", button.dataset.mode === mode);
   });
   setCase(mode === "daily" ? CASES[dailyIndex()] : randomPracticeCase(), mode === "daily");
+}
+
+function switchDifficulty(nextDifficulty) {
+  if (!DIFFICULTY_LABELS[nextDifficulty]) return;
+  difficulty = nextDifficulty;
+  localStorage.setItem(DIFFICULTY_KEY, difficulty);
+  elements.difficulty.value = difficulty;
+  setCase(mode === "daily" ? CASES[dailyIndex()] : currentCase, mode === "daily");
 }
 
 function hydrateDiagnosisList() {
@@ -396,6 +432,7 @@ async function init() {
   }
 
   hydrateDiagnosisList();
+  elements.difficulty.value = difficulty;
   updateStatsView();
   setCase(CASES[dailyIndex()], true);
 
@@ -407,6 +444,7 @@ async function init() {
   });
   elements.copyShare.addEventListener("click", () => copyText(shareText(), elements.copyShare));
   elements.copyAnki.addEventListener("click", () => copyText(ankiText(), elements.copyAnki));
+  elements.difficulty.addEventListener("change", () => switchDifficulty(elements.difficulty.value));
 
   document.querySelectorAll("[data-mode]").forEach((button) => {
     button.addEventListener("click", () => switchMode(button.dataset.mode));

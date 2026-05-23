@@ -30,7 +30,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -199,6 +200,38 @@ button {
 h2 {
   margin: 0;
   line-height: 1.12;
+}
+
+.panel-tools {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.difficulty-control {
+  display: grid;
+  gap: 6px;
+  min-width: 110px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.difficulty-control select {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #fffdf8;
+  color: var(--ink);
+  font-weight: 800;
+  text-transform: none;
+}
+
+.difficulty-control select:focus {
+  outline: 3px solid rgba(31, 122, 95, 0.2);
+  border-color: var(--green);
 }
 
 .score {
@@ -522,6 +555,11 @@ dialog::backdrop {
 
   .panel-header {
     display: grid;
+  }
+
+  .panel-tools {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .score {

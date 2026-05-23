@@ -4,6 +4,12 @@
 
 Vietnamese diagnosis labels are normalized toward ICD-10 names from the Vietnam ICD lookup at `https://icd.kcb.vn/icd-10/icd10`; common classroom names remain accepted as aliases.
 
+Difficulty tiers:
+
+- `Dễ`: shows autocomplete suggestions and accepts common aliases.
+- `Vừa`: removes autocomplete suggestions but still accepts aliases.
+- `Khó`: hides the case title until the answer is shown and only accepts the ICD diagnosis name or ICD code.
+
 ## Local use
 
 Serve the folder with any static file server, then open `index.html`. The app loads `cases.csv`, so opening the HTML directly with `file://` may not work in every browser.
