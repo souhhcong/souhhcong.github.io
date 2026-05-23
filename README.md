@@ -25,6 +25,8 @@ The cases are educational prompts only and are not medical advice. Vignettes are
 - CDC: Clinical Care of Dengue
 - CDC: Symptoms of Dengue and Testing
 - CDC: Clinical Guidelines for Post-Streptococcal Glomerulonephritis
-- MSD Manual Professional: Pulmonary Embolism, Acute Pancreatitis, Infective Endocarditis, Diabetic Ketoacidosis, Anti-GBM Disease, Postpartum Endometritis, Subarachnoid Hemorrhage, Clostridioides difficile Infection
+- MSD Manual Professional: Pulmonary Embolism, Acute Pancreatitis, Infective Endocarditis, Acute Complications of Diabetes Mellitus, Anti-GBM Disease, Postpartum Endometritis, Subarachnoid Hemorrhage, Clostridioides difficile Infection
 - NIDDK: Anti-GBM (Goodpasture's) Disease
 - IDSA/SHEA: 2021 Clinical Practice Guideline Update for Clostridioides difficile Infection
+
+Source review date: 2026-05-23.

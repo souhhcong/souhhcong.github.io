@@ -61,7 +61,7 @@ const CASES = [
   },
   {
     id: 4,
-    title: "Phù và tiểu bọt sau viêm họng",
+    title: "Phù và tiểu sẫm màu sau viêm họng",
     diagnosis: "Viêm cầu thận cấp hậu nhiễm liên cầu",
     aliases: ["viem cau than cap hau nhiem lien cau", "post streptococcal glomerulonephritis", "psgn"],
     clues: [
@@ -190,7 +190,7 @@ const CASES = [
       "Khám bụng chướng nhẹ, ấn đau lan tỏa; bạch cầu 18 G/L.",
       "Xét nghiệm phân phát hiện độc tố C. difficile.",
       "Nội soi trong ca nặng có thể thấy giả mạc vàng trắng bám niêm mạc đại tràng.",
-      "Điều trị đầu tay thường là vancomycin uống hoặc fidaxomicin, đồng thời ngừng kháng sinh gây bệnh nếu có thể."
+      "Điều trị ưu tiên hiện nay là fidaxomicin khi có điều kiện; vancomycin uống vẫn là lựa chọn chấp nhận được, đồng thời ngừng kháng sinh gây bệnh nếu có thể."
     ],
     summary:
       "Tiêu chảy sau kháng sinh, bạch cầu tăng và độc tố C. difficile dương tính gợi ý viêm đại tràng do C. difficile.",
@@ -231,12 +231,12 @@ const SOURCE_REFERENCES = {
     url: "https://www.msdmanuals.com/professional/cardiovascular-disorders/endocarditis/infective-endocarditis"
   },
   msdDKA: {
-    title: "MSD Manual Professional - Diabetic Ketoacidosis",
-    url: "https://www.msdmanuals.com/professional/endocrine-and-metabolic-disorders/diabetes-mellitus-and-disorders-of-carbohydrate-metabolism/diabetic-ketoacidosis-dka"
+    title: "MSD Manual Professional - Acute Complications of Diabetes Mellitus",
+    url: "https://www.msdmanuals.com/professional/endocrine-and-metabolic-disorders/diabetes-mellitus-and-hypoglycemia/acute-complications-of-diabetes-mellitus"
   },
   msdAntiGBM: {
     title: "MSD Manual Professional - Anti-GBM Disease",
-    url: "https://www.msdmanuals.com/professional/pulmonary-disorders/diffuse-alveolar-hemorrhage-and-pulmonary-renal-syndrome/goodpasture-syndrome"
+    url: "https://www.msdmanuals.com/professional/pulmonary-disorders/diffuse-alveolar-hemorrhage-and-pulmonary-renal-syndrome/anti-glomerular-basement-membrane-anti-gbm-disease"
   },
   niddkAntiGBM: {
     title: "NIDDK - Anti-GBM (Goodpasture's) Disease",
@@ -252,7 +252,7 @@ const SOURCE_REFERENCES = {
   },
   msdCDiff: {
     title: "MSD Manual Professional - Clostridioides difficile Infection",
-    url: "https://www.msdmanuals.com/professional/infectious-diseases/anaerobic-bacteria/clostridioides-formerly-clostridium-difficile-induced-diarrhea"
+    url: "https://www.msdmanuals.com/professional/infectious-diseases/anaerobic-bacteria/clostridioides-difficile-infection"
   },
   idsaCDiff: {
     title: "IDSA/SHEA - 2021 C. difficile Guideline Update",
@@ -271,6 +271,49 @@ const CASE_SOURCES = {
   8: ["msdPostpartumEndometritis"],
   9: ["msdSubarachnoidHemorrhage"],
   10: ["msdCDiff", "idsaCDiff"]
+};
+
+const CASE_CITATION_NOTES = {
+  1: [
+    ["CDC Dengue", "Fever with nausea/vomiting, aches, positive tourniquet test, leukopenia and thrombocytopenia are consistent dengue features."],
+    ["CDC Dengue", "Warning signs include abdominal pain/tenderness, persistent vomiting, mucosal bleeding, lethargy/restlessness, liver enlargement and hematocrit rise."]
+  ],
+  2: [
+    ["MSD Manual", "Pulmonary embolism commonly presents with dyspnea and pleuritic chest pain; diagnosis is commonly made with CT angiography."],
+    ["MSD Manual", "Treatment is anticoagulation, with thrombolysis or clot removal reserved for selected severe cases."]
+  ],
+  3: [
+    ["MSD Manual", "Acute pancreatitis is diagnosed by compatible pain, serum amylase/lipase more than 3 times the upper limit, and/or imaging."],
+    ["MSD Manual", "Gallstones and alcohol use are the most common causes."]
+  ],
+  4: [
+    ["CDC", "PSGN can follow group A strep infection and commonly has edema, hypertension, hematuria/proteinuria, red blood cell casts, low C3 and elevated streptococcal antibodies."],
+    ["CDC", "Treatment focuses on managing edema and hypertension."]
+  ],
+  5: [
+    ["MSD Manual", "Infective endocarditis diagnosis requires blood-culture evidence of microorganisms and usually echocardiography."],
+    ["MSD Manual", "Staphylococcus aureus and injection drug use are recognized risk patterns; treatment uses prolonged antimicrobials and sometimes surgery."]
+  ],
+  6: [
+    ["MSD Manual", "DKA is characterized by hyperglycemia, ketosis and metabolic acidosis, often with nausea, vomiting, abdominal pain, dehydration and Kussmaul respirations."],
+    ["MSD Manual", "Treatment requires IV fluids, insulin and careful electrolyte, especially potassium, management."]
+  ],
+  7: [
+    ["NIDDK", "Anti-GBM disease can affect kidneys and lungs; anti-GBM antibody testing is central to diagnosis."],
+    ["MSD Manual", "Pulmonary-renal presentation with anti-GBM antibodies supports anti-GBM disease/Goodpasture syndrome."]
+  ],
+  8: [
+    ["MSD Manual", "Postpartum endometritis is more common after cesarean delivery and is suspected with postpartum fever, pain and fundal tenderness."],
+    ["MSD Manual", "First-line treatment includes broad-spectrum IV antibiotics, commonly clindamycin plus gentamicin."]
+  ],
+  9: [
+    ["MSD Manual", "Subarachnoid hemorrhage should be suspected when severe headache reaches peak intensity within seconds."],
+    ["MSD Manual", "Evaluation uses urgent noncontrast CT; treatment includes aneurysm management and nimodipine to prevent vasospasm."]
+  ],
+  10: [
+    ["MSD Manual", "C. difficile disease commonly follows antibiotic exposure and can present with watery diarrhea, abdominal pain, fever and leukocytosis."],
+    ["IDSA/SHEA", "The 2021 focused update recommends fidaxomicin over vancomycin for an initial CDI episode, while recognizing vancomycin as an acceptable alternative depending on resources."]
+  ]
 };
 
 const DIFFERENTIALS = {
@@ -352,6 +395,7 @@ const elements = {
   summary: $("#summary"),
   differentials: $("#differentials"),
   pearls: $("#pearls"),
+  citationNotes: $("#citation-notes"),
   sources: $("#sources"),
   played: $("#played"),
   solved: $("#solved"),
@@ -518,6 +562,9 @@ function showResult() {
       (source) =>
         `<li><a href="${source.url}" target="_blank" rel="noreferrer">${source.title}</a></li>`
     )
+    .join("");
+  elements.citationNotes.innerHTML = (CASE_CITATION_NOTES[currentCase.id] || [])
+    .map(([sourceName, note]) => `<p class="citation-note"><strong>${sourceName}:</strong> ${note}</p>`)
     .join("");
 }
 
