@@ -6,7 +6,19 @@ Vietnamese diagnosis labels are normalized toward ICD-10 names from the Vietnam 
 
 ## Local use
 
-Open `index.html` in a browser, or serve the folder with any static file server.
+Serve the folder with any static file server, then open `index.html`. The app loads `cases.csv`, so opening the HTML directly with `file://` may not work in every browser.
+
+## Case Data
+
+Cases live in `cases.csv`. Add or edit rows there instead of changing `app.js`.
+
+Important columns:
+
+- `id`, `title`, `icd_code`, `diagnosis`, `aliases`
+- `clue1` through `clue6`
+- `summary`
+- `pearl1_title`, `pearl1_text`, `pearl2_title`, `pearl2_text`
+- optional `differential*_name` and `differential*_note`
 
 ## Deploy to GitHub Pages
 
