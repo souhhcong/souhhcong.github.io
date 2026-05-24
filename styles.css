@@ -190,6 +190,7 @@ button {
 
 .panel-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
   align-items: start;
@@ -197,21 +198,30 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.panel-header > div:first-child {
+  min-width: min(100%, 220px);
+}
+
 h2 {
   margin: 0;
   line-height: 1.12;
+  overflow-wrap: anywhere;
 }
 
 .panel-tools {
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
+  justify-content: flex-end;
   gap: 10px;
+  max-width: 100%;
+  margin-left: auto;
 }
 
 .difficulty-control {
   display: grid;
   gap: 6px;
-  min-width: 110px;
+  width: min(166px, 100%);
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
@@ -227,6 +237,7 @@ h2 {
   color: var(--ink);
   font-weight: 800;
   text-transform: none;
+  max-width: 100%;
 }
 
 .difficulty-control select:focus {
