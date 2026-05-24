@@ -189,9 +189,8 @@ button {
 }
 
 .panel-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
   padding-bottom: 18px;
@@ -212,16 +211,19 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 10px;
+  width: 100%;
   max-width: 100%;
-  margin-left: auto;
+  margin-left: 0;
 }
 
 .difficulty-control {
   display: grid;
   gap: 6px;
-  width: min(166px, 100%);
+  flex: 1 1 166px;
+  min-width: 0;
+  max-width: 260px;
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
