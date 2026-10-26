@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>chanle · local preview</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 14px system-ui, sans-serif; background: #e5e2db; color: #252c27; }
+      header { padding: 12px 16px; background: #fffdf7; border-bottom: 1px solid #ccc7bb; }
+      form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+      label { display: grid; gap: 4px; }
+      select, button, a { font: inherit; padding: 8px; }
+      #case { max-width: min(450px, 85vw); }
+      button { cursor: pointer; }
+      p { margin: 10px 0 0; color: #59645c; }
+      main { padding: 16px; }
+      iframe { display: block; margin: auto; width: 100%; height: calc(100vh - 155px); min-height: 500px; border: 1px solid #bab5aa; background: #f7f3ea; }
+      #error { color: #a32b20; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <form id="controls">
+        <label>Game <select id="game-type" aria-label="Game"><option value="clinical">Clinical clues</option><option value="treatment">Treatment plan</option></select></label>
+        <label>Specialty <select id="category" aria-label="Specialty"><option value="all">All specialties</option></select></label>
+        <label>Case <select id="case" aria-label="Case" required><option value="">Loading cases…</option></select></label>
+        <label>Difficulty <select id="difficulty" aria-label="Difficulty"><option value="easy">Dễ</option><option value="medium">Vừa</option><option value="hard">Khó</option></select></label>
+        <label>Screen <select id="screen" aria-label="Screen"><option value="100%">Full width</option><option value="390px">Phone · 390px</option><option value="768px">Tablet · 768px</option></select></label>
+        <button type="submit">Load / reset case</button>
+        <a id="open" href="/" target="_blank" rel="noopener">Open game in tab</a>
+      </form>
+      <p>Local preview · reload after editing files. H1 = familiar knowledge, H5 = rare or specialised. Selected cases use practice mode and do not restore a saved round.</p>
+      <p id="error" role="alert" hidden></p>
+    </header>
+    <main><iframe id="game" title="chanle game preview" src="/"></iframe></main>
+    <script type="module">
+      const select = document.querySelector("#case");
+      const game = document.querySelector("#game");
+      const screen = document.querySelector("#screen");
+      const category = document.querySelector("#category");
+      const gameType = document.querySelector("#game-type");
+      let cases = [];
+      let revision;
+      let ratings;
+      function loadCase() {
+        if (!select.value) return;
+        const query = new URLSearchParams({case: select.value, difficulty: document.querySelector("#difficulty").value,
+          game:gameType.value, category:category.value});
+        game.src = `/?${query}`;
+        document.querySelector("#open").href = game.src;
+      }
+      function filterCases() {
+        const previous = select.value;
+        const allowed = new Set(revision.cases.filter((item) => category.value === "all" || item.categoryIds.includes(category.value)).map((item) => item.caseId));
+        select.replaceChildren(...cases.filter(({id}) => allowed.has(id)).map(({id,title}) => {
+          const option = document.createElement("option");
+          option.value = id;
+          option.textContent = `#${String(id).padStart(3,"0")} · ${title} · H${ratings.get(id)}/5`;
+          return option;
+        }));
+        if ([...select.options].some((option) => option.value === previous)) select.value = previous;
+      }
+      category.addEventListener("change", () => {filterCases(); loadCase();});
+      gameType.addEventListener("change", loadCase);
+      document.querySelector("#controls").addEventListener("submit", (event) => {event.preventDefault(); loadCase();});
+      screen.addEventListener("change", () => {game.style.width = screen.value; game.style.maxWidth = "100%";});
+      try {
+        const [response, revisionResponse, ratingResponse] = await Promise.all([fetch("/__preview/cases.json"),fetch("/revision-data.json"),fetch("/case-difficulty.json")]);
+        if (!response.ok || !revisionResponse.ok || !ratingResponse.ok) throw new Error("Case list could not be loaded. Run deno task check.");
+        cases = await response.json();
+        revision = await revisionResponse.json();
+        ratings = new Map((await ratingResponse.json()).cases.map(item=>[item.caseId,item.hardness]));
+        category.append(...revision.categories.map(({id,label}) => {
+          const option = document.createElement("option");
+          option.value = id;
+          option.textContent = `${label} (${revision.cases.filter((item) => item.categoryIds.includes(id)).length})`;
+          return option;
+        }));
+        filterCases();
+        loadCase();
+      } catch (error) {
+        const message = document.querySelector("#error");
+        message.textContent = error.message;
+        message.hidden = false;
+      }
+    </script>
+  </body>
+</html>

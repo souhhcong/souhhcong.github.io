@@ -1,0 +1,19 @@
+{
+  "version": "vn-clinical-familiarity-0.1.0",
+  "status": "pilot_unvalidated",
+  "population": "Vietnamese general medicine students, Y4-Y6; equal year weighting until player population is known",
+  "construct": "Condition recognition and basic understanding, independent of any puzzle clues or treatment details",
+  "weights": {"curriculum": 35, "exposure": 25, "reinforcement": 20, "pattern": 10, "scope": 10},
+  "levels": {
+    "curriculum": ["Repeated explicit core learning objectives across at least two undergraduate programmes", "Explicit required disease topic or core problem in one undergraduate programme", "Limited depth, optional coverage, or documented institutional variation", "Predominantly advanced specialty teaching with positive supporting evidence", "Documented postgraduate/subspecialty scope; no inference from search absence"],
+    "exposure": ["Repeated encounters in several core placements", "Usually encountered in a relevant core placement", "Occasional encounter or substantial regional/seasonal variation", "Unlikely firsthand encounter during ordinary placements", "Exceptional encounter even at typical training hospitals"],
+    "reinforcement": ["Repeated across core undergraduate resources and assessment blueprints", "Dedicated undergraduate chapter/lecture or verified assessment objective", "Brief or single-resource coverage", "Mainly advanced specialty resources", "Mainly subspecialty literature; little generalist reinforcement"],
+    "pattern": ["Most students know the canonical syndrome and basic mechanism", "Standard presentation and basic mechanism usually familiar", "Name recognized, but canonical syndrome or mechanism variably understood", "Pattern generally requires additional specialty study", "Recognition and basic understanding require niche knowledge"],
+    "scope": ["Broad generalist recognition and initial assessment expected across core placements", "Routine recognition/basic understanding within a core specialty", "Generalist awareness expected, detailed understanding less consistent", "Mainly specialty-level recognition", "Subspecialty-level entity or fine subtype distinction"]
+  },
+  "tierUpperBounds": {"easy": 30, "medium": 60, "hard": 100},
+  "missingValue": 2,
+  "displayStep": 5,
+  "review": {"boundaryMargin": 5, "repeatDifference": 10, "minimumEvidenceCoverage": 60},
+  "warning": "Weights, level boundaries and tiers are design hypotheses, not validated probabilities. Missing values are unknown, never proof of specialist scope."
+}

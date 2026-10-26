@@ -1,0 +1,1605 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "caseId": 1,
+      "hardness": 1
+    },
+    {
+      "caseId": 2,
+      "hardness": 2
+    },
+    {
+      "caseId": 3,
+      "hardness": 1
+    },
+    {
+      "caseId": 4,
+      "hardness": 2
+    },
+    {
+      "caseId": 5,
+      "hardness": 2
+    },
+    {
+      "caseId": 6,
+      "hardness": 1
+    },
+    {
+      "caseId": 7,
+      "hardness": 4
+    },
+    {
+      "caseId": 8,
+      "hardness": 2
+    },
+    {
+      "caseId": 9,
+      "hardness": 2
+    },
+    {
+      "caseId": 10,
+      "hardness": 3
+    },
+    {
+      "caseId": 11,
+      "hardness": 1
+    },
+    {
+      "caseId": 12,
+      "hardness": 1
+    },
+    {
+      "caseId": 13,
+      "hardness": 2
+    },
+    {
+      "caseId": 14,
+      "hardness": 2
+    },
+    {
+      "caseId": 15,
+      "hardness": 1
+    },
+    {
+      "caseId": 16,
+      "hardness": 1
+    },
+    {
+      "caseId": 17,
+      "hardness": 1
+    },
+    {
+      "caseId": 18,
+      "hardness": 2
+    },
+    {
+      "caseId": 19,
+      "hardness": 2
+    },
+    {
+      "caseId": 20,
+      "hardness": 2
+    },
+    {
+      "caseId": 21,
+      "hardness": 1
+    },
+    {
+      "caseId": 22,
+      "hardness": 1
+    },
+    {
+      "caseId": 23,
+      "hardness": 1
+    },
+    {
+      "caseId": 24,
+      "hardness": 1
+    },
+    {
+      "caseId": 25,
+      "hardness": 2
+    },
+    {
+      "caseId": 26,
+      "hardness": 2
+    },
+    {
+      "caseId": 27,
+      "hardness": 2
+    },
+    {
+      "caseId": 28,
+      "hardness": 2
+    },
+    {
+      "caseId": 29,
+      "hardness": 3
+    },
+    {
+      "caseId": 30,
+      "hardness": 3
+    },
+    {
+      "caseId": 31,
+      "hardness": 1
+    },
+    {
+      "caseId": 32,
+      "hardness": 1
+    },
+    {
+      "caseId": 33,
+      "hardness": 1
+    },
+    {
+      "caseId": 34,
+      "hardness": 1
+    },
+    {
+      "caseId": 35,
+      "hardness": 1
+    },
+    {
+      "caseId": 36,
+      "hardness": 2
+    },
+    {
+      "caseId": 37,
+      "hardness": 3
+    },
+    {
+      "caseId": 38,
+      "hardness": 2
+    },
+    {
+      "caseId": 39,
+      "hardness": 3
+    },
+    {
+      "caseId": 40,
+      "hardness": 2
+    },
+    {
+      "caseId": 41,
+      "hardness": 1
+    },
+    {
+      "caseId": 42,
+      "hardness": 1
+    },
+    {
+      "caseId": 43,
+      "hardness": 1
+    },
+    {
+      "caseId": 44,
+      "hardness": 2
+    },
+    {
+      "caseId": 45,
+      "hardness": 2
+    },
+    {
+      "caseId": 46,
+      "hardness": 2
+    },
+    {
+      "caseId": 47,
+      "hardness": 3
+    },
+    {
+      "caseId": 48,
+      "hardness": 1
+    },
+    {
+      "caseId": 49,
+      "hardness": 2
+    },
+    {
+      "caseId": 50,
+      "hardness": 2
+    },
+    {
+      "caseId": 51,
+      "hardness": 1
+    },
+    {
+      "caseId": 52,
+      "hardness": 1
+    },
+    {
+      "caseId": 53,
+      "hardness": 1
+    },
+    {
+      "caseId": 54,
+      "hardness": 2
+    },
+    {
+      "caseId": 55,
+      "hardness": 3
+    },
+    {
+      "caseId": 56,
+      "hardness": 3
+    },
+    {
+      "caseId": 57,
+      "hardness": 3
+    },
+    {
+      "caseId": 58,
+      "hardness": 2
+    },
+    {
+      "caseId": 59,
+      "hardness": 3
+    },
+    {
+      "caseId": 60,
+      "hardness": 1
+    },
+    {
+      "caseId": 61,
+      "hardness": 1
+    },
+    {
+      "caseId": 62,
+      "hardness": 1
+    },
+    {
+      "caseId": 63,
+      "hardness": 1
+    },
+    {
+      "caseId": 64,
+      "hardness": 1
+    },
+    {
+      "caseId": 65,
+      "hardness": 2
+    },
+    {
+      "caseId": 66,
+      "hardness": 3
+    },
+    {
+      "caseId": 67,
+      "hardness": 2
+    },
+    {
+      "caseId": 68,
+      "hardness": 1
+    },
+    {
+      "caseId": 69,
+      "hardness": 2
+    },
+    {
+      "caseId": 70,
+      "hardness": 1
+    },
+    {
+      "caseId": 71,
+      "hardness": 1
+    },
+    {
+      "caseId": 72,
+      "hardness": 2
+    },
+    {
+      "caseId": 73,
+      "hardness": 3
+    },
+    {
+      "caseId": 74,
+      "hardness": 3
+    },
+    {
+      "caseId": 75,
+      "hardness": 4
+    },
+    {
+      "caseId": 76,
+      "hardness": 2
+    },
+    {
+      "caseId": 77,
+      "hardness": 1
+    },
+    {
+      "caseId": 78,
+      "hardness": 1
+    },
+    {
+      "caseId": 79,
+      "hardness": 1
+    },
+    {
+      "caseId": 80,
+      "hardness": 1
+    },
+    {
+      "caseId": 81,
+      "hardness": 1
+    },
+    {
+      "caseId": 82,
+      "hardness": 1
+    },
+    {
+      "caseId": 83,
+      "hardness": 1
+    },
+    {
+      "caseId": 84,
+      "hardness": 1
+    },
+    {
+      "caseId": 85,
+      "hardness": 1
+    },
+    {
+      "caseId": 86,
+      "hardness": 2
+    },
+    {
+      "caseId": 87,
+      "hardness": 1
+    },
+    {
+      "caseId": 88,
+      "hardness": 1
+    },
+    {
+      "caseId": 89,
+      "hardness": 2
+    },
+    {
+      "caseId": 90,
+      "hardness": 1
+    },
+    {
+      "caseId": 91,
+      "hardness": 1
+    },
+    {
+      "caseId": 92,
+      "hardness": 2
+    },
+    {
+      "caseId": 93,
+      "hardness": 2
+    },
+    {
+      "caseId": 94,
+      "hardness": 3
+    },
+    {
+      "caseId": 95,
+      "hardness": 1
+    },
+    {
+      "caseId": 96,
+      "hardness": 1
+    },
+    {
+      "caseId": 97,
+      "hardness": 1
+    },
+    {
+      "caseId": 98,
+      "hardness": 2
+    },
+    {
+      "caseId": 99,
+      "hardness": 1
+    },
+    {
+      "caseId": 100,
+      "hardness": 2
+    },
+    {
+      "caseId": 101,
+      "hardness": 1
+    },
+    {
+      "caseId": 102,
+      "hardness": 2
+    },
+    {
+      "caseId": 103,
+      "hardness": 2
+    },
+    {
+      "caseId": 104,
+      "hardness": 2
+    },
+    {
+      "caseId": 105,
+      "hardness": 2
+    },
+    {
+      "caseId": 106,
+      "hardness": 2
+    },
+    {
+      "caseId": 107,
+      "hardness": 2
+    },
+    {
+      "caseId": 108,
+      "hardness": 2
+    },
+    {
+      "caseId": 109,
+      "hardness": 2
+    },
+    {
+      "caseId": 110,
+      "hardness": 3
+    },
+    {
+      "caseId": 111,
+      "hardness": 2
+    },
+    {
+      "caseId": 112,
+      "hardness": 2
+    },
+    {
+      "caseId": 113,
+      "hardness": 2
+    },
+    {
+      "caseId": 114,
+      "hardness": 3
+    },
+    {
+      "caseId": 115,
+      "hardness": 1
+    },
+    {
+      "caseId": 116,
+      "hardness": 1
+    },
+    {
+      "caseId": 117,
+      "hardness": 4
+    },
+    {
+      "caseId": 118,
+      "hardness": 4
+    },
+    {
+      "caseId": 119,
+      "hardness": 2
+    },
+    {
+      "caseId": 120,
+      "hardness": 1
+    },
+    {
+      "caseId": 121,
+      "hardness": 1
+    },
+    {
+      "caseId": 122,
+      "hardness": 3
+    },
+    {
+      "caseId": 123,
+      "hardness": 1
+    },
+    {
+      "caseId": 124,
+      "hardness": 2
+    },
+    {
+      "caseId": 125,
+      "hardness": 1
+    },
+    {
+      "caseId": 126,
+      "hardness": 1
+    },
+    {
+      "caseId": 127,
+      "hardness": 3
+    },
+    {
+      "caseId": 128,
+      "hardness": 3
+    },
+    {
+      "caseId": 129,
+      "hardness": 3
+    },
+    {
+      "caseId": 130,
+      "hardness": 1
+    },
+    {
+      "caseId": 131,
+      "hardness": 1
+    },
+    {
+      "caseId": 132,
+      "hardness": 2
+    },
+    {
+      "caseId": 133,
+      "hardness": 3
+    },
+    {
+      "caseId": 134,
+      "hardness": 2
+    },
+    {
+      "caseId": 135,
+      "hardness": 4
+    },
+    {
+      "caseId": 136,
+      "hardness": 3
+    },
+    {
+      "caseId": 137,
+      "hardness": 2
+    },
+    {
+      "caseId": 138,
+      "hardness": 1
+    },
+    {
+      "caseId": 139,
+      "hardness": 1
+    },
+    {
+      "caseId": 140,
+      "hardness": 3
+    },
+    {
+      "caseId": 141,
+      "hardness": 1
+    },
+    {
+      "caseId": 142,
+      "hardness": 2
+    },
+    {
+      "caseId": 143,
+      "hardness": 3
+    },
+    {
+      "caseId": 144,
+      "hardness": 3
+    },
+    {
+      "caseId": 145,
+      "hardness": 2
+    },
+    {
+      "caseId": 146,
+      "hardness": 2
+    },
+    {
+      "caseId": 147,
+      "hardness": 3
+    },
+    {
+      "caseId": 148,
+      "hardness": 3
+    },
+    {
+      "caseId": 149,
+      "hardness": 2
+    },
+    {
+      "caseId": 150,
+      "hardness": 4
+    },
+    {
+      "caseId": 151,
+      "hardness": 1
+    },
+    {
+      "caseId": 152,
+      "hardness": 3
+    },
+    {
+      "caseId": 153,
+      "hardness": 3
+    },
+    {
+      "caseId": 154,
+      "hardness": 4
+    },
+    {
+      "caseId": 155,
+      "hardness": 3
+    },
+    {
+      "caseId": 156,
+      "hardness": 1
+    },
+    {
+      "caseId": 157,
+      "hardness": 2
+    },
+    {
+      "caseId": 158,
+      "hardness": 3
+    },
+    {
+      "caseId": 159,
+      "hardness": 3
+    },
+    {
+      "caseId": 160,
+      "hardness": 2
+    },
+    {
+      "caseId": 161,
+      "hardness": 4
+    },
+    {
+      "caseId": 162,
+      "hardness": 4
+    },
+    {
+      "caseId": 163,
+      "hardness": 2
+    },
+    {
+      "caseId": 164,
+      "hardness": 4
+    },
+    {
+      "caseId": 165,
+      "hardness": 3
+    },
+    {
+      "caseId": 166,
+      "hardness": 3
+    },
+    {
+      "caseId": 167,
+      "hardness": 1
+    },
+    {
+      "caseId": 168,
+      "hardness": 1
+    },
+    {
+      "caseId": 169,
+      "hardness": 1
+    },
+    {
+      "caseId": 170,
+      "hardness": 1
+    },
+    {
+      "caseId": 171,
+      "hardness": 2
+    },
+    {
+      "caseId": 172,
+      "hardness": 3
+    },
+    {
+      "caseId": 173,
+      "hardness": 2
+    },
+    {
+      "caseId": 174,
+      "hardness": 2
+    },
+    {
+      "caseId": 175,
+      "hardness": 2
+    },
+    {
+      "caseId": 176,
+      "hardness": 2
+    },
+    {
+      "caseId": 177,
+      "hardness": 1
+    },
+    {
+      "caseId": 178,
+      "hardness": 1
+    },
+    {
+      "caseId": 179,
+      "hardness": 2
+    },
+    {
+      "caseId": 180,
+      "hardness": 1
+    },
+    {
+      "caseId": 181,
+      "hardness": 1
+    },
+    {
+      "caseId": 182,
+      "hardness": 1
+    },
+    {
+      "caseId": 183,
+      "hardness": 2
+    },
+    {
+      "caseId": 184,
+      "hardness": 1
+    },
+    {
+      "caseId": 185,
+      "hardness": 1
+    },
+    {
+      "caseId": 186,
+      "hardness": 2
+    },
+    {
+      "caseId": 187,
+      "hardness": 1
+    },
+    {
+      "caseId": 188,
+      "hardness": 2
+    },
+    {
+      "caseId": 189,
+      "hardness": 2
+    },
+    {
+      "caseId": 190,
+      "hardness": 2
+    },
+    {
+      "caseId": 191,
+      "hardness": 2
+    },
+    {
+      "caseId": 192,
+      "hardness": 2
+    },
+    {
+      "caseId": 193,
+      "hardness": 2
+    },
+    {
+      "caseId": 194,
+      "hardness": 4
+    },
+    {
+      "caseId": 195,
+      "hardness": 4
+    },
+    {
+      "caseId": 196,
+      "hardness": 1
+    },
+    {
+      "caseId": 197,
+      "hardness": 1
+    },
+    {
+      "caseId": 198,
+      "hardness": 3
+    },
+    {
+      "caseId": 199,
+      "hardness": 2
+    },
+    {
+      "caseId": 200,
+      "hardness": 3
+    },
+    {
+      "caseId": 201,
+      "hardness": 2
+    },
+    {
+      "caseId": 202,
+      "hardness": 2
+    },
+    {
+      "caseId": 203,
+      "hardness": 2
+    },
+    {
+      "caseId": 204,
+      "hardness": 2
+    },
+    {
+      "caseId": 205,
+      "hardness": 3
+    },
+    {
+      "caseId": 206,
+      "hardness": 2
+    },
+    {
+      "caseId": 207,
+      "hardness": 4
+    },
+    {
+      "caseId": 208,
+      "hardness": 3
+    },
+    {
+      "caseId": 209,
+      "hardness": 2
+    },
+    {
+      "caseId": 210,
+      "hardness": 5
+    },
+    {
+      "caseId": 211,
+      "hardness": 3
+    },
+    {
+      "caseId": 212,
+      "hardness": 2
+    },
+    {
+      "caseId": 213,
+      "hardness": 3
+    },
+    {
+      "caseId": 214,
+      "hardness": 3
+    },
+    {
+      "caseId": 215,
+      "hardness": 3
+    },
+    {
+      "caseId": 216,
+      "hardness": 2
+    },
+    {
+      "caseId": 217,
+      "hardness": 3
+    },
+    {
+      "caseId": 218,
+      "hardness": 2
+    },
+    {
+      "caseId": 219,
+      "hardness": 2
+    },
+    {
+      "caseId": 220,
+      "hardness": 3
+    },
+    {
+      "caseId": 221,
+      "hardness": 2
+    },
+    {
+      "caseId": 222,
+      "hardness": 3
+    },
+    {
+      "caseId": 223,
+      "hardness": 3
+    },
+    {
+      "caseId": 224,
+      "hardness": 4
+    },
+    {
+      "caseId": 225,
+      "hardness": 4
+    },
+    {
+      "caseId": 226,
+      "hardness": 1
+    },
+    {
+      "caseId": 227,
+      "hardness": 3
+    },
+    {
+      "caseId": 228,
+      "hardness": 2
+    },
+    {
+      "caseId": 229,
+      "hardness": 2
+    },
+    {
+      "caseId": 230,
+      "hardness": 4
+    },
+    {
+      "caseId": 231,
+      "hardness": 5
+    },
+    {
+      "caseId": 232,
+      "hardness": 3
+    },
+    {
+      "caseId": 233,
+      "hardness": 4
+    },
+    {
+      "caseId": 234,
+      "hardness": 4
+    },
+    {
+      "caseId": 235,
+      "hardness": 4
+    },
+    {
+      "caseId": 236,
+      "hardness": 4
+    },
+    {
+      "caseId": 237,
+      "hardness": 4
+    },
+    {
+      "caseId": 238,
+      "hardness": 4
+    },
+    {
+      "caseId": 239,
+      "hardness": 4
+    },
+    {
+      "caseId": 240,
+      "hardness": 5
+    },
+    {
+      "caseId": 241,
+      "hardness": 3
+    },
+    {
+      "caseId": 242,
+      "hardness": 2
+    },
+    {
+      "caseId": 243,
+      "hardness": 1
+    },
+    {
+      "caseId": 244,
+      "hardness": 4
+    },
+    {
+      "caseId": 245,
+      "hardness": 1
+    },
+    {
+      "caseId": 246,
+      "hardness": 3
+    },
+    {
+      "caseId": 247,
+      "hardness": 4
+    },
+    {
+      "caseId": 248,
+      "hardness": 4
+    },
+    {
+      "caseId": 249,
+      "hardness": 5
+    },
+    {
+      "caseId": 250,
+      "hardness": 2
+    },
+    {
+      "caseId": 251,
+      "hardness": 3
+    },
+    {
+      "caseId": 252,
+      "hardness": 2
+    },
+    {
+      "caseId": 253,
+      "hardness": 2
+    },
+    {
+      "caseId": 254,
+      "hardness": 2
+    },
+    {
+      "caseId": 255,
+      "hardness": 1
+    },
+    {
+      "caseId": 256,
+      "hardness": 3
+    },
+    {
+      "caseId": 257,
+      "hardness": 4
+    },
+    {
+      "caseId": 258,
+      "hardness": 2
+    },
+    {
+      "caseId": 259,
+      "hardness": 1
+    },
+    {
+      "caseId": 260,
+      "hardness": 1
+    },
+    {
+      "caseId": 261,
+      "hardness": 3
+    },
+    {
+      "caseId": 262,
+      "hardness": 5
+    },
+    {
+      "caseId": 263,
+      "hardness": 2
+    },
+    {
+      "caseId": 264,
+      "hardness": 2
+    },
+    {
+      "caseId": 265,
+      "hardness": 2
+    },
+    {
+      "caseId": 266,
+      "hardness": 2
+    },
+    {
+      "caseId": 267,
+      "hardness": 2
+    },
+    {
+      "caseId": 268,
+      "hardness": 3
+    },
+    {
+      "caseId": 269,
+      "hardness": 1
+    },
+    {
+      "caseId": 270,
+      "hardness": 2
+    },
+    {
+      "caseId": 271,
+      "hardness": 4
+    },
+    {
+      "caseId": 272,
+      "hardness": 2
+    },
+    {
+      "caseId": 273,
+      "hardness": 4
+    },
+    {
+      "caseId": 274,
+      "hardness": 3
+    },
+    {
+      "caseId": 275,
+      "hardness": 4
+    },
+    {
+      "caseId": 276,
+      "hardness": 3
+    },
+    {
+      "caseId": 277,
+      "hardness": 2
+    },
+    {
+      "caseId": 278,
+      "hardness": 2
+    },
+    {
+      "caseId": 279,
+      "hardness": 3
+    },
+    {
+      "caseId": 280,
+      "hardness": 1
+    },
+    {
+      "caseId": 281,
+      "hardness": 2
+    },
+    {
+      "caseId": 282,
+      "hardness": 3
+    },
+    {
+      "caseId": 283,
+      "hardness": 3
+    },
+    {
+      "caseId": 284,
+      "hardness": 3
+    },
+    {
+      "caseId": 285,
+      "hardness": 3
+    },
+    {
+      "caseId": 286,
+      "hardness": 2
+    },
+    {
+      "caseId": 287,
+      "hardness": 4
+    },
+    {
+      "caseId": 288,
+      "hardness": 4
+    },
+    {
+      "caseId": 289,
+      "hardness": 3
+    },
+    {
+      "caseId": 290,
+      "hardness": 4
+    },
+    {
+      "caseId": 291,
+      "hardness": 2
+    },
+    {
+      "caseId": 292,
+      "hardness": 4
+    },
+    {
+      "caseId": 293,
+      "hardness": 3
+    },
+    {
+      "caseId": 294,
+      "hardness": 4
+    },
+    {
+      "caseId": 295,
+      "hardness": 4
+    },
+    {
+      "caseId": 296,
+      "hardness": 3
+    },
+    {
+      "caseId": 297,
+      "hardness": 1
+    },
+    {
+      "caseId": 298,
+      "hardness": 1
+    },
+    {
+      "caseId": 299,
+      "hardness": 5
+    },
+    {
+      "caseId": 300,
+      "hardness": 4
+    },
+    {
+      "caseId": 301,
+      "hardness": 1
+    },
+    {
+      "caseId": 302,
+      "hardness": 4
+    },
+    {
+      "caseId": 303,
+      "hardness": 2
+    },
+    {
+      "caseId": 304,
+      "hardness": 3
+    },
+    {
+      "caseId": 305,
+      "hardness": 3
+    },
+    {
+      "caseId": 306,
+      "hardness": 4
+    },
+    {
+      "caseId": 307,
+      "hardness": 3
+    },
+    {
+      "caseId": 308,
+      "hardness": 4
+    },
+    {
+      "caseId": 309,
+      "hardness": 2
+    },
+    {
+      "caseId": 310,
+      "hardness": 3
+    },
+    {
+      "caseId": 311,
+      "hardness": 3
+    },
+    {
+      "caseId": 312,
+      "hardness": 4
+    },
+    {
+      "caseId": 313,
+      "hardness": 2
+    },
+    {
+      "caseId": 314,
+      "hardness": 3
+    },
+    {
+      "caseId": 315,
+      "hardness": 4
+    },
+    {
+      "caseId": 316,
+      "hardness": 3
+    },
+    {
+      "caseId": 317,
+      "hardness": 2
+    },
+    {
+      "caseId": 318,
+      "hardness": 3
+    },
+    {
+      "caseId": 319,
+      "hardness": 2
+    },
+    {
+      "caseId": 320,
+      "hardness": 4
+    },
+    {
+      "caseId": 321,
+      "hardness": 3
+    },
+    {
+      "caseId": 322,
+      "hardness": 4
+    },
+    {
+      "caseId": 323,
+      "hardness": 2
+    },
+    {
+      "caseId": 324,
+      "hardness": 2
+    },
+    {
+      "caseId": 325,
+      "hardness": 3
+    },
+    {
+      "caseId": 326,
+      "hardness": 3
+    },
+    {
+      "caseId": 327,
+      "hardness": 5
+    },
+    {
+      "caseId": 328,
+      "hardness": 4
+    },
+    {
+      "caseId": 329,
+      "hardness": 5
+    },
+    {
+      "caseId": 330,
+      "hardness": 4
+    },
+    {
+      "caseId": 331,
+      "hardness": 2
+    },
+    {
+      "caseId": 332,
+      "hardness": 1
+    },
+    {
+      "caseId": 333,
+      "hardness": 1
+    },
+    {
+      "caseId": 334,
+      "hardness": 2
+    },
+    {
+      "caseId": 335,
+      "hardness": 1
+    },
+    {
+      "caseId": 336,
+      "hardness": 2
+    },
+    {
+      "caseId": 337,
+      "hardness": 3
+    },
+    {
+      "caseId": 338,
+      "hardness": 4
+    },
+    {
+      "caseId": 339,
+      "hardness": 3
+    },
+    {
+      "caseId": 340,
+      "hardness": 3
+    },
+    {
+      "caseId": 341,
+      "hardness": 1
+    },
+    {
+      "caseId": 342,
+      "hardness": 1
+    },
+    {
+      "caseId": 343,
+      "hardness": 2
+    },
+    {
+      "caseId": 344,
+      "hardness": 2
+    },
+    {
+      "caseId": 345,
+      "hardness": 3
+    },
+    {
+      "caseId": 346,
+      "hardness": 2
+    },
+    {
+      "caseId": 347,
+      "hardness": 1
+    },
+    {
+      "caseId": 348,
+      "hardness": 3
+    },
+    {
+      "caseId": 349,
+      "hardness": 2
+    },
+    {
+      "caseId": 350,
+      "hardness": 2
+    },
+    {
+      "caseId": 351,
+      "hardness": 2
+    },
+    {
+      "caseId": 352,
+      "hardness": 2
+    },
+    {
+      "caseId": 353,
+      "hardness": 2
+    },
+    {
+      "caseId": 354,
+      "hardness": 3
+    },
+    {
+      "caseId": 355,
+      "hardness": 3
+    },
+    {
+      "caseId": 356,
+      "hardness": 3
+    },
+    {
+      "caseId": 357,
+      "hardness": 4
+    },
+    {
+      "caseId": 358,
+      "hardness": 4
+    },
+    {
+      "caseId": 359,
+      "hardness": 3
+    },
+    {
+      "caseId": 360,
+      "hardness": 4
+    },
+    {
+      "caseId": 361,
+      "hardness": 2
+    },
+    {
+      "caseId": 362,
+      "hardness": 2
+    },
+    {
+      "caseId": 363,
+      "hardness": 2
+    },
+    {
+      "caseId": 364,
+      "hardness": 3
+    },
+    {
+      "caseId": 365,
+      "hardness": 2
+    },
+    {
+      "caseId": 366,
+      "hardness": 3
+    },
+    {
+      "caseId": 367,
+      "hardness": 3
+    },
+    {
+      "caseId": 368,
+      "hardness": 1
+    },
+    {
+      "caseId": 369,
+      "hardness": 3
+    },
+    {
+      "caseId": 370,
+      "hardness": 2
+    },
+    {
+      "caseId": 371,
+      "hardness": 4
+    },
+    {
+      "caseId": 372,
+      "hardness": 3
+    },
+    {
+      "caseId": 373,
+      "hardness": 1
+    },
+    {
+      "caseId": 374,
+      "hardness": 3
+    },
+    {
+      "caseId": 375,
+      "hardness": 2
+    },
+    {
+      "caseId": 376,
+      "hardness": 1
+    },
+    {
+      "caseId": 377,
+      "hardness": 2
+    },
+    {
+      "caseId": 378,
+      "hardness": 3
+    },
+    {
+      "caseId": 379,
+      "hardness": 2
+    },
+    {
+      "caseId": 380,
+      "hardness": 3
+    },
+    {
+      "caseId": 381,
+      "hardness": 3
+    },
+    {
+      "caseId": 382,
+      "hardness": 3
+    },
+    {
+      "caseId": 383,
+      "hardness": 3
+    },
+    {
+      "caseId": 384,
+      "hardness": 1
+    },
+    {
+      "caseId": 385,
+      "hardness": 1
+    },
+    {
+      "caseId": 386,
+      "hardness": 2
+    },
+    {
+      "caseId": 387,
+      "hardness": 3
+    },
+    {
+      "caseId": 388,
+      "hardness": 3
+    },
+    {
+      "caseId": 389,
+      "hardness": 2
+    },
+    {
+      "caseId": 390,
+      "hardness": 2
+    },
+    {
+      "caseId": 391,
+      "hardness": 1
+    },
+    {
+      "caseId": 392,
+      "hardness": 2
+    },
+    {
+      "caseId": 393,
+      "hardness": 2
+    },
+    {
+      "caseId": 394,
+      "hardness": 2
+    },
+    {
+      "caseId": 395,
+      "hardness": 2
+    },
+    {
+      "caseId": 396,
+      "hardness": 2
+    },
+    {
+      "caseId": 397,
+      "hardness": 3
+    },
+    {
+      "caseId": 398,
+      "hardness": 3
+    },
+    {
+      "caseId": 399,
+      "hardness": 2
+    },
+    {
+      "caseId": 400,
+      "hardness": 2
+    }
+  ]
+}
