@@ -72,6 +72,8 @@ deno task check
 
 These checks also run on pushes and pull requests. They require no downloaded JavaScript packages.
 
+After editing `app.js`, `styles.css` or `assets/logo.svg`, run `deno task version:assets` before checking and committing. This stamps content hashes into the HTML asset URLs so browsers load the matching release after a GitHub Pages deployment. The deployment test rejects stale versions.
+
 Editorial references, source-check dates, unresolved questions, and any actual clinician review records belong in the local, Git-ignored `.internal/` folder. They are not loaded by the browser or included in Anki exports. Keep a private backup separately; a public clone will not contain those files. Maintainers who have the local ledger can validate its case fingerprints with:
 
 ```sh

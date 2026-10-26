@@ -3,6 +3,7 @@
     "dev": "deno run --allow-read=app.js,cases.csv,revision-data.json,case-difficulty.json,index.html,styles.css,assets,scripts/preview.html --allow-net=127.0.0.1 scripts/serve.js",
     "check": "deno run --allow-read scripts/validate-cases.js && deno test --allow-read tests/",
     "check:internal": "deno run --allow-read scripts/validate-cases.js --internal",
+    "version:assets": "deno run --allow-read=index.html,styles.css,app.js,assets/logo.svg --allow-write=index.html scripts/version-assets.js",
     "research:difficulty": "deno run --allow-read --allow-write=.internal/condition-difficulty scripts/condition-difficulty.js",
     "research:frequency": "deno run --allow-read --allow-write=.internal --allow-env=SERPAPI_API_KEY,SERPER_API_KEY,DATAFORSEO_LOGIN,DATAFORSEO_PASSWORD --allow-net=serpapi.com,google.serper.dev,api.dataforseo.com scripts/google-frequency.js"
   }
