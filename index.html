@@ -12,7 +12,7 @@
     <meta property="og:type" content="website" />
     <title>chanle | chẩn đoán mỗi ngày</title>
     <link rel="icon" href="assets/logo.svg?v=4c126a7f65ca" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=5858bd3ba914" />
+    <link rel="stylesheet" href="styles.css?v=9c9710d9087a" />
   </head>
   <body>
     <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -91,7 +91,7 @@
             </div>
             <div class="clue-progress"><div class="progress-caption"><span>Dữ kiện đã mở</span><strong id="clue-count">1 / 6</strong></div><div class="clue-steps" id="clue-steps" aria-hidden="true"></div><progress id="clue-progress" value="1" max="6" aria-label="Số dữ kiện đã mở">1 / 6</progress></div>
             <ol class="clue-list" id="clue-list"></ol>
-            <div class="clue-action"><button class="reveal-button" type="button" id="reveal-button"><svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg><span>Mở thêm dữ kiện</span></button><span class="reveal-note">Không mất lượt đoán</span></div>
+            <div class="clue-action"><button class="reveal-button" type="button" id="reveal-button"><svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg><span>Mở thêm dữ kiện</span></button><span class="reveal-note">Tốn 1 lượt đoán</span><button class="give-up-button" type="button" id="give-up-button">Bỏ cuộc</button></div>
             <form class="guess-form" id="guess-form" autocomplete="off">
               <div class="guess-label"><label for="guess-input">Chẩn đoán của bạn</label><span class="score" aria-label="Số lượt còn lại"><span id="attempts-left">6</span> lượt còn lại</span></div>
               <div class="attempt-track" id="attempt-track" aria-label="Tiến trình lượt đoán"></div>
@@ -119,7 +119,7 @@
       </main>
     </div>
 
-    <dialog id="help" aria-labelledby="help-title"><div class="modal"><button class="icon-button close" type="button" data-close="help" aria-label="Đóng">×</button><span class="modal-icon"><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg></span><h2 id="help-title">Cách chơi</h2><p>Mỗi ca bắt đầu với một dữ kiện và 6 lượt đoán. Mỗi lần đoán sai, bạn sẽ được xem thêm một dữ kiện. Bạn cũng có thể bấm “Mở thêm dữ kiện” mà không mất lượt đoán.</p><p>Bạn có thể nhập tên bệnh, tên gọi tương đương hoặc mã ICD được chấp nhận cho ca đó. Không cần phân biệt chữ hoa, chữ thường hay dấu tiếng Việt.</p><p>Mọi độ khó đều có gợi ý tên bệnh, 6 dữ kiện và 6 lượt đoán. Dễ ưu tiên kiến thức thường gặp, Vừa ưu tiên mức trung bình, Khó ưu tiên bệnh hiếm hoặc kiến thức chuyên sâu. Các bệnh vẫn có thể xuất hiện ở mọi mức, với tần suất khác nhau.</p><p>Chọn Kế hoạch điều trị để đoán bệnh từ các bước xử trí, thuốc, thủ thuật và theo dõi. Mỗi kế hoạch cũng có 6 dữ kiện; tên bệnh chỉ hiện sau khi kết thúc. Dữ kiện được mở dần theo luật chơi. Trong thực tế, một số biện pháp cấp cứu cần được thực hiện đồng thời.</p><p>Chọn chuyên khoa để bắt đầu luyện tập trong nhóm đó. Một bệnh có thể thuộc nhiều nhóm. Ca hằng ngày được chọn từ toàn bộ ngân hàng, với ca riêng cho mỗi kiểu dữ kiện và độ khó. Luyện tập tránh lặp lại các ca vừa chơi. Các kế hoạch áp dụng cho bệnh cảnh giả định trong trò chơi, không phải phác đồ dùng cho người bệnh thật.</p></div></dialog>
-    <script src="app.js?v=6ae828d00d59" defer></script>
+    <dialog id="help" aria-labelledby="help-title"><div class="modal"><button class="icon-button close" type="button" data-close="help" aria-label="Đóng">×</button><span class="modal-icon"><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg></span><h2 id="help-title">Cách chơi</h2><p>Mỗi ca bắt đầu với một dữ kiện và 6 lượt đoán. Mỗi lần đoán sai, bạn sẽ được xem thêm một dữ kiện. Bấm “Mở thêm dữ kiện” cũng tốn 1 lượt đoán. Khi đã mở đủ 6 dữ kiện, bạn vẫn còn 1 lượt nếu chỉ dùng nút mở dữ kiện. Bấm “Bỏ cuộc” để kết thúc ca, tính là chưa giải được và xem toàn bộ đáp án cùng giải thích.</p><p>Bạn có thể nhập tên bệnh, tên gọi tương đương hoặc mã ICD được chấp nhận cho ca đó. Không cần phân biệt chữ hoa, chữ thường hay dấu tiếng Việt.</p><p>Mọi độ khó đều có gợi ý tên bệnh, 6 dữ kiện và 6 lượt đoán. Dễ ưu tiên kiến thức thường gặp, Vừa ưu tiên mức trung bình, Khó ưu tiên bệnh hiếm hoặc kiến thức chuyên sâu. Các bệnh vẫn có thể xuất hiện ở mọi mức, với tần suất khác nhau.</p><p>Chọn Kế hoạch điều trị để đoán bệnh từ các bước xử trí, thuốc, thủ thuật và theo dõi. Mỗi kế hoạch cũng có 6 dữ kiện; tên bệnh chỉ hiện sau khi kết thúc. Dữ kiện được mở dần theo luật chơi. Trong thực tế, một số biện pháp cấp cứu cần được thực hiện đồng thời.</p><p>Chọn chuyên khoa để bắt đầu luyện tập trong nhóm đó. Một bệnh có thể thuộc nhiều nhóm. Ca hằng ngày được chọn từ toàn bộ ngân hàng, với ca riêng cho mỗi kiểu dữ kiện và độ khó. Luyện tập tránh lặp lại các ca vừa chơi. Các kế hoạch áp dụng cho bệnh cảnh giả định trong trò chơi, không phải phác đồ dùng cho người bệnh thật.</p></div></dialog>
+    <script src="app.js?v=1008425b8761" defer></script>
   </body>
 </html>

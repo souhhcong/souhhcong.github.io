@@ -42,6 +42,7 @@ let currentCase;
 let revealed = 1;
 let attempts = [];
 let finished = false;
+let gaveUp = false;
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -283,6 +284,7 @@ const elements = {
   diagnosisList: $("#diagnosis-list"),
   feedback: $("#feedback"),
   reveal: $("#reveal-button"),
+  giveUp: $("#give-up-button"),
   next: $("#new-case-button"),
   history: $("#history"),
   result: $("#result"),
@@ -406,8 +408,11 @@ function updateStatsView() {
 function validRound(saved, caseData) {
   return saved && saved.caseId === caseData.id && Number.isInteger(saved.revealed) && saved.revealed >= 1 &&
     saved.revealed <= MAX_CLUES && Array.isArray(saved.attempts) && saved.attempts.length <= MAX_ATTEMPTS &&
-    saved.attempts.every((attempt) => typeof attempt?.text === "string" && typeof attempt.correct === "boolean") &&
-    typeof saved.finished === "boolean" && saved.finished === (saved.attempts.some((a) => a.correct) || saved.attempts.length === MAX_ATTEMPTS);
+    saved.attempts.every((attempt) => typeof attempt?.text === "string" && typeof attempt.correct === "boolean" &&
+      (attempt.kind === undefined || attempt.kind === "reveal") && !(attempt.kind === "reveal" && attempt.correct)) &&
+    (saved.gaveUp === undefined || typeof saved.gaveUp === "boolean") &&
+    !(saved.gaveUp && saved.attempts.some(a => a.correct)) &&
+    typeof saved.finished === "boolean" && saved.finished === (saved.gaveUp === true || saved.attempts.some((a) => a.correct) || saved.attempts.length === MAX_ATTEMPTS);
 }
 
 function dailyStore() {
@@ -452,7 +457,7 @@ function saveDailyState() {
   if (mode !== "daily") return;
   const store = dailyStore();
   store.rounds[gameType] ??= {};
-  store.rounds[gameType][difficulty] = {caseId:currentCase.id, revealed, attempts, finished};
+  store.rounds[gameType][difficulty] = {caseId:currentCase.id, revealed, attempts, finished, gaveUp};
   localStorage.setItem(STATE_KEY, JSON.stringify(store));
 }
 
@@ -462,6 +467,7 @@ function loadDailyState(caseData) {
   revealed = saved.revealed;
   attempts = saved.attempts || [];
   finished = Boolean(saved.finished);
+  gaveUp = saved.gaveUp === true;
   return true;
 }
 
@@ -477,6 +483,7 @@ function setCase(caseData, restore = false) {
   revealed = 1;
   attempts = [];
   finished = false;
+  gaveUp = false;
 
   if (restore) loadDailyState(caseData);
   if (finished) revealed = activeClues().length;
@@ -540,7 +547,7 @@ function render() {
     return `<span class="attempt-dot ${state}" aria-hidden="true"></span>`;
   }).join("");
   elements.attemptTrack.setAttribute("aria-label", `Đã dùng ${attempts.length} trên ${MAX_ATTEMPTS} lượt đoán`);
-  elements.roundStatus.textContent = finished ? "Ca đã hoàn thành" : "Đáp án sẽ mở khi ca kết thúc";
+  elements.roundStatus.textContent = gaveUp ? "Đã bỏ cuộc" : finished ? "Ca đã hoàn thành" : "Đáp án sẽ mở khi ca kết thúc";
   elements.playTip.textContent = "Chọn từ gợi ý hoặc tự nhập tên bệnh, tên tương đương hay mã ICD. Không cần gõ đúng dấu tiếng Việt.";
   elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"} · ${GAME_LABELS[gameType]} · ${DIFFICULTY_LABELS[difficulty]}`;
   elements.caseKicker.textContent = gameType === "treatment" ? "Đoán bệnh qua điều trị" : "Ca bệnh";
@@ -559,12 +566,13 @@ function render() {
     ? attempts
         .map(
           (item, index) =>
-            `<li><span>${index + 1}. ${escapeHtml(item.text)}</span><strong class="${item.correct ? "hit" : "miss"}">${item.correct ? "Đúng" : "Sai"}</strong></li>`
+            `<li><span>${index + 1}. ${escapeHtml(item.text)}</span><strong class="${item.correct ? "hit" : "miss"}">${item.kind === "reveal" ? "Mở dữ kiện" : item.correct ? "Đúng" : "Sai"}</strong></li>`
         )
         .join("")
     : '<li class="history-empty"><span class="empty-history-icon"><svg class="icon" aria-hidden="true"><use href="#i-history" /></svg></span><span>Chưa có lượt đoán</span></li>';
 
   elements.reveal.disabled = finished || revealed >= activeClues().length;
+  elements.giveUp.disabled = finished;
   elements.form.querySelector("button").disabled = finished;
   elements.input.disabled = finished;
 
@@ -579,6 +587,7 @@ function render() {
 }
 
 function finish(solved) {
+  if (finished) return;
   finished = true;
   revealed = activeClues().length;
   const stats = getStats();
@@ -601,7 +610,7 @@ function finish(solved) {
 
   elements.feedback.textContent = solved
     ? "Chính xác"
-    : "Đã hết lượt đoán";
+    : gaveUp ? "Đã bỏ cuộc · Xem đáp án bên dưới" : "Đã hết lượt đoán";
   elements.feedback.className = `feedback ${solved ? "good" : "bad"}`;
   render();
   elements.answer.focus?.();
@@ -652,11 +661,22 @@ function submitGuess(event) {
 }
 
 function revealClue() {
-  if (finished) return;
+  if (finished || revealed >= activeClues().length || attempts.length >= MAX_ATTEMPTS) return;
+  attempts.push({text: "Mở thêm dữ kiện", correct: false, kind: "reveal"});
   revealed = Math.min(activeClues().length, revealed + 1);
-  elements.feedback.textContent = "Đã mở thêm dữ kiện";
+  if (attempts.length >= MAX_ATTEMPTS) {
+    finish(false);
+    return;
+  }
+  elements.feedback.textContent = "Đã mở thêm dữ kiện · Đã dùng 1 lượt đoán";
   elements.feedback.className = "feedback";
   render();
+}
+
+function giveUp() {
+  if (finished) return;
+  gaveUp = true;
+  finish(false);
 }
 
 function practiceRepeatWindow(size = practicePool().length) {
@@ -712,7 +732,7 @@ async function copyText(text, button) {
 function shareText() {
   const solvedAt = attempts.findIndex((item) => item.correct) + 1;
   const marks = attempts
-    .map((item) => (item.correct ? "🟩" : "⬜"))
+    .map((item) => (item.correct ? "🟩" : item.kind === "reveal" ? "🟨" : "⬜"))
     .concat(Array(Math.max(0, MAX_ATTEMPTS - attempts.length)).fill("⬛"))
     .join("");
   return `chanle #${String(currentCase.id).padStart(3, "0")} · ${GAME_LABELS[gameType]} · ${categoryLabel()} · ${DIFFICULTY_LABELS[difficulty]} ${solvedAt || "X"}/${MAX_ATTEMPTS}\n${marks}\nhttps://souhhcong.github.io/`;
@@ -820,6 +840,7 @@ async function init() {
 
   elements.form.addEventListener("submit", submitGuess);
   elements.reveal.addEventListener("click", revealClue);
+  elements.giveUp.addEventListener("click", giveUp);
   elements.next.addEventListener("click", nextCase);
   elements.reviewNext.addEventListener("click", nextCase);
   elements.copyShare.addEventListener("click", () => copyText(shareText(), elements.copyShare));

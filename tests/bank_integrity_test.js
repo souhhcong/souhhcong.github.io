@@ -105,7 +105,7 @@ Deno.test("cases 200 and 400 are playable and gradeable in both modes through th
     for(let count=1;count<6;count++) nodes.get("#reveal-button").listeners.get("click")();
     nodes.get("#guess-input").value=answer;
     nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-    assert(run("finished && revealed===6 && attempts[0].correct"),"Late case could not complete");
+    assert(run("finished && revealed===6 && attempts[5].correct"),"Late case could not complete");
     assert(nodes.get("#answer").textContent.includes(answerText),"Wrong late answer");
   }
 });

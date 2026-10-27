@@ -57,13 +57,13 @@ Deno.test("both game types accept all configured answers at every difficulty", (
   })`),"Answer grading differs between modes");
 });
 
-Deno.test("treatment reveal retains six guesses, hides symptom title and shows mode-specific rationale", async () => {
+Deno.test("treatment reveal spends guesses, hides symptom title and shows mode-specific rationale", async () => {
   const {run,nodes} = loadApp();
   await run("init()");
   run("switchGame('treatment')");
   for (let count = 1; count <= 6; count++) {
     assert(nodes.get("#case-title").textContent.startsWith("Kế hoạch điều trị #"),"Treatment title leaks case");
-    assert(run("revealed") === count && run("attempts.length") === 0,"Reveal consumed a guess");
+    assert(run("revealed") === count && run("attempts.length") === count - 1,"Reveal did not consume one guess");
     const markup = nodes.get("#clue-list").innerHTML;
     const visible = run("activeClues().slice(0,revealed).map(escapeHtml)");
     assert(visible.every((text) => markup.includes(text)),"Wrong clue bank rendered");
@@ -72,7 +72,7 @@ Deno.test("treatment reveal retains six guesses, hides symptom title and shows m
   assert(nodes.get("#reveal-button").disabled,"Reveal did not stop");
   nodes.get("#guess-input").value = run("currentCase.icdCode");
   nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-  assert(run("finished && attempts[0].correct"),"Could not win treatment round");
+  assert(run("finished && attempts[5].correct"),"Could not win treatment round");
   assert(nodes.get("#treatment-explanation").textContent === run("currentCase.treatmentExplanation"),"Wrong explanation");
   assert(nodes.get("#summary").textContent === run("currentCase.summary"),"Clinical link missing");
 });

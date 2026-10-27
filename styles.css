@@ -145,13 +145,16 @@ h2 { margin: 0; overflow-wrap: anywhere; }
 .clue.is-new { animation: clue-in 350ms cubic-bezier(.2,.7,.3,1) both; }
 .clue.locked { align-items: center; justify-content: center; flex: 1 1 90px; gap: 7px; padding: 11px 7px; border: 1px dashed #e2e8e2; background: #fafcf9; color: #60715f; font-size: 9px; line-height: 1.4; }
 .clue.locked .icon { width: 12px; height: 12px; opacity: .7; }
-.clue-action { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 17px 0 22px; }
+.clue-action { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; padding: 17px 0 22px; }
 .reveal-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 0; min-height: 36px; border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--accent); font-size: 11px; font-weight: 650; }
 .reveal-button .icon { width: 14px; height: 14px; }
 .reveal-button:hover:not(:disabled) { border-bottom-color: var(--accent-border); }
 .reveal-button:disabled { color: #9ba59f; }
 .reveal-button:disabled + .reveal-note { opacity: 0; }
 .reveal-note { border-left: 1px solid #e4eae3; padding-left: 12px; color: #65745f; font-size: 9px; }
+.give-up-button { min-height: 36px; padding: 6px 12px; border: 1px solid #e7d9d6; border-radius: 8px; background: transparent; color: var(--red); font-size: 11px; font-weight: 650; }
+.give-up-button:hover:not(:disabled) { background: #fbf2f0; border-color: #d8b7b1; }
+.give-up-button:disabled { color: #9ba59f; border-color: var(--line); }
 .guess-form { padding-top: 19px; border-top: 1px solid #eaf0e9; }
 .guess-label { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
 .guess-label label { font-size: 12px; color: #536a5b; font-weight: 650; }

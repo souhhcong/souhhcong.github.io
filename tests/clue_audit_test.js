@@ -65,13 +65,13 @@ Deno.test("clue audit requires traceable notes, sources, attribution and change 
   rejects((_, audit) => { audit.clues[0].changed = true; }, /inconsistent change history/);
 });
 
-Deno.test("all six clues reveal in order without spending guesses or finishing the round", async () => {
+Deno.test("all six clues reveal in order spending one guess per reveal and leaving a final answer", async () => {
   const {run, nodes} = loadApp();
   await run("init()");
   for (let count = 2; count <= 6; count++) {
     nodes.get("#reveal-button").listeners.get("click")();
-    if (run("revealed") !== count || !run("attempts.length === 0 && !finished")) {
-      throw new Error("Clue reveal altered guesses or ended the game");
+    if (run("revealed") !== count || run("attempts.length") !== count - 1 || run("finished")) {
+      throw new Error("Clue reveal did not spend exactly one guess or ended the game early");
     }
     const markup = nodes.get("#clue-list").innerHTML;
     const clues = run("currentCase.clues.slice(0, revealed)");
@@ -83,5 +83,5 @@ Deno.test("all six clues reveal in order without spending guesses or finishing t
   if (!nodes.get("#reveal-button").disabled) throw new Error("Reveal still enabled after six clues");
   nodes.get("#guess-input").value = run("currentCase.icdCode");
   nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-  if (!run("finished && attempts.length === 1 && attempts[0].correct")) throw new Error("Answer failed after full reveal");
+  if (!run("finished && attempts.length === 6 && attempts[5].correct")) throw new Error("Answer failed after full reveal");
 });
