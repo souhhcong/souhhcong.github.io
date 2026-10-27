@@ -668,7 +668,7 @@ function revealClue() {
     finish(false);
     return;
   }
-  elements.feedback.textContent = "Đã mở thêm dữ kiện · Đã dùng 1 lượt đoán";
+  elements.feedback.textContent = "Đã mở thêm dữ kiện";
   elements.feedback.className = "feedback";
   render();
 }
