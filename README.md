@@ -140,6 +140,10 @@ Collection can consume API quota. Use `--case=18` for one case or an explicit `-
 
 These are estimated matching web pages, not exact text occurrences or measured student knowledge. Google describes result totals as estimates that [may not be accurate](https://developers.google.com/custom-search/v1/reference/rest/v1/Search). Quoted wording, synonym coverage, news and public interest can affect the comparison. The report produces an inverse-percentile `webFrequencyHardness` only after all cases have comparable valid counts; ties stay together. It never changes `case-difficulty.json`. Private methodology notes are in `.internal/google-frequency-method.md`.
 
+## Vietnamese language review
+
+For automated Vietnamese language review and source-backed new-condition intake, see the [copyediting workflow](scripts/language/README.md). It includes native Luna/Terra handoffs, an optional API runner and blinded English-versus-Vietnamese prompt comparisons. Candidates remain private until the separate release checks pass.
+
 ## Deploy to GitHub Pages
 
 For a user site, put these files in the root of the `souhhcong.github.io` repository and push to `main`. GitHub Pages will serve the site from the repository root at:

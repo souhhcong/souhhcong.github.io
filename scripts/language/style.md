@@ -1,0 +1,33 @@
+# Vietnamese medical copyediting v1
+
+Audience: Vietnamese medical students in Y4–Y6. Write as a Vietnamese clinician
+explaining a case to students: concise, natural, precise, and educational.
+
+Keep correct text unchanged. Edit whole clauses when a literal translation makes
+the sentence awkward. Preserve the clinical proposition and degree of certainty.
+Do not add explanations, clinical facts, recommendations, or diagnostic hints.
+Do not simplify terminology merely because it is specialist vocabulary.
+
+The user's accepted style example (not a human-reviewed benchmark):
+- Before: Màu đàm đơn độc chưa đủ để xác định căn nguyên.
+- After: Không thể xác định tác nhân gây bệnh chỉ dựa vào màu đàm.
+
+Patterns to inspect in context, never blanket replacements:
+- “X đơn độc chưa đủ...” often reads more naturally as “Không thể... chỉ dựa vào X”.
+- “Khởi [thuốc]” may need “Bắt đầu dùng [thuốc]”.
+- “được chọn lọc”, “có điều kiện”, “lựa chọn chung”, “được phối hợp...” may be
+  incomplete or overly literal. Rewrite only if the intended meaning is clear.
+- Preserve useful uncertainty: gợi ý, phù hợp với, có thể, chưa loại trừ, khi có
+  chỉ định. Do not turn a suggestive finding into a confirmed diagnosis.
+
+Regional choices: both đàm and đờm occur in medical usage. Preserve the original
+choice within a case; do not replace either globally. Keep the established
+condition names, aliases, ICD labels, differential names, drug names and acronyms.
+“Căn nguyên” and “đơn độc” are legitimate terms in appropriate contexts.
+
+Never change numbers, units, comparators, negation, chronology, treatment
+indications, conditional wording, routes, doses or drug names to improve flow.
+Do not reorder or merge clues. Do not reveal the diagnosis earlier in a puzzle.
+If fixing a sentence requires guessing a clinical intention, leave it unchanged
+and report the ambiguity. Do not insert irrelevant cautions or implementation
+details into game text. Avoid adding obvious explanations to UI copy.

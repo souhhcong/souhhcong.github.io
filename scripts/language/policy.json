@@ -1,0 +1,11 @@
+{
+  "version": "vi-medical-copyedit-1.0.0",
+  "pipelineVersion": "1.0.0",
+  "models": {"editor": "gpt-6-luna", "meaning": "gpt-6.1-terra", "naturalness": "gpt-6.1-terra"},
+  "reasoning": "medium",
+  "maxEditsPerCondition": 3,
+  "pilotIds": [1,2,7,31,35,44,68,70,84,98,116,145,174,196,231,299,321,361,391,400],
+  "protectedPhrases": ["có thể", "khi cần", "khi có chỉ định", "nếu", "gợi ý", "trước", "sau", "chống chỉ định"],
+  "medicalTokens": ["adrenaline", "epinephrine", "paracetamol", "aspirin", "ibuprofen", "heparin", "apixaban", "rivaroxaban", "warfarin", "doxycycline", "azithromycin", "ceftazidime", "meropenem", "cyclophosphamide", "glucocorticoid", "corticoid", "corticosteroid", "levodopa", "methylphenidate", "immunoglobulin", "isoniazid", "rifampicin", "pyrazinamide", "ethambutol", "insulin", "mepolizumab", "ferritin", "creatinin", "hematocrit", "procalcitonin", "eosinophil", "melioidosis", "Goodpasture", "Parkinson", "Kawasaki", "M. tuberculosis", "B. pseudomallei", "O. tsutsugamushi"],
+  "note": "Language-only automation, not human or clinical certification. Phrase and token lists are conservative checks, not complete semantic verification. No automatic bank publication."
+}
