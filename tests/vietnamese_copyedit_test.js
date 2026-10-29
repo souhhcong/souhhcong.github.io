@@ -162,7 +162,13 @@ Deno.test("editor rejects omitted IDs, extra keys, protected fields, stale text 
       notes: [],
     }],
   }, { conditions: [{ caseId: 31, edits: [edit, edit], notes: [] }] }];
-  bad.forEach((o) => throws(() => validateOutput(r.editor.plan, o)));
+  bad.forEach((o) => {
+    // Keep coverage valid so these cases exercise the intended edit guards.
+    for (const entry of o.conditions) {
+      entry.checks = structuredClone(r.editor.output.conditions[0].checks);
+    }
+    throws(() => validateOutput(r.editor.plan, o));
+  });
   assert(!Object.hasOwn(editableFields(condition), "clinical.diagnosis"));
 });
 Deno.test("guards preserve quantities, units, polarity, drugs, uncertainty and identity", () => {
