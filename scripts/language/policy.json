@@ -1,6 +1,6 @@
 {
-  "version": "vi-medical-copyedit-1.0.0",
-  "pipelineVersion": "1.0.0",
+  "version": "vi-medical-copyedit-1.1.1",
+  "pipelineVersion": "1.1.1",
   "models": {"editor": "gpt-6-luna", "meaning": "gpt-6.1-terra", "naturalness": "gpt-6.1-terra"},
   "reasoning": "medium",
   "maxEditsPerCondition": 3,

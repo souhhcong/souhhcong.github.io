@@ -3,6 +3,7 @@ import {
   collectEdits,
   combineReports,
   decideEdits,
+  languageFlags,
   loadBank,
   makePlan,
   POLICY,
@@ -16,6 +17,7 @@ import {
   validatePlan,
 } from "./vietnamese-copyedit.js";
 import { requestCopyedit } from "./language-api.js";
+import { importFeedback, reviewTargetsFrom } from "./language-feedback.js";
 
 const read = async (path) => JSON.parse(await Deno.readTextFile(path));
 const fail = (message) => {
@@ -33,13 +35,14 @@ for (const arg of argv) {
 }
 const allowed = {
   template: ["id"],
-  plan: ["ids", "draft", "run", "language"],
+  plan: ["ids", "draft", "run", "language", "feedback"],
   ingest: ["plan", "input"],
   review: ["editor", "phase", "reverse"],
   stage: ["editor", "meaning", "naturalness", "reverse", "facts", "run"],
-  run: ["ids", "draft", "run", "language", "limit", "max-calls"],
+  run: ["ids", "draft", "run", "language", "limit", "max-calls", "feedback"],
   capture: ["url", "id", "title", "locator", "fields", "excerpt-file"],
   "proofread": ["english", "vietnamese", "run"],
+  feedback: ["run"],
 };
 if (
   !allowed[command] ||
@@ -73,7 +76,24 @@ function originals(plan) {
     return { ...c, hardness: { caseId: c.caseId, hardness: 3 } };
   });
 }
-if (command === "template") {
+if (command === "feedback") {
+  if (!/^[a-zA-Z0-9_-]+$/.test(options.run ?? "")) {
+    fail("feedback requires --run=COMPARISON_ID");
+  }
+  const dir = new URL(`comparisons/${options.run}/`, BASE);
+  const result = importFeedback({
+    markdown: await Deno.readTextFile(new URL("PROOFREAD.md", dir)),
+    sheet: await read(new URL("proofread.json", dir)),
+    answerKey: await read(new URL("answer-key.json", dir)),
+    unchangedMarkdown: await Deno.readTextFile(
+      new URL("UNCHANGED-CHECKS.md", dir),
+    ),
+  });
+  console.log(
+    (await saveArtifact(`feedback/${sha(result)}.json`, result)).pathname,
+  );
+  console.log(JSON.stringify(result.summary));
+} else if (command === "template") {
   const id = Number(options.id);
   if (
     !Number.isSafeInteger(id) || id < 1 ||
@@ -109,7 +129,10 @@ if (command === "template") {
     phase: "editor",
     conditions,
     run: options.run ?? "default",
-    promptLanguage: options.language ?? "vi",
+    promptLanguage: options.language ?? "en",
+    reviewTargets: options.feedback
+      ? reviewTargetsFrom(await read(options.feedback), conditions)
+      : [],
   });
   // Hardness is administrative/provisional; never exposed to the copyeditor.
   const url = await savePlan(plan);
@@ -225,13 +248,15 @@ if (command === "template") {
     return { plan, ...result };
   };
   const run = options.run ?? "default", summaries = [], reports = [];
+  const feedback = options.feedback ? await read(options.feedback) : null;
   for (const c of conditions) {
     const editor = await execute(
       makePlan({
         phase: "editor",
         conditions: [c],
         run,
-        promptLanguage: options.language ?? "vi",
+        promptLanguage: options.language ?? "en",
+        reviewTargets: feedback ? reviewTargetsFrom(feedback, [c]) : [],
       }),
     );
     const edits = collectEdits(editor.plan, editor.output);
@@ -393,9 +418,47 @@ if (command === "template") {
       "",
     );
   });
-  await Deno.writeTextFile(
-    new URL(`comparisons/${run}/PROOFREAD.md`, BASE),
-    md.join("\n"),
+  const writeInitialText = async (name, text) => {
+    try {
+      await Deno.writeTextFile(
+        new URL(`comparisons/${run}/${name}`, BASE),
+        text,
+        { createNew: true },
+      );
+    } catch (e) {
+      if (!(e instanceof Deno.errors.AlreadyExists)) throw e;
+    }
+  };
+  await writeInitialText("PROOFREAD.md", md.join("\n"));
+  const flags = new Map(
+    en.plan.conditions.flatMap(languageFlags).map(
+      (f) => [`${f.caseId}:${f.field}`, f],
+    ),
+  );
+  for (const target of en.plan.reviewTargets ?? []) {
+    flags.set(`${target.caseId}:${target.field}`, {
+      ...target,
+      text: target.before,
+    });
+  }
+  await writeInitialText(
+    "UNCHANGED-CHECKS.md",
+    [
+      "# Kiểm tra các câu có thể bị bỏ sót",
+      "",
+      "Đây là dấu hiệu cần xem lại trong ngữ cảnh, không phải kết luận câu sai. Ghi câu đã ổn, hoặc nêu vấn đề còn lại.",
+      "",
+      ...[...flags.values()].flatMap(
+        (f) => [
+          `## ${f.caseId} — ${f.field}`,
+          "",
+          f.text,
+          "",
+          "Ghi chú / đề xuất: ___",
+          "",
+        ],
+      ),
+    ].join("\n"),
   );
   console.log(new URL(`comparisons/${run}/PROOFREAD.md`, BASE).pathname);
 }

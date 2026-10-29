@@ -2,14 +2,14 @@
 
 This tool edits Vietnamese for clinical-year medical students. It separates language review from medical source review and condition difficulty. It never writes the three playable banks or the existing `.internal/medical-review.json` ledger. Outputs, source snapshots and model responses stay under Git-ignored `.internal/vietnamese-copyedit/`; the preview server does not serve that directory.
 
-Vietnamese is the provisional CLI prompt default; it has not been demonstrated superior. Set `--language=en` to use the baseline English instructions.
+English is the CLI prompt baseline after the first owner's comparison (three English wins, one identical-wording tie). All four preferred options still received criticism. This small, selected sample does not establish general model or prompt superiority. Set `--language=vi` to test Vietnamese instructions.
 
 ## Existing conditions
 
-1. Supply the complete condition, including all six clinical clues, six treatment clues and explanations. Luna proposes at most three field edits per condition and may abstain. English and Vietnamese prompts share a versioned style guide.
+1. Supply the complete condition, including all six clinical clues, six treatment clues and explanations. Luna proposes at most three field edits per condition and must return a `checks` verdict and short reason for **every editable field**, including unchanged fields. Each field is `natural`, `edited`, or `uncertain`; edit/check consistency and complete coverage are enforced. English and Vietnamese prompts share a versioned style guide. These judgments remain model estimates, not proof that unchanged wording is fluent.
 2. Deterministic checks reject changed quantities, units, comparisons, polarity counts, listed drugs, uncertainty markers, acronyms and identity terms. These checks are deliberately conservative and do not establish semantic equivalence.
-3. A separate Terra review compares meaning against the original. Two separate Terra naturalness reviews compare masked A/B variants with reversed order. Editor reasons and prompt language labels are hidden from the naturalness reviewers. They receive the original full clinical context, which can reveal the original wording; this is not perfect blinding.
-4. Only preserved edits preferred in both orientations pass. Ties, uncertainty, meaning changes, guard failures or editor ambiguity notes retain the entire original condition. Real bank validators check the combined candidate bank, aliases, categories, six clues, ICD format and treatment answer giveaways. Copyediting also rejects newly introduced explicit answers in clinical titles/clues, while preserving pre-existing wording.
+3. A separate Terra review compares meaning against the original. Two separate Terra naturalness reviews compare masked A/B variants with reversed order. Each reports both relative preference and independent `qualityA`/`qualityB`: `natural`, `needs_revision`, or `uncertain`. A preferred sentence can still need revision. Editor reasons and prompt language labels are hidden from the naturalness reviewers. They receive the original full clinical context, which can reveal the original wording; this is not perfect blinding.
+4. Only preserved edits preferred **and independently rated natural** in both orientations pass. Ties, uncertainty, meaning changes, guard failures, unresolved field reviews or editor ambiguity notes retain the entire original condition. Real bank validators check the combined candidate bank, aliases, categories, six clues, ICD format and treatment answer giveaways. Copyediting also rejects newly introduced explicit answers in clinical titles/clues, while preserving pre-existing wording.
 5. Stage a complete candidate bank, machine-readable decisions, before/after diff and remaining contextual language flags. A flag is a review hint, not an error or an automatic replacement. A condition with no proposed edits has not been certified fluent.
 
 ### Native subagent handoff (no API key)
@@ -36,6 +36,8 @@ deno task copyedit stage --editor=EDITOR --meaning=MEANING --naturalness=FORWARD
 ```
 
 Batch plans support 1–20 conditions. Smaller batches may improve attention; the pilot used 20, while the API runner uses one condition per editor call. Those configurations need separate recall/cost evaluation.
+
+If ingestion fails, keep the original response and stop or fix the specific technical mismatch using the exact plan text. Never drop proposed edits and relabel problematic fields `natural` merely to pass validation. Such a run is a technical failure, not a zero-edit success, and must be excluded from prompt-quality comparisons. Existing cache reports remain immutable.
 
 ### Optional unattended API runner
 
@@ -105,6 +107,25 @@ deno task copyedit proofread --english=EN_CACHE_REPORT --vietnamese=VI_CACHE_REP
 ```
 
 This writes `comparisons/en-vi-pilot/PROOFREAD.md`, editable `proofread.json` and a separate answer key. A/B/C hide original/English/Vietnamese origins. Identical variants are intentional; score ties fairly. Proofread before opening the key. Judge naturalness **and** meaning, and flag ambiguous intent rather than repairing it by guessing. The sheet covers the union of proposed fields only. Also inspect unchanged flagged fields and a random set of unchanged conditions to estimate missed problems.
+
+The command also creates `UNCHANGED-CHECKS.md`. Generated Markdown review files are created only when absent so rerunning the command preserves handwritten comments. Record preferences in Markdown **or** JSON; contradictory entries stop import. Import the completed files with:
+
+```sh
+deno task copyedit feedback --run=en-vi-pilot
+```
+
+Import produces a private, content-addressed feedback record with hashes of the input sheets and key. Identical text receives tied credit regardless of the selected letter. A best-option preference is recorded as **relative preference only**, never final acceptance or clinical approval. Written problems, uncertain wording and explicit no-problem controls remain distinct. The original sheets are preserved.
+
+Pass the printed feedback record into a targeted retry:
+
+```sh
+deno task copyedit plan --ids=31,44,70,116,145,174,196,391 --language=en \
+  --feedback=FEEDBACK_RECORD --run=feedback-repair-v1
+```
+
+`--feedback` also works with the optional API `run` command. The packet contains `reviewTargets` for the owner's reported problems. Those exact original fields must be edited or marked uncertain; an unchanged known problem cannot be returned as `natural`. Stale feedback text fails validation. Do not pass the second editor's outputs or other reviewers' judgments. Reusing the same reviewed cases measures repair of known failures, not held-out accuracy.
+
+Version 1.1.1 adds these field and absolute-quality gates. Earlier native plan/report files remain archived, but the current validator rejects their older policy/schema. Use the earlier Git revision to reproduce their processing; do not relabel or mutate old responses into the new schema.
 
 Measure preserved-meaning edit precision, human preference against original, English-vs-Vietnamese wins/ties on the same fields, problematic-field recall on an independently marked sample, reviewer order disagreement, abstentions, guard failures, specialty coverage and tokens/calls per accepted edit. A second model's judgment is a screening signal, not ground truth. Repeated wording failures and agreed proofreading choices become style-guide examples and a held-out regression set. Reserve unseen conditions for final evaluation; examples shown in prompts are not held-out tests. Repeat runs and 1/5/20-condition batch comparisons are needed before choosing a default or scaling to 400+.
 

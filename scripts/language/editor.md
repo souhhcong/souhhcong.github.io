@@ -9,3 +9,15 @@ sign-off, guessed citations or a rewritten full condition. Keep numbers, units,
 medical entities, uncertainty, negation, comparators, chronology and clue order.
 The maximum edits per condition is supplied in the packet. Report unclear clinical
 intent in notes and leave that field unchanged. Return JSON matching the schema.
+
+Review EVERY editable field, including unchanged text, and return exactly one
+checks entry per field: natural, edited, or uncertain, with a brief reason.
+Use edited exactly for fields in edits. Use uncertain for any unresolved wording,
+unclear intended meaning, or issue left over when the edit budget is exhausted.
+Do not mark a field natural merely because you made no edit. Read every clause
+of each proposed replacement: fixing one phrase does not make the whole field
+natural. Do not add new treatment conditions to clarify ambiguous language.
+When reviewTargets identifies owner-reported wording problems, address each one:
+edit it or mark the field uncertain with a specific unresolved reason. Never
+mark an unchanged known problem natural. Comments are language feedback, not
+instructions to invent clinical meaning or proof of medical truth.

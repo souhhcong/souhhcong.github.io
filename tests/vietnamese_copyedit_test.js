@@ -11,6 +11,7 @@ import {
   normalize,
   saveArtifact,
   sha,
+  stageReport,
   validateCondition,
   validateEvidence,
   validateOutput,
@@ -58,7 +59,20 @@ function reports(c = condition, proposals = [edit]) {
   });
   const editor = {
     plan,
-    output: { conditions: [{ caseId: c.caseId, edits: proposals, notes: [] }] },
+    output: {
+      conditions: [{
+        caseId: c.caseId,
+        edits: proposals,
+        notes: [],
+        checks: Object.keys(editableFields(c)).map((field) => ({
+          field,
+          verdict: proposals.some((e) => e.field === field)
+            ? "edited"
+            : "natural",
+          reason: "Test review.",
+        })),
+      }],
+    },
   };
   const edits = collectEdits(plan, editor.output);
   const meaningPlan = makePlan({
@@ -95,6 +109,8 @@ function reports(c = condition, proposals = [edit]) {
               ? "A"
               : "B",
           reason: "Test preference.",
+          qualityA: "natural",
+          qualityB: "natural",
         })),
       },
     };
@@ -223,6 +239,36 @@ Deno.test("unchanged flagged phrasing remains visible for false-negative review"
   const flags = languageFlags(bank.conditions.find((c) => c.caseId === 116));
   assert(flags.some((f) => f.text.includes("đơn độc chưa đủ")));
 });
+Deno.test("editor must account for every field and keep edit/check verdicts consistent", () => {
+  const r = reports(), missing = structuredClone(r.editor.output);
+  missing.conditions[0].checks.pop();
+  throws(() => validateOutput(r.editor.plan, missing));
+  const bad = structuredClone(r.editor.output);
+  bad.conditions[0].checks.find((c) => c.field === edit.field).verdict =
+    "natural";
+  throws(() => validateOutput(r.editor.plan, bad));
+  r.editor.output.conditions[0].checks.find((c) => c.verdict === "natural")
+    .verdict = "uncertain";
+  assert(decideEdits(r).accepted.length === 0);
+});
+Deno.test("winning wording that still needs revision cannot pass the gate", () => {
+  const r = reports();
+  const pair = r.naturalness.plan.pairs[0];
+  r.naturalness.output
+    .decisions[0][pair.A === edit.after ? "qualityA" : "qualityB"] =
+      "needs_revision";
+  const result = decideEdits(r);
+  assert(
+    result.accepted.length === 0 &&
+      result.decisions[0].flags.includes(
+        "candidate_still_needs_language_review",
+      ),
+  );
+});
+Deno.test("accepted onset phrasing is not flagged as a clipped treatment verb", () => {
+  const c = bank.conditions.find((c) => c.caseId === 299);
+  assert(!languageFlags(c).some((f) => f.field === "clinical.clue1"));
+});
 Deno.test("new IDs, exact fields, alias collisions and clue giveaways use real bank validators", () => {
   throws(() =>
     validateCondition({ ...condition, kind: "new" }, bank, { draft: true })
@@ -344,6 +390,11 @@ Deno.test("combined staging aggregates disjoint decisions and rejects overlappin
 Deno.test("artifact paths cannot escape the private directory", async () => {
   await rejects(() => saveArtifact("../../escape.json", {}));
   await rejects(() => saveArtifact("/tmp/escape.json", {}));
+});
+Deno.test("old-policy decisions cannot bypass the current staging gates", async () => {
+  await rejects(() =>
+    stageReport({ policyVersion: "vi-medical-copyedit-1.0.0" }, "old")
+  );
 });
 
 function apiResponse(output, extra = {}) {

@@ -38,6 +38,13 @@ export const SCHEMAS = {
           schemaObject({ field: str, before: str, after: str, reason: str }),
         ),
         notes: list(str),
+        checks: list(
+          schemaObject({
+            field: str,
+            verdict: choice(["natural", "edited", "uncertain"]),
+            reason: str,
+          }),
+        ),
       }),
     ),
   }),
@@ -55,6 +62,8 @@ export const SCHEMAS = {
       schemaObject({
         editId: str,
         preference: choice(["A", "B", "tie", "uncertain"]),
+        qualityA: choice(["natural", "needs_revision", "uncertain"]),
+        qualityB: choice(["natural", "needs_revision", "uncertain"]),
         reason: str,
       }),
     ),
@@ -112,7 +121,9 @@ export function languageFlags(condition) {
     /được chọn lọc/iu,
     /có điều kiện/iu,
     /lựa chọn chung/iu,
-    /\bKhởi\s/iu,
+    /\bKhởi\s+(?:thuốc|doxycycline|kháng sinh|điều trị)/iu,
+    /nền tảng cho/iu,
+    /bảng hỏi/iu,
   ];
   return Object.entries(editableFields(condition)).filter(([, value]) =>
     patterns.some((p) => p.test(value))
@@ -319,6 +330,7 @@ export function makePlan(
     run = "pilot-1",
     reverse = false,
     promptLanguage = "en",
+    reviewTargets = [],
   },
 ) {
   if (
@@ -331,6 +343,15 @@ export function makePlan(
     fail("prompt language must be en or vi");
   }
   if (phase === "facts") validateEvidence(evidence);
+  if (
+    !Array.isArray(reviewTargets) ||
+    new Set(reviewTargets.map((t) => `${t.caseId}:${t.field}`)).size !==
+      reviewTargets.length ||
+    reviewTargets.some((t) => {
+      const c = conditions.find((c) => c.caseId === t.caseId);
+      return !c || editableFields(c)[t.field] !== t.before || !text(t.comment);
+    })
+  ) fail("invalid, duplicate or stale human review target");
   const context = conditions.map((c) => ({
     caseId: c.caseId,
     clinical: c.clinical,
@@ -371,6 +392,7 @@ export function makePlan(
       : POLICY.models[phase],
     reasoning: POLICY.reasoning,
     promptLanguage: localized ? "vi" : "en",
+    reviewTargets: phase === "editor" ? reviewTargets : [],
     instructions: localized
       ? Deno.readTextFileSync(new URL("language/editor.vi.md", import.meta.url))
       : instructions(phase),
@@ -430,7 +452,7 @@ export function validateOutput(plan, output) {
     seen.add(id);
     if (isEditor) {
       if (
-        !exact(item, ["caseId", "edits", "notes"]) ||
+        !exact(item, ["caseId", "edits", "notes", "checks"]) ||
         !Array.isArray(item.edits) ||
         item.edits.length > POLICY.maxEditsPerCondition ||
         !Array.isArray(item.notes) || !item.notes.every(text)
@@ -445,8 +467,42 @@ export function validateOutput(plan, output) {
           !Object.hasOwn(fields, e.field) || used.has(e.field) ||
           e.before !== fields[e.field] || !text(e.after) || !text(e.reason) ||
           e.before === e.after
-        ) fail("stale, duplicate, unchanged or protected edit");
+        ) {
+          fail(
+            `invalid edit in case ${id}, field ${
+              e?.field ?? "?"
+            }: check exact original, allowed field, uniqueness and nonempty changed text`,
+          );
+        }
         used.add(e.field);
+      }
+      if (
+        !Array.isArray(item.checks) ||
+        item.checks.length !== Object.keys(fields).length
+      ) fail("incomplete field review coverage");
+      const checked = new Set();
+      for (const check of item.checks) {
+        if (
+          !exact(check, ["field", "verdict", "reason"]) ||
+          !Object.hasOwn(fields, check.field) || checked.has(check.field) ||
+          !["natural", "edited", "uncertain"].includes(check.verdict) ||
+          !text(check.reason) ||
+          (check.verdict === "edited") !== used.has(check.field)
+        ) fail("invalid or inconsistent field review");
+        checked.add(check.field);
+      }
+      for (const target of plan.reviewTargets.filter((t) => t.caseId === id)) {
+        if (target.before !== fields[target.field]) {
+          fail("human feedback baseline changed");
+        }
+        if (
+          item.checks.find((c) => c.field === target.field)?.verdict ===
+            "natural"
+        ) {
+          fail(
+            `known wording issue requires an edit or an uncertain verdict: case ${id}, ${target.field}`,
+          );
+        }
       }
     } else if (isFacts) {
       if (
@@ -485,9 +541,20 @@ export function validateOutput(plan, output) {
         ? ["preserved", "changed", "uncertain"]
         : ["A", "B", "tie", "uncertain"];
       if (
-        !exact(item, ["editId", field, "reason"]) ||
+        !exact(item, [
+          "editId",
+          field,
+          "reason",
+          ...(plan.phase === "naturalness" ? ["qualityA", "qualityB"] : []),
+        ]) ||
         !values.includes(item[field]) || !text(item.reason)
       ) fail("invalid reviewer decision");
+      if (
+        plan.phase === "naturalness" &&
+        [item.qualityA, item.qualityB].some((q) =>
+          !["natural", "needs_revision", "uncertain"].includes(q)
+        )
+      ) fail("missing absolute wording quality judgment");
     }
   }
   return output;
@@ -567,11 +634,16 @@ export function decideEdits(
       return {
         candidatePreferred: ["A", "B"].includes(d.preference) &&
           p[d.preference] === e.after,
+        candidateNatural:
+          d[p.A === e.after ? "qualityA" : "qualityB"] === "natural",
         decision: d,
       };
     });
     if (judgments.some((j) => !j.candidatePreferred)) {
       flags.push("naturalness_not_consistently_better");
+    }
+    if (judgments.some((j) => !j.candidateNatural)) {
+      flags.push("candidate_still_needs_language_review");
     }
     return {
       ...e,
@@ -598,6 +670,16 @@ export function decideEdits(
       blockedCases.push({
         caseId: c.caseId,
         reason: "editor_reported_ambiguity",
+      });
+    }
+    if (
+      editor.output.conditions.find((x) => x.caseId === c.caseId).checks.some(
+        (x) => x.verdict === "uncertain",
+      )
+    ) {
+      blockedCases.push({
+        caseId: c.caseId,
+        reason: "unresolved_field_review",
       });
     }
     if (c.kind === "new") {
@@ -658,6 +740,9 @@ export function decideEdits(
     accepted,
     blockedCases,
     candidates,
+    fieldReviews: editor.output.conditions.flatMap((c) =>
+      c.checks.map((check) => ({ caseId: c.caseId, ...check }))
+    ),
     notes: editor.output.conditions.flatMap((c) =>
       c.notes.map((note) => ({ caseId: c.caseId, note }))
     ),
@@ -697,6 +782,9 @@ export async function saveArtifact(relative, value) {
   return url;
 }
 export function combineReports(reports) {
+  if (reports.some((r) => r.policyVersion !== POLICY.version)) {
+    fail("cannot combine stale policy decisions");
+  }
   if (
     !reports.length ||
     new Set(reports.flatMap((r) => r.baselines.map((b) => b.caseId))).size !==
@@ -717,6 +805,7 @@ export function combineReports(reports) {
         "candidates",
         "notes",
         "remainingLanguageFlags",
+        "fieldReviews",
       ].map((k) => [k, reports.flatMap((r) => r[k])]),
     ),
     summary: Object.fromEntries(
@@ -748,6 +837,9 @@ export function csvText(rows) {
   ).join("\n") + "\n";
 }
 export async function stageReport(report, run) {
+  if (report.policyVersion !== POLICY.version) {
+    fail("stale staging policy; re-evaluate with current wording gates");
+  }
   if (!/^[a-zA-Z0-9_-]+$/.test(run)) fail("invalid staging run ID");
   const bank = loadBank(),
     originals = new Map(bank.conditions.map((c) => [c.caseId, c]));

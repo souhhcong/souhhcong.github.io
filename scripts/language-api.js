@@ -19,6 +19,7 @@ export async function requestCopyedit(
     instructions: plan.instructions + "\n\n" + plan.styleGuide,
     input: JSON.stringify({
       conditions: plan.conditions,
+      reviewTargets: plan.reviewTargets,
       edits: plan.edits,
       pairs: plan.pairs,
       evidence: plan.evidence,
