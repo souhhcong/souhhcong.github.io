@@ -490,7 +490,7 @@ function setCase(caseData, restore = false) {
 
   elements.caseNumber.textContent = `Ca #${String(caseData.id).padStart(3, "0")}`;
   elements.input.setAttribute("list", "diagnosis-list");
-  elements.input.placeholder = "Nhập chẩn đoán hoặc mã ICD...";
+  elements.input.placeholder = "Chẩn đoán hoặc mã ICD";
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
   elements.input.value = "";
@@ -549,27 +549,29 @@ function render() {
   elements.attemptTrack.setAttribute("aria-label", `Đã dùng ${attempts.length} trên ${MAX_ATTEMPTS} lượt đoán`);
   elements.roundStatus.textContent = gaveUp ? "Đã bỏ cuộc" : finished ? "Ca đã hoàn thành" : "Đáp án sẽ mở khi ca kết thúc";
   elements.playTip.textContent = "Chọn từ gợi ý hoặc tự nhập tên bệnh, tên tương đương hay mã ICD. Không cần gõ đúng dấu tiếng Việt.";
-  elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"} · ${GAME_LABELS[gameType]} · ${DIFFICULTY_LABELS[difficulty]}`;
+  elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"}\u00a0· ${GAME_LABELS[gameType]}\u00a0· ${DIFFICULTY_LABELS[difficulty]}`;
   elements.caseKicker.textContent = gameType === "treatment" ? "Đoán bệnh qua điều trị" : "Ca bệnh";
   elements.caseTitle.textContent = gameType === "treatment" ? (finished ? currentCase.diagnosis : `Kế hoạch điều trị #${String(currentCase.id).padStart(3, "0")}`) : currentCase.title;
   elements.clueList.innerHTML = activeClues()
     .map((clue, index) => {
       const visible = index < revealed;
       const latest = visible && index === revealed - 1;
+      const number = String(index + 1).padStart(2, "0");
       return visible
-        ? `<li class="clue ${latest ? "is-latest" : ""} ${latest && justRevealed ? "is-new" : ""}"><span class="clue-number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span><span>${escapeHtml(clue)}</span></li>`
-        : `<li class="clue locked" aria-label="Dữ kiện ${index + 1} chưa mở"><svg class="icon" aria-hidden="true"><use href="#i-lock" /></svg><span>Dữ kiện ${String(index + 1).padStart(2, "0")}</span></li>`;
+        ? `<li class="clue ${latest ? "is-latest" : ""} ${latest && justRevealed ? "is-new" : ""}"><span class="clue-number" aria-hidden="true">${number}</span><p class="clue-text"><span class="mark">${escapeHtml(clue)}</span></p></li>`
+        : `<li class="clue locked" aria-label="Dữ kiện ${index + 1} chưa mở"><span aria-hidden="true">${number}</span></li>`;
     })
     .join("");
 
-  elements.history.innerHTML = attempts.length
-    ? attempts
-        .map(
-          (item, index) =>
-            `<li><span>${index + 1}. ${escapeHtml(item.text)}</span><strong class="${item.correct ? "hit" : "miss"}">${item.kind === "reveal" ? "Mở dữ kiện" : item.correct ? "Đúng" : "Sai"}</strong></li>`
-        )
-        .join("")
-    : '<li class="history-empty"><span class="empty-history-icon"><svg class="icon" aria-hidden="true"><use href="#i-history" /></svg></span><span>Chưa có lượt đoán</span></li>';
+  elements.history.innerHTML = Array.from({length: MAX_ATTEMPTS}, (_, index) => {
+    const item = attempts[index];
+    if (!item) return `<li class="slot"><span class="slot-n" aria-hidden="true">${index + 1}</span><span class="slot-line"></span></li>`;
+    const state = item.correct ? "hit" : "miss";
+    const body = item.kind === "reveal"
+      ? `<span class="slot-note">Mở dữ kiện</span>`
+      : `<span class="guess ${state}">${escapeHtml(item.text)}</span><span class="sr-only">${item.correct ? " Đúng" : " Sai"}</span>`;
+    return `<li class="slot is-filled ${item.kind === "reveal" ? "is-reveal" : ""}"><span class="slot-n" aria-hidden="true">${index + 1}</span><span class="slot-line">${body}</span></li>`;
+  }).join("");
 
   elements.reveal.disabled = finished || revealed >= activeClues().length;
   elements.giveUp.disabled = finished;

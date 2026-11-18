@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T23:30:00Z",
+  "title": "Design System: chanle",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Xerox Paper",
+        "canonical": "#ecece7",
+        "tonalRamp": [
+          "#2a2a27",
+          "#3f3f3b",
+          "#5a5a55",
+          "#77776f",
+          "#96968e",
+          "#b6b6ae",
+          "#d4d4cd",
+          "#ecece7"
+        ]
+      },
+      "toner": {
+        "role": "primary",
+        "displayName": "Toner Black",
+        "canonical": "#1c1c1a",
+        "tonalRamp": [
+          "#1c1c1a",
+          "#2e2e2b",
+          "#44443f",
+          "#5c5c56",
+          "#78786f",
+          "#97978f",
+          "#babab3",
+          "#deded8"
+        ]
+      },
+      "toner-2": {
+        "role": "neutral",
+        "displayName": "Faded Toner",
+        "canonical": "#55554f",
+        "tonalRamp": [
+          "#22221f",
+          "#33332f",
+          "#44443f",
+          "#55554f",
+          "#73736c",
+          "#93938b",
+          "#b6b6ae",
+          "#d9d9d2"
+        ]
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Soft Rule",
+        "canonical": "rgba(28, 28, 26, 0.25)",
+        "tonalRamp": [
+          "rgba(28,28,26,0.9)",
+          "rgba(28,28,26,0.75)",
+          "rgba(28,28,26,0.6)",
+          "rgba(28,28,26,0.45)",
+          "rgba(28,28,26,0.35)",
+          "rgba(28,28,26,0.25)",
+          "rgba(28,28,26,0.15)",
+          "rgba(28,28,26,0.08)"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Fresh Sheet",
+        "canonical": "#fafaf8",
+        "tonalRamp": [
+          "#2b2b29",
+          "#454542",
+          "#65655f",
+          "#8a8a83",
+          "#adada6",
+          "#cfcfc9",
+          "#ebebe7",
+          "#fafaf8"
+        ]
+      },
+      "highlighter": {
+        "role": "secondary",
+        "displayName": "Fluorescent Highlighter Yellow",
+        "canonical": "#ffe53b",
+        "tonalRamp": [
+          "#3d3500",
+          "#5e5200",
+          "#857400",
+          "#ad9800",
+          "#d6bc00",
+          "#ffe53b",
+          "#fff08a",
+          "#fff9cf"
+        ]
+      },
+      "pen": {
+        "role": "secondary",
+        "displayName": "Ballpoint Blue",
+        "canonical": "#2340a0",
+        "tonalRamp": [
+          "#0e1a45",
+          "#17296b",
+          "#2340a0",
+          "#3c5ac0",
+          "#6580d4",
+          "#93a7e3",
+          "#c0ccf0",
+          "#e6ebfa"
+        ]
+      },
+      "pink": {
+        "role": "tertiary",
+        "displayName": "Highlighter Pink",
+        "canonical": "rgba(255, 111, 174, 0.5)",
+        "tonalRamp": [
+          "#4a0f2a",
+          "#7a1a46",
+          "#b02a66",
+          "#e04a8a",
+          "#ff6fae",
+          "#ff9cc8",
+          "#ffc8e0",
+          "#ffe8f2"
+        ]
+      },
+      "green": {
+        "role": "tertiary",
+        "displayName": "Highlighter Green",
+        "canonical": "#5fe08a",
+        "tonalRamp": [
+          "#0b3a1c",
+          "#13592b",
+          "#1d7a3c",
+          "#2ea052",
+          "#45c46d",
+          "#5fe08a",
+          "#9cedb5",
+          "#d6f9e1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "Masthead wordmark; 14px in the footer."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Case title on phones; 27px below 360px."
+      },
+      "display-wide": {
+        "displayName": "Display Wide",
+        "purpose": "Case title from 900px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Revealed answer; dialog title at 26px."
+      },
+      "mode-word": {
+        "displayName": "Mode Word",
+        "purpose": "Lâm sàng / Điều trị game-type controls; 27px desktop, 21px below 360px."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Clues (17px desktop), summaries, explanations."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section heads, clue numbers, clue tally."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Case line, slot notes, footer, faded toner."
+      },
+      "hand": {
+        "displayName": "Hand",
+        "purpose": "Player's written guesses in ballpoint blue."
+      },
+      "hand-figure": {
+        "displayName": "Hand Figure",
+        "purpose": "Stat figures in the margin column."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sheet-lift",
+        "value": "0 18px 40px -20px rgba(0, 0, 0, 0.35)",
+        "purpose": "Help dialog only, a loose sheet over the page; backdrop rgba(28, 28, 26, 0.4)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Highlighter sweeps."
+      },
+      {
+        "name": "clue-sweep",
+        "value": "450ms",
+        "purpose": "New clue highlighter sweep (background-size 0 to 100%)."
+      },
+      {
+        "name": "mode-sweep",
+        "value": "380ms",
+        "purpose": "Active mode word highlighter transition."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "All animation and transition removed under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "max-width: 359px"
+      },
+      {
+        "name": "inline-meta",
+        "value": "640px"
+      },
+      {
+        "name": "margin-column",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid toner action: Đoán, Ca tiếp theo.",
+      "html": "<button class=\"ds-btn-primary\">Ca tiếp theo <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: var(--toner, #1c1c1a); color: var(--paper, #ecece7); border: 2px solid var(--toner, #1c1c1a); border-radius: 0; font-weight: 700; font-size: 16px; cursor: pointer; } .ds-btn-primary:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; } .ds-btn-primary:disabled { background: var(--toner-2, #55554f); border-color: var(--toner-2, #55554f); color: var(--field, #fafaf8); cursor: not-allowed; }"
+    },
+    {
+      "name": "Outline Square Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "1px toner square for Chia sẻ, Thẻ Anki; inverts on hover.",
+      "html": "<button class=\"ds-btn-square\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"><path d=\"m21 3-7 18-3-8-8-3 18-7Zm0 0L11 13\"/></svg><span>Chia sẻ</span></button>",
+      "css": ".ds-btn-square { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--toner, #1c1c1a); border-radius: 0; background: transparent; color: var(--toner, #1c1c1a); font-weight: 700; font-size: 14px; cursor: pointer; } .ds-btn-square:hover { background: var(--toner, #1c1c1a); color: var(--paper, #ecece7); } .ds-btn-square:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Underlined printed action: Mở dữ kiện, Ca khác.",
+      "html": "<button class=\"ds-btn-text\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"><path d=\"M12 5v14M5 12h14\"/></svg><span>Mở dữ kiện</span></button>",
+      "css": ".ds-btn-text { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; border: 0; background: none; color: var(--toner, #1c1c1a); font-weight: 700; font-size: 15px; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; cursor: pointer; } .ds-btn-text:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; }"
+    },
+    {
+      "name": "Guess Field",
+      "kind": "input",
+      "refersTo": "input-guess",
+      "description": "2px-framed fresh-sheet input butted against the Đoán button.",
+      "html": "<div class=\"ds-guess-row\"><input class=\"ds-guess-input\" placeholder=\"Chẩn đoán hoặc mã ICD\"><button class=\"ds-guess-submit\">Đoán</button></div>",
+      "css": ".ds-guess-row { display: flex; } .ds-guess-input { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); flex: 1; min-width: 0; min-height: 48px; border: 2px solid var(--toner, #1c1c1a); border-radius: 0; background: var(--field, #fafaf8); color: var(--toner, #1c1c1a); padding: 8px 12px; font-size: 16px; caret-color: var(--pen, #2340a0); } .ds-guess-input::placeholder { color: #4a4a45; } .ds-guess-input:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 2px; } .ds-guess-submit { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); min-height: 48px; padding: 0 22px; background: var(--toner, #1c1c1a); color: var(--paper, #ecece7); border: 2px solid var(--toner, #1c1c1a); border-radius: 0; font-weight: 700; font-size: 16px; cursor: pointer; } .ds-guess-submit:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; }"
+    },
+    {
+      "name": "Masthead Navigation",
+      "kind": "nav",
+      "refersTo": "nav-tab",
+      "description": "Wordmark, text tabs with a toner underline when active, help square.",
+      "html": "<header class=\"ds-mast\"><a class=\"ds-brand\" href=\"#\">chanle</a><nav class=\"ds-nav\"><button class=\"ds-tab is-active\">Hôm nay</button><button class=\"ds-tab\">Luyện tập</button></nav><button class=\"ds-help\" aria-label=\"Hướng dẫn\">?</button></header>",
+      "css": ".ds-mast { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); display: flex; align-items: center; gap: 14px; padding: 10px 0 8px; border-bottom: 1px solid var(--toner, #1c1c1a); color: var(--toner, #1c1c1a); } .ds-brand { font-weight: 900; font-size: 24px; letter-spacing: -0.04em; line-height: 1; color: inherit; text-decoration: none; margin-right: auto; } .ds-nav { display: flex; gap: 16px; } .ds-tab { font: inherit; background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 0 4px; font-size: 15px; font-weight: 500; color: var(--toner-2, #55554f); cursor: pointer; } .ds-tab.is-active { color: var(--toner, #1c1c1a); font-weight: 700; border-bottom-color: var(--toner, #1c1c1a); } .ds-tab:focus-visible, .ds-help:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; } .ds-help { font: inherit; width: 36px; height: 36px; border: 1px solid var(--toner, #1c1c1a); border-radius: 0; background: none; font-weight: 700; display: inline-grid; place-items: center; cursor: pointer; } .ds-help:hover { background: var(--toner, #1c1c1a); color: var(--paper, #ecece7); }"
+    },
+    {
+      "name": "Mode Words",
+      "kind": "custom",
+      "refersTo": "mode-word",
+      "description": "Heavy game-type words; the active one carries a swept highlighter band.",
+      "html": "<div class=\"ds-modes\"><button class=\"ds-mode is-active\"><span>Lâm sàng</span></button><button class=\"ds-mode\"><span>Điều trị</span></button></div>",
+      "css": ".ds-modes { display: flex; gap: 22px; } .ds-mode { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); background: none; border: 0; padding: 2px; font-size: 23px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--toner-2, #55554f); cursor: pointer; } .ds-mode span { --hl: #ffe53b; padding: 0 2px; background-image: linear-gradient(101deg, transparent 0, var(--hl) 0.45em, var(--hl) calc(100% - 0.4em), transparent 100%); background-repeat: no-repeat; background-position: 0 90%; background-size: 0 52%; transition: background-size 380ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-mode:hover span { background-size: 100% 52%; } .ds-mode.is-active { color: var(--toner, #1c1c1a); } .ds-mode.is-active span { background-size: 100% 52%; } .ds-mode:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-mode span { transition: none; } }"
+    },
+    {
+      "name": "Clue Line",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Numbered clue rows; the latest carries the highlighter sweep, unopened ones collapse to dashed slots.",
+      "html": "<ol class=\"ds-clues\"><li class=\"ds-clue\"><span class=\"ds-clue-n\">01</span><p><span class=\"ds-mark\">Nữ 24 tuổi sốt kéo dài hơn một tuần sau chuyến đi.</span></p></li><li class=\"ds-clue is-latest\"><span class=\"ds-clue-n\">02</span><p><span class=\"ds-mark\">Mạch chậm tương đối so với nhiệt độ.</span></p></li><li class=\"ds-locked\">03</li><li class=\"ds-locked\">04</li><li class=\"ds-locked\">05</li><li class=\"ds-locked\">06</li></ol>",
+      "css": ".ds-clues { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; column-gap: 8px; color: var(--toner, #1c1c1a); } .ds-clue { flex: 0 0 100%; display: grid; grid-template-columns: 30px 1fr; padding: 8px 0; border-top: 1px solid var(--rule-soft, rgba(28,28,26,0.25)); line-height: 1.55; } .ds-clue:first-child { border-top-color: var(--toner, #1c1c1a); } .ds-clue p { margin: 0; } .ds-clue-n { font-weight: 700; font-size: 13px; padding-top: 2px; } .ds-mark { --hl: #ffe53b; padding: 0.04em 0.15em; margin-left: -0.15em; background-repeat: no-repeat; background-position: 0 70%; -webkit-box-decoration-break: clone; box-decoration-break: clone; } .ds-clue.is-latest .ds-mark { background-image: linear-gradient(101deg, transparent 0, var(--hl) 0.45em, var(--hl) calc(100% - 0.4em), transparent 100%); animation: ds-sweep 450ms cubic-bezier(0.16, 1, 0.3, 1) both; background-size: 100% 76%; } @keyframes ds-sweep { from { background-size: 0% 76%; } to { background-size: 100% 76%; } } .ds-locked { flex: 1 1 0; min-width: 0; padding: 6px 8px 4px; border-bottom: 1px dashed var(--toner-2, #55554f); color: var(--toner-2, #55554f); font-size: 13px; font-weight: 500; } @media (prefers-reduced-motion: reduce) { .ds-clue.is-latest .ds-mark { animation: none; } }"
+    },
+    {
+      "name": "Guess Slots",
+      "kind": "custom",
+      "refersTo": "guess-mark",
+      "description": "Ruled lines with ballpoint guesses: pink band plus strike for a miss, green band for the hit.",
+      "html": "<ul class=\"ds-slots\"><li><span class=\"ds-n\">1</span><span class=\"ds-line\"><span class=\"ds-guess is-miss\">Sốt rét</span></span></li><li><span class=\"ds-n\">2</span><span class=\"ds-line\"><span class=\"ds-guess is-hit\">Thương hàn</span></span></li><li><span class=\"ds-n\">3</span><span class=\"ds-line\"></span></li></ul>",
+      "css": ".ds-slots { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--toner, #1c1c1a); } .ds-slots li { display: flex; align-items: flex-end; gap: 10px; min-height: 30px; } .ds-n { width: 18px; font-size: 12px; font-weight: 700; color: var(--toner-2, #55554f); padding-bottom: 3px; } .ds-line { flex: 1; min-height: 30px; display: flex; align-items: flex-end; padding-bottom: 2px; border-bottom: 1px solid var(--rule-soft, rgba(28,28,26,0.25)); } .ds-guess { font-family: var(--hand, 'Patrick Hand', 'Bradley Hand', cursive); font-size: 19px; line-height: 1.2; color: var(--pen, #2340a0); padding: 0 6px; margin-left: -6px; background-repeat: no-repeat; } .ds-guess.is-miss { background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 7.5C18 5 30 8.5 48 5.5S78 4 100 1.8' fill='none' stroke='%232340a0' stroke-width='2' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E\"), linear-gradient(transparent 30%, rgba(255,111,174,0.5) 30%); background-size: 100% 10px, 100% 100%; background-position: 0 58%, 0 0; } .ds-guess.is-hit { background-image: linear-gradient(101deg, transparent 0, #5fe08a 0.4em, #5fe08a calc(100% - 0.4em), transparent 100%); background-size: 100% 70%; background-position: 0 90%; }"
+    },
+    {
+      "name": "Underline Select",
+      "kind": "input",
+      "refersTo": "select-underline",
+      "description": "Borderless select with a toner underline and square chevron.",
+      "html": "<span class=\"ds-select\"><select><option>Tất cả chuyên khoa (400)</option></select><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"><path d=\"m6 9 6 6 6-6\"/></svg></span>",
+      "css": ".ds-select { position: relative; display: block; } .ds-select select { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); appearance: none; -webkit-appearance: none; width: 100%; min-height: 36px; background: transparent; border: 0; border-bottom: 1px solid var(--toner, #1c1c1a); border-radius: 0; padding: 4px 26px 3px 8px; font-size: 15px; font-weight: 700; color: var(--toner, #1c1c1a); cursor: pointer; } .ds-select select:focus-visible { outline: 2px solid var(--pen, #2340a0); outline-offset: 3px; } .ds-select svg { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); pointer-events: none; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Marked-Up Đề Cương",
+    "overview": "**Creative North Star: \"The Marked-Up Đề Cương\"**\n\nEvery case is a page of photocopied revision notes. The page is cool grey xerox paper with a faint toner speckle, printed in toner black with one-pixel rules and no corners anywhere. Nothing floats, glows or sits in a card: hierarchy comes from type scale and weight alone, and structure comes from rules drawn across the column.\n\nThe student's own marks are the only colour. Fluorescent yellow highlighter marks the newest clue and the active mode; pink highlighter and a blue ballpoint strike mark a wrong guess; green highlighter marks the solved answer; blue ballpoint handwriting carries everything the player writes (guesses, their own stats). A finished page reads as a sheet the student has worked through, which is what gets shared.\n\nThe system rejects the soft-card SaaS dashboard it replaced: no rounded panels, icon tiles, gradients-as-decoration or hero illustration.",
+    "keyCharacteristics": [
+      "Xerox paper ground with SVG fractal-noise speckle, toner ink, zero radius everywhere.",
+      "Hierarchy by a heavy grotesque at weight 900 with tight tracking, never by boxes.",
+      "One-pixel rules: full toner for section heads, 25% toner for row dividers, dashed for unopened clue slots.",
+      "Colour appears only as marker or pen marks on text, never as a surface fill.",
+      "Two hands: printed (Be Vietnam Pro) for the page, ballpoint (Patrick Hand) for the player."
+    ],
+    "rules": [
+      {
+        "name": "The Marks-Not-Fills Rule",
+        "body": "Highlighter and pen colours are only ever drawn across text as bands, strokes or handwriting. No panel, tile, chip or button is filled with them.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Highlight Rule",
+        "body": "Yellow sits on the latest clue only; older clues drop the mark when a new one opens. The active mode word is the only other yellow on the page.",
+        "section": "colors"
+      },
+      {
+        "name": "The Type-Is-The-Chrome Rule",
+        "body": "Hierarchy changes by size and weight, not by containers. A new section gets a bold label over a toner rule, never a box.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Hands Rule",
+        "body": "Print is the page; handwriting is the player. Patrick Hand is used only for text the player produced or earned (guesses, their stats), never for instructions or headings.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Loose Sheet Rule",
+        "body": "The dialog is the only lifted object. Nothing on the page carries a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep every corner at 0px and draw structure with 1px rules (toner for heads, 25% toner for rows).",
+      "**Do** apply yellow, pink and green as chisel-edged bands behind text, with `box-decoration-break: clone` so marks wrap per line.",
+      "**Do** set anything the player wrote in Patrick Hand, ballpoint blue (#2340a0).",
+      "**Do** carry hierarchy with Be Vietnam Pro at 900 and -0.04em tracking for headings, balanced wrap on titles.",
+      "**Do** keep the speckled xerox paper (#ecece7) as the only page ground, including the dialog.",
+      "**Do** make every reveal animation instant under reduced motion."
+    ],
+    "donts": [
+      "**Don't** use rounded panels, cards, icon tiles, decorative gradients or hero illustration.",
+      "**Don't** fill any surface or button with a highlighter or pen colour.",
+      "**Don't** put more than one yellow clue mark on the page at once.",
+      "**Don't** add shadows to anything on the page; only the dialog lifts.",
+      "**Don't** use Patrick Hand for instructions, headings or printed content."
+    ]
+  }
+}

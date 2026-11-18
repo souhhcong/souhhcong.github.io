@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T22:04:56.988Z",
+        "reason": "Claude triage: inactive mode word carries a 0-size highlighter gradient; no colour sits behind the grey text"
+      },
+      {
+        "rule": "icon-tile-stack",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T22:04:57.002Z",
+        "reason": "Claude triage: flagged tile is the dialog close button positioned top-right, not an icon tile"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-18T22:26:44.469Z",
+        "reason": "Claude triage: unchosen direction sketch from the decision round, intentionally in another world's fonts; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-18T22:26:44.484Z",
+        "reason": "Claude triage: unchosen direction sketch from the decision round, intentionally in another world's fonts; not shipped"
+      }
+    ]
+  }
+}
