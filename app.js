@@ -281,7 +281,7 @@ const elements = {
   clueList: $("#clue-list"),
   form: $("#guess-form"),
   input: $("#guess-input"),
-  diagnosisList: $("#diagnosis-list"),
+  suggestions: $("#suggestions"),
   feedback: $("#feedback"),
   reveal: $("#reveal-button"),
   giveUp: $("#give-up-button"),
@@ -491,7 +491,7 @@ function setCase(caseData, restore = false) {
   if (finished) revealed = activeClues().length;
 
   elements.caseNumber.textContent = `Ca #${String(caseData.id).padStart(3, "0")}`;
-  elements.input.setAttribute("list", "diagnosis-list");
+  elements.input.setAttribute("role", "combobox");
   elements.input.placeholder = "Tên bệnh hoặc mã ICD";
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
@@ -639,6 +639,7 @@ function showResult() {
 }
 
 function submitGuess(event) {
+  closeSuggestions();
   event.preventDefault();
   const text = elements.input.value.trim();
   if (!text || finished) return;
@@ -792,16 +793,90 @@ function switchDifficulty(nextDifficulty) {
   setCase(mode === "daily" ? dailyCase() : randomPracticeCase(), mode === "daily");
 }
 
+let suggestionNames = [];
+let activeSuggestion = -1;
+
 function hydrateDiagnosisList() {
   const names = new Set();
   (mode === "daily" ? CASES : practicePool()).forEach((item) => {
     names.add(item.diagnosis);
     item.aliases.forEach((alias) => names.add(alias));
   });
-  elements.diagnosisList.innerHTML = [...names]
+  suggestionNames = [...names]
     .sort((a, b) => a.localeCompare(b, "vi"))
-    .map((name) => `<option value="${escapeHtml(name)}"></option>`)
+    .map((name) => ({name, key: normalize(name)}))
+    // Drop accentless aliases that only duplicate an accented name.
+    .filter((entry, _, all) => entry.name.toLowerCase() !== entry.key || !all.some((other) => other !== entry && other.key === entry.key));
+  closeSuggestions();
+}
+
+function closeSuggestions() {
+  activeSuggestion = -1;
+  elements.suggestions.hidden = true;
+  elements.suggestions.innerHTML = "";
+  elements.input.setAttribute("aria-expanded", "false");
+  elements.input.removeAttribute("aria-activedescendant");
+}
+
+function setActiveSuggestion(index) {
+  const items = [...elements.suggestions.children];
+  activeSuggestion = index;
+  items.forEach((item, i) => item.setAttribute("aria-selected", String(i === index)));
+  if (items[index]) {
+    elements.input.setAttribute("aria-activedescendant", items[index].id);
+    items[index].scrollIntoView({block: "nearest"});
+  } else {
+    elements.input.removeAttribute("aria-activedescendant");
+  }
+}
+
+function updateSuggestions() {
+  const query = normalize(elements.input.value);
+  if (!query || elements.input.disabled) return closeSuggestions();
+  const starts = [];
+  const contains = [];
+  for (const entry of suggestionNames) {
+    if (entry.key === query) continue;
+    if (entry.key.startsWith(query)) starts.push(entry);
+    else if (entry.key.includes(query)) contains.push(entry);
+  }
+  const matches = [...starts, ...contains].slice(0, 6);
+  if (!matches.length) return closeSuggestions();
+  elements.suggestions.innerHTML = matches
+    .map((entry, i) => `<li role="option" id="suggestion-${i}" aria-selected="false" data-value="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</li>`)
     .join("");
+  elements.suggestions.hidden = false;
+  elements.input.setAttribute("aria-expanded", "true");
+  setActiveSuggestion(-1);
+}
+
+function pickSuggestion(value) {
+  elements.input.value = value;
+  closeSuggestions();
+  elements.input.focus();
+}
+
+function bindSuggestions() {
+  elements.input.addEventListener("input", updateSuggestions);
+  elements.input.addEventListener("blur", () => setTimeout(closeSuggestions, 120));
+  elements.input.addEventListener("keydown", (event) => {
+    const count = elements.suggestions.children.length;
+    if (elements.suggestions.hidden || !count) return;
+    if (event.key === "ArrowDown") { event.preventDefault(); setActiveSuggestion((activeSuggestion + 1) % count); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); setActiveSuggestion((activeSuggestion - 1 + count) % count); }
+    else if (event.key === "Escape") closeSuggestions();
+    else if (event.key === "Enter" && activeSuggestion >= 0) {
+      event.preventDefault();
+      pickSuggestion(elements.suggestions.children[activeSuggestion].dataset.value);
+    }
+  });
+  // pointerdown keeps focus on the input so the mobile keyboard stays open.
+  elements.suggestions.addEventListener("pointerdown", (event) => {
+    const item = event.target.closest("li");
+    if (!item) return;
+    event.preventDefault();
+    pickSuggestion(item.dataset.value);
+  });
 }
 
 function localPreviewOptions() {
@@ -847,6 +922,7 @@ async function init() {
   if (preview) rememberPracticeCase(currentCase);
 
   elements.form.addEventListener("submit", submitGuess);
+  bindSuggestions();
   elements.reveal.addEventListener("click", revealClue);
   elements.giveUp.addEventListener("click", giveUp);
   elements.next.addEventListener("click", nextCase);

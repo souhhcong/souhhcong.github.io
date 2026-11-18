@@ -21,7 +21,7 @@ Deno.test("startup, difficulty switching and a winning submission work together"
   select.value = "hard";
   select.listeners.get("change")();
   assert(nodes.get("#case-title").textContent === run('"Ca bệnh #" + String(currentCase.id).padStart(3, "0")'), "Hard mode does not use the neutral case heading");
-  assert(nodes.get("#guess-input").getAttribute("list") === "diagnosis-list", "Hard mode removed autocomplete");
+  assert(nodes.get("#guess-input").getAttribute("role") === "combobox", "Hard mode removed autocomplete");
   nodes.get("#guess-input").value = run("currentCase.aliases[0]");
   nodes.get("#guess-form").listeners.get("submit")({ preventDefault() {} });
   assert(run("finished && attempts[0].correct"), "Winning submission did not complete the game");

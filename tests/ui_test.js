@@ -21,7 +21,7 @@ Deno.test("visible clue and guess progress stays in sync through reveals, guesse
   assert(nodes.get("#app").getAttribute("data-game-type")==="treatment","Mode appearance stale");
   assert(nodes.get("#clue-progress").value===1 && nodes.get("#history-count").textContent==="0 / 6","New mode retained old progress");
   run("switchDifficulty('hard')");
-  assert(nodes.get("#guess-input").getAttribute("list")==="diagnosis-list" && nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Difficulty changed easy-mode assistance");
+  assert(nodes.get("#guess-input").getAttribute("role")==="combobox" && nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Difficulty changed easy-mode assistance");
 });
 
 Deno.test("completion updates the review focus, round state and meaningful accuracy statistics", async () => {

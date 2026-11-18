@@ -120,13 +120,20 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .guess.hit { font-weight: 700; background-image: linear-gradient(101deg, transparent 0, var(--green) 0.4em, var(--green) calc(100% - 0.4em), transparent 100%); background-repeat: no-repeat; background-size: 100% 70%; background-position: 0 90%; }
 .slot-note { font-size: 12px; font-weight: 500; color: var(--toner-2); padding-bottom: 3px; }
 
-.guess-form { padding-top: 10px; }
+.guess-form { padding-top: 10px; position: relative; }
+.suggestions { position: absolute; left: 0; right: 0; top: 58px; z-index: 20; list-style: none; margin: 0; padding: 0; background: var(--field); border: 2px solid var(--toner); border-top-width: 1px; max-height: 288px; overflow-y: auto; }
+.suggestions[hidden] { display: none; }
+.suggestions li { min-height: 44px; display: flex; align-items: center; padding: 8px 12px; font-size: 16px; border-top: 1px solid var(--rule, #bdbdb5); cursor: pointer; }
+.suggestions li:first-child { border-top: 0; }
+.suggestions li[aria-selected="true"], .suggestions li:hover { background: var(--toner); color: var(--paper); }
 .guesses { padding-top: 8px; }
 .guess-row { display: flex; }
 .guess-row input { flex: 1; min-width: 0; min-height: 48px; border: 2px solid var(--toner); background: var(--field); padding: 8px 12px; font-size: 16px; }
 .guess-row input::placeholder { color: #4a4a45; opacity: 1; }
 .guess-row input:disabled { opacity: 0.55; }
-.guess-row input:focus-visible { outline-offset: 2px; }
+/* Focus rings sit inside the butted input and button so neither covers the other. */
+.guess-row input:focus-visible { outline-offset: -6px; }
+.guess-row button:focus-visible { outline-color: var(--paper); outline-offset: -6px; }
 .guess-row button { min-height: 48px; padding: 0 22px; background: var(--toner); color: var(--paper); border: 2px solid var(--toner); font-weight: 700; font-size: 16px; }
 .feedback { min-height: 1.6em; padding-top: 6px; margin-bottom: 10px; font-size: 14px; font-weight: 400; color: var(--toner-2); }
 .feedback.good { color: var(--toner); font-weight: 700; }
@@ -158,6 +165,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .stats-button .when-done, .shell:not([data-round="active"]) .stats-button .when-active { display: none; }
 .shell:not([data-round="active"]) .stats-button .when-done { display: inline; }
 .stats-button { margin-left: auto; }
+@media (max-width: 639px) { #round-status { flex-basis: 100%; } }
 .answer { display: inline; font-size: clamp(26px, 6.5vw, 36px); font-weight: 900; line-height: 1.2; letter-spacing: -0.04em; -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 0.1em 0.14em; margin-left: -0.1em; }
 .shell[data-round="complete"] .answer { text-decoration: underline 2px var(--toner); text-underline-offset: 6px; }
 .shell[data-round="solved"] .answer { background-image: linear-gradient(101deg, transparent 0, var(--green) 0.4em, var(--green) calc(100% - 0.4em), transparent 100%); background-repeat: no-repeat; background-size: 100% 62%; background-position: 0 85%; }

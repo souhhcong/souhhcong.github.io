@@ -96,7 +96,7 @@ Deno.test("category selection starts focused practice and overlap is retained in
   await run("init()");
   run("switchCategory('cardiology')");
   assert(run("mode === 'practice' && practicePool().length > 1 && practicePool().every(item => item.categoryIds.includes('cardiology')) && currentCase.categoryIds.includes('cardiology')"),"Wrong category pool");
-  assert(!nodes.get("#diagnosis-list").innerHTML.includes("Thủy đậu"),"Autocomplete escaped selected group");
+  assert(!run("suggestionNames.map((entry)=>entry.name).join('|')").includes("Thủy đậu"),"Autocomplete escaped selected group");
   run("switchGame('treatment')");
   assert(run("currentCase.categoryIds.includes('cardiology') && practiceCategory === 'cardiology'"),"Mode switch lost category");
   assert(run("CASES.find((item)=>item.id===2).categoryIds.includes('respiratory')"),"Expected overlap absent");

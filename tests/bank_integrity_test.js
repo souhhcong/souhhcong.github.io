@@ -139,9 +139,9 @@ Deno.test("new specialties offer focused practice and matching suggestions in bo
   for (const category of ["ophthalmology","ent","psychiatry"]) for (const game of ["clinical","treatment"]) {
     run(`switchCategory('${category}'); switchGame('${game}')`);
     assert(run(`mode==='practice' && practiceCategory==='${category}' && currentCase.categoryIds.includes('${category}')`),"New specialty did not start focused practice");
-    context.suggestions=nodes.get("#diagnosis-list").innerHTML;
-    assert(run("practicePool().every(item=>suggestions.includes(escapeHtml(item.diagnosis)))"),"In-category diagnosis missing from suggestions");
-    assert(!nodes.get("#diagnosis-list").innerHTML.includes("Loét tá tràng xuất huyết"),"Unrelated diagnosis offered by new group");
+    context.suggestions=run("suggestionNames.map((entry)=>entry.name).join('|')");
+    assert(run("practicePool().every(item=>suggestions.includes(item.diagnosis))"),"In-category diagnosis missing from suggestions");
+    assert(!run("suggestionNames.map((entry)=>entry.name).join('|')").includes("Loét tá tràng xuất huyết"),"Unrelated diagnosis offered by new group");
     const first=run("currentCase.id");
     nodes.get("#new-case-button").listeners.get("click")();
     assert(run("currentCase.id")!==first,"New specialty repeated immediately");

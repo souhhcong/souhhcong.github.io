@@ -45,7 +45,7 @@ Deno.test("all difficulties keep easy-mode titles, suggestions, clues and answer
   await run("init()");
   for(const type of ["clinical","treatment"]) for(const level of ["easy","medium","hard"]) {
     run(`gameType='${type}'; difficulty='${level}'; setCase(CASES.find(item=>item.id===7))`);
-    assert(nodes.get("#guess-input").getAttribute("list")==="diagnosis-list","Suggestions hidden by difficulty");
+    assert(nodes.get("#guess-input").getAttribute("role")==="combobox","Suggestions hidden by difficulty");
     assert(nodes.get("#case-title").textContent === (type==="clinical"?"Ca bệnh #007":"Kế hoạch điều trị #007"),"Case heading differs from easy mode");
     assert(run("revealed===1 && activeClues().length===6 && attempts.length===0"),"Rules changed with difficulty");
     assert(nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Guidance still describes old mechanics");
@@ -123,7 +123,7 @@ Deno.test("changing practice difficulty draws a fresh weighted question while re
   const first=run("currentCase.id");
   run("switchDifficulty('hard')");
   assert(run("currentCase.id")!==first && run("currentCase.categoryIds.includes('ophthalmology') && revealed===1 && attempts.length===0"),"Difficulty did not draw a new in-category case");
-  assert(nodes.get("#guess-input").getAttribute("list")==="diagnosis-list","Difficulty disabled assistance");
+  assert(nodes.get("#guess-input").getAttribute("role")==="combobox","Difficulty disabled assistance");
   const second=run("currentCase.id");
   run("switchDifficulty('hard')");
   assert(run("currentCase.id")===second,"Reapplying same difficulty discarded the question");
