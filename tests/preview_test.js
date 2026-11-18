@@ -48,7 +48,7 @@ Deno.test("local case links select fresh practice rounds and the requested diffi
     context.URLSearchParams = URLSearchParams;
     await run("init()");
     assert(run('currentCase.id === 43 && mode === "practice" && difficulty === "hard" && !finished && attempts.length === 0'), "Local case link ignored");
-    assert(nodes.get("#case-title").textContent === run("currentCase.title"), "Hard preview hid a title");
+    assert(nodes.get("#case-title").textContent === run('"Ca bệnh #" + String(currentCase.id).padStart(3, "0")'), "Hard preview changed the neutral heading");
     assert(nodes.get("#guess-input").getAttribute("list") === "diagnosis-list", "Hard preview lost easy-mode suggestions");
   }
 });

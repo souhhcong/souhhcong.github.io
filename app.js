@@ -288,6 +288,7 @@ const elements = {
   next: $("#new-case-button"),
   history: $("#history"),
   result: $("#result"),
+  resultCard: $("#result-card"),
   answer: $("#answer"),
   icdLabel: $("#icd-label"),
   summary: $("#summary"),
@@ -301,7 +302,8 @@ const elements = {
   copyAnki: $("#copy-anki")
 };
 
-let renderedClues = 0;
+// Only a newly opened clue (from "Mở dữ kiện" or a wrong guess) plays the reveal animation; loads and resets do not.
+let animateReveal = false;
 
 function normalize(value) {
   return value
@@ -479,7 +481,7 @@ function isCorrect(guess) {
 
 function setCase(caseData, restore = false) {
   currentCase = caseData;
-  renderedClues = 0;
+  animateReveal = false;
   revealed = 1;
   attempts = [];
   finished = false;
@@ -490,7 +492,7 @@ function setCase(caseData, restore = false) {
 
   elements.caseNumber.textContent = `Ca #${String(caseData.id).padStart(3, "0")}`;
   elements.input.setAttribute("list", "diagnosis-list");
-  elements.input.placeholder = "Chẩn đoán hoặc mã ICD";
+  elements.input.placeholder = "Tên bệnh hoặc mã ICD";
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
   elements.input.value = "";
@@ -531,8 +533,8 @@ function escapeHtml(value) {
 }
 
 function render() {
-  const justRevealed = revealed > renderedClues;
-  renderedClues = revealed;
+  const justRevealed = animateReveal;
+  animateReveal = false;
   elements.app.setAttribute("data-round", finished ? (attempts.some(item => item.correct) ? "solved" : "complete") : "active");
   elements.attemptsLeft.textContent = Math.max(0, MAX_ATTEMPTS - attempts.length);
   elements.clueCount.textContent = `${revealed} / ${MAX_CLUES}`;
@@ -551,7 +553,7 @@ function render() {
   elements.playTip.textContent = "Chọn từ gợi ý hoặc tự nhập tên bệnh, tên tương đương hay mã ICD. Không cần gõ đúng dấu tiếng Việt.";
   elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"}\u00a0· ${GAME_LABELS[gameType]}\u00a0· ${DIFFICULTY_LABELS[difficulty]}`;
   elements.caseKicker.textContent = gameType === "treatment" ? "Đoán bệnh qua điều trị" : "Ca bệnh";
-  elements.caseTitle.textContent = gameType === "treatment" ? (finished ? currentCase.diagnosis : `Kế hoạch điều trị #${String(currentCase.id).padStart(3, "0")}`) : currentCase.title;
+  elements.caseTitle.textContent = gameType === "treatment" ? (finished ? currentCase.diagnosis : `Kế hoạch điều trị #${String(currentCase.id).padStart(3, "0")}`) : `Ca bệnh #${String(currentCase.id).padStart(3, "0")}`;
   elements.clueList.innerHTML = activeClues()
     .map((clue, index) => {
       const visible = index < revealed;
@@ -615,6 +617,7 @@ function finish(solved) {
     : gaveUp ? "Đã bỏ cuộc · Xem đáp án bên dưới" : "Đã hết lượt đoán";
   elements.feedback.className = `feedback ${solved ? "good" : "bad"}`;
   render();
+  if (!elements.resultCard.open) elements.resultCard.showModal?.();
   elements.answer.focus?.();
 }
 
@@ -657,6 +660,7 @@ function submitGuess(event) {
 
   const canReveal = revealed < activeClues().length;
   revealed = Math.min(activeClues().length, revealed + 1);
+  animateReveal = canReveal;
   elements.feedback.textContent = canReveal ? "Chưa đúng · Đã mở dữ kiện tiếp theo" : "Chưa đúng · Bạn đã mở đủ dữ kiện";
   elements.feedback.className = "feedback bad";
   render();
@@ -666,6 +670,7 @@ function revealClue() {
   if (finished || revealed >= activeClues().length || attempts.length >= MAX_ATTEMPTS) return;
   attempts.push({text: "Mở thêm dữ kiện", correct: false, kind: "reveal"});
   revealed = Math.min(activeClues().length, revealed + 1);
+  animateReveal = true;
   if (attempts.length >= MAX_ATTEMPTS) {
     finish(false);
     return;
@@ -704,6 +709,7 @@ function randomPracticeCase(random = Math.random) {
 }
 
 function nextCase() {
+  elements.resultCard.close?.();
   if (mode === "daily") switchMode("practice");
   else setCase(randomPracticeCase());
   elements.caseTitle.focus?.();
@@ -862,9 +868,11 @@ async function init() {
   document.querySelectorAll("[data-close]").forEach((button) => {
     button.addEventListener("click", () => $(`#${button.dataset.close}`).close());
   });
-  $("#help").addEventListener("click", (event) => {
-    if (event.target === $("#help")) $("#help").close();
-  });
+  for (const id of ["#help", "#result-card"]) {
+    $(id).addEventListener("click", (event) => {
+      if (event.target === $(id)) $(id).close();
+    });
+  }
 }
 
 init();

@@ -20,7 +20,7 @@ Deno.test("startup, difficulty switching and a winning submission work together"
   const select = nodes.get("#difficulty-select");
   select.value = "hard";
   select.listeners.get("change")();
-  assert(nodes.get("#case-title").textContent === run("currentCase.title"), "Hard mode does not use easy-mode title visibility");
+  assert(nodes.get("#case-title").textContent === run('"Ca bệnh #" + String(currentCase.id).padStart(3, "0")'), "Hard mode does not use the neutral case heading");
   assert(nodes.get("#guess-input").getAttribute("list") === "diagnosis-list", "Hard mode removed autocomplete");
   nodes.get("#guess-input").value = run("currentCase.aliases[0]");
   nodes.get("#guess-form").listeners.get("submit")({ preventDefault() {} });

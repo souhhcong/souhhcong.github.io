@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-18T23:30:00Z",
+  "generatedAt": "2026-11-19T00:10:00Z",
   "title": "Design System: chanle",
   "extensions": {
     "colorMeta": {
@@ -173,13 +173,13 @@
         "displayName": "Meta",
         "purpose": "Case line, slot notes, footer, faded toner."
       },
-      "hand": {
-        "displayName": "Hand",
-        "purpose": "Player's written guesses in ballpoint blue."
+      "guess": {
+        "displayName": "Guess",
+        "purpose": "Guesses on slot lines in toner; miss in faded toner, hit at 700."
       },
-      "hand-figure": {
-        "displayName": "Hand Figure",
-        "purpose": "Stat figures in the margin column."
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Stat values in the margin column, tabular."
       }
     },
     "shadows": [
@@ -287,9 +287,9 @@
       "name": "Guess Slots",
       "kind": "custom",
       "refersTo": "guess-mark",
-      "description": "Ruled lines with ballpoint guesses: pink band plus strike for a miss, green band for the hit.",
+      "description": "Ruled lines with printed guesses: pink band plus straight toner strike for a miss, bold over green for the hit.",
       "html": "<ul class=\"ds-slots\"><li><span class=\"ds-n\">1</span><span class=\"ds-line\"><span class=\"ds-guess is-miss\">Sốt rét</span></span></li><li><span class=\"ds-n\">2</span><span class=\"ds-line\"><span class=\"ds-guess is-hit\">Thương hàn</span></span></li><li><span class=\"ds-n\">3</span><span class=\"ds-line\"></span></li></ul>",
-      "css": ".ds-slots { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--toner, #1c1c1a); } .ds-slots li { display: flex; align-items: flex-end; gap: 10px; min-height: 30px; } .ds-n { width: 18px; font-size: 12px; font-weight: 700; color: var(--toner-2, #55554f); padding-bottom: 3px; } .ds-line { flex: 1; min-height: 30px; display: flex; align-items: flex-end; padding-bottom: 2px; border-bottom: 1px solid var(--rule-soft, rgba(28,28,26,0.25)); } .ds-guess { font-family: var(--hand, 'Patrick Hand', 'Bradley Hand', cursive); font-size: 19px; line-height: 1.2; color: var(--pen, #2340a0); padding: 0 6px; margin-left: -6px; background-repeat: no-repeat; } .ds-guess.is-miss { background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 7.5C18 5 30 8.5 48 5.5S78 4 100 1.8' fill='none' stroke='%232340a0' stroke-width='2' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E\"), linear-gradient(transparent 30%, rgba(255,111,174,0.5) 30%); background-size: 100% 10px, 100% 100%; background-position: 0 58%, 0 0; } .ds-guess.is-hit { background-image: linear-gradient(101deg, transparent 0, #5fe08a 0.4em, #5fe08a calc(100% - 0.4em), transparent 100%); background-size: 100% 70%; background-position: 0 90%; }"
+      "css": ".ds-slots { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--toner, #1c1c1a); } .ds-slots li { display: flex; align-items: flex-end; gap: 10px; min-height: 30px; } .ds-n { width: 18px; font-size: 12px; font-weight: 700; color: var(--toner-2, #55554f); padding-bottom: 3px; } .ds-line { flex: 1; min-height: 30px; display: flex; align-items: flex-end; padding-bottom: 2px; border-bottom: 1px solid var(--rule-soft, rgba(28,28,26,0.25)); } .ds-guess { font-family: var(--print, 'Be Vietnam Pro', system-ui, sans-serif); font-size: 16px; font-weight: 500; line-height: 1.3; color: var(--toner, #1c1c1a); padding: 0 6px; margin-left: -6px; background-repeat: no-repeat; background-size: 100% 70%; background-position: 0 90%; } .ds-guess.is-miss { color: var(--toner-2, #55554f); text-decoration: line-through 1.5px var(--toner, #1c1c1a); text-decoration-skip-ink: none; background-image: linear-gradient(101deg, transparent 0, var(--pink, rgba(255,111,174,0.5)) 0.3em, var(--pink, rgba(255,111,174,0.5)) calc(100% - 0.3em), transparent 100%); } .ds-guess.is-hit { font-weight: 700; background-image: linear-gradient(101deg, transparent 0, var(--green, #5fe08a) 0.4em, var(--green, #5fe08a) calc(100% - 0.4em), transparent 100%); }"
     },
     {
       "name": "Underline Select",
@@ -302,18 +302,18 @@
   ],
   "narrative": {
     "northStar": "The Marked-Up Đề Cương",
-    "overview": "**Creative North Star: \"The Marked-Up Đề Cương\"**\n\nEvery case is a page of photocopied revision notes. The page is cool grey xerox paper with a faint toner speckle, printed in toner black with one-pixel rules and no corners anywhere. Nothing floats, glows or sits in a card: hierarchy comes from type scale and weight alone, and structure comes from rules drawn across the column.\n\nThe student's own marks are the only colour. Fluorescent yellow highlighter marks the newest clue and the active mode; pink highlighter and a blue ballpoint strike mark a wrong guess; green highlighter marks the solved answer; blue ballpoint handwriting carries everything the player writes (guesses, their own stats). A finished page reads as a sheet the student has worked through, which is what gets shared.\n\nThe system rejects the soft-card SaaS dashboard it replaced: no rounded panels, icon tiles, gradients-as-decoration or hero illustration.",
+    "overview": "**Creative North Star: \"The Marked-Up Đề Cương\"**\n\nEvery case is a page of photocopied revision notes. The page is cool grey xerox paper with a faint toner speckle, printed in toner black with one-pixel rules and no corners anywhere. Nothing floats, glows or sits in a card: hierarchy comes from type scale and weight alone, and structure comes from rules drawn across the column.\n\nThe student's own marks are the only colour. Fluorescent yellow highlighter marks the newest clue and the active mode; pink highlighter under a straight ruled strike-through marks a wrong guess; green highlighter marks the correct guess and the solved answer. Everything is set in one printed face: the player's guesses are print too, distinguished by their marks, not by a different hand. A finished page reads as a sheet the student has worked through, which is what gets shared.\n\nThe system rejects the soft-card SaaS dashboard it replaced: no rounded panels, icon tiles, gradients-as-decoration or hero illustration.",
     "keyCharacteristics": [
       "Xerox paper ground with SVG fractal-noise speckle, toner ink, zero radius everywhere.",
       "Hierarchy by a heavy grotesque at weight 900 with tight tracking, never by boxes.",
       "One-pixel rules: full toner for section heads, 25% toner for row dividers, dashed for unopened clue slots.",
-      "Colour appears only as marker or pen marks on text, never as a surface fill.",
-      "Two hands: printed (Be Vietnam Pro) for the page, ballpoint (Patrick Hand) for the player."
+      "Colour appears only as highlighter marks on text, never as a surface fill.",
+      "One face, Be Vietnam Pro, for everything; no handwriting."
     ],
     "rules": [
       {
         "name": "The Marks-Not-Fills Rule",
-        "body": "Highlighter and pen colours are only ever drawn across text as bands, strokes or handwriting. No panel, tile, chip or button is filled with them.",
+        "body": "Highlighter colours are only ever drawn across text as bands. No panel, tile, chip or button is filled with them, and ballpoint blue never leaves focus and caret.",
         "section": "colors"
       },
       {
@@ -327,21 +327,21 @@
         "section": "typography"
       },
       {
-        "name": "The Two Hands Rule",
-        "body": "Print is the page; handwriting is the player. Patrick Hand is used only for text the player produced or earned (guesses, their stats), never for instructions or headings.",
+        "name": "The One Face Rule",
+        "body": "Be Vietnam Pro sets every word on the page, the player's guesses included. The player's input is distinguished by highlighter marks and ruled strikes, never by a handwriting face.",
         "section": "typography"
       },
       {
         "name": "The One Loose Sheet Rule",
-        "body": "The dialog is the only lifted object. Nothing on the page carries a shadow.",
+        "body": "Dialogs (the result card and help) are the only lifted objects. Nothing on the page carries a shadow.",
         "section": "elevation"
       }
     ],
     "dos": [
       "**Do** keep every corner at 0px and draw structure with 1px rules (toner for heads, 25% toner for rows).",
       "**Do** apply yellow, pink and green as chisel-edged bands behind text, with `box-decoration-break: clone` so marks wrap per line.",
-      "**Do** set anything the player wrote in Patrick Hand, ballpoint blue (#2340a0).",
-      "**Do** carry hierarchy with Be Vietnam Pro at 900 and -0.04em tracking for headings, balanced wrap on titles.",
+      "**Do** mark a missed guess with a straight 1.5px toner line-through over the pink band, and keep ballpoint blue for focus and caret only.",
+      "**Do** carry hierarchy with Be Vietnam Pro at 900 and -0.04em tracking for the mode words and the answer; never show the case's clinical title, it hints at the diagnosis.",
       "**Do** keep the speckled xerox paper (#ecece7) as the only page ground, including the dialog.",
       "**Do** make every reveal animation instant under reduced motion."
     ],
@@ -350,7 +350,7 @@
       "**Don't** fill any surface or button with a highlighter or pen colour.",
       "**Don't** put more than one yellow clue mark on the page at once.",
       "**Don't** add shadows to anything on the page; only the dialog lifts.",
-      "**Don't** use Patrick Hand for instructions, headings or printed content."
+      "**Don't** reintroduce a handwriting font or drawn pen squiggles (wavy SVG strikes, scribbles); the user rejected both."
     ]
   }
 }

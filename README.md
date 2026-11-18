@@ -10,7 +10,7 @@ Daily challenges use all specialties, with a different deterministic weighted qu
 
 Clinical diagnosis names are shown separately from ICD-10 category labels. Vietnamese names, common classroom synonyms, English aliases, and the case's ICD code are accepted when listed for that case; matching ignores accents, capitalization, and punctuation.
 
-All difficulties use the same presentation and rules as the original easy mode: autocomplete suggestions, visible clinical titles, six progressive clues, six guesses, and identical accepted answers. Treatment titles remain neutral until completion. Difficulty changes which questions are drawn:
+All difficulties use the same presentation and rules as the original easy mode: autocomplete suggestions, a neutral case heading (the clinical title stays hidden so it cannot hint at the diagnosis), six progressive clues, six guesses, and identical accepted answers. Treatment titles remain neutral until completion. Difficulty changes which questions are drawn:
 
 - `Dễ`: favors familiar undergraduate knowledge and common conditions.
 - `Vừa`: favors intermediate familiarity.

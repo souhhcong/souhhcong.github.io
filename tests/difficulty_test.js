@@ -46,7 +46,7 @@ Deno.test("all difficulties keep easy-mode titles, suggestions, clues and answer
   for(const type of ["clinical","treatment"]) for(const level of ["easy","medium","hard"]) {
     run(`gameType='${type}'; difficulty='${level}'; setCase(CASES.find(item=>item.id===7))`);
     assert(nodes.get("#guess-input").getAttribute("list")==="diagnosis-list","Suggestions hidden by difficulty");
-    assert(nodes.get("#case-title").textContent === (type==="clinical"?run("currentCase.title"):"Kế hoạch điều trị #007"),"Title visibility differs from easy mode");
+    assert(nodes.get("#case-title").textContent === (type==="clinical"?"Ca bệnh #007":"Kế hoạch điều trị #007"),"Case heading differs from easy mode");
     assert(run("revealed===1 && activeClues().length===6 && attempts.length===0"),"Rules changed with difficulty");
     assert(nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Guidance still describes old mechanics");
     nodes.get("#guess-input").value=run("currentCase.aliases[0]");

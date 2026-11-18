@@ -38,6 +38,15 @@
         ],
         "createdAt": "2026-11-18T22:26:44.484Z",
         "reason": "Claude triage: unchosen direction sketch from the decision round, intentionally in another world's fonts; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-18T22:35:07.284Z",
+        "reason": "Claude triage: archived decision-round sketch from before the user dropped the handwriting face; not shipped"
       }
     ]
   }

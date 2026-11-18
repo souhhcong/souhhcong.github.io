@@ -13,9 +13,9 @@
     <title>chanle | chẩn đoán mỗi ngày</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&family=Patrick+Hand&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="icon" href="assets/logo.svg?v=55130148bcd7" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=8a2afe756f8f" />
+    <link rel="stylesheet" href="styles.css?v=98daf515423f" />
   </head>
   <body>
     <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -25,6 +25,7 @@
       <symbol id="i-send" viewBox="0 0 24 24"><path d="m21 3-7 18-3-8-8-3 18-7Zm0 0L11 13" /></symbol>
       <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" /><path d="M16 8V3H4v13h4" /></symbol>
       <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-5m4 5V8m4 8v-3" /></symbol>
       <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
     </svg>
     <a class="skip-link" href="#game-area">Vào ca bệnh</a>
@@ -55,12 +56,13 @@
           </section>
 
           <article class="case" id="game-area" tabindex="-1" aria-labelledby="case-title">
-            <h2 id="case-title" class="case-title" tabindex="-1">Đang tải ca bệnh</h2>
-            <p class="case-line" aria-live="polite"><span id="case-number">Ca #001</span>&nbsp;· <span id="mode-label">Ca hằng ngày</span></p>
-            <p class="clue-tally">Dữ kiện <span id="clue-count">1 / 6</span></p>
+            <h2 id="case-title" class="sr-only" tabindex="-1">Đang tải ca bệnh</h2>
+            <p class="sr-only" aria-live="polite"><span id="case-number">Ca #001</span>&nbsp;· <span id="mode-label">Ca hằng ngày</span></p>
+            <p class="sr-only">Dữ kiện <span id="clue-count">1 / 6</span></p>
             <span class="sr-only" id="case-kicker">Ca bệnh</span>
             <div class="sr-only" id="clue-steps" aria-hidden="true"></div>
             <progress class="sr-only" id="clue-progress" value="1" max="6" aria-label="Số dữ kiện đã mở">1 / 6</progress>
+            <p class="case-prompt"><span class="for-clinical">Chẩn đoán ca bệnh</span><span class="for-treatment">Đoán bệnh từ kế hoạch điều trị</span></p>
             <ol class="clue-list" id="clue-list"></ol>
             <div class="clue-actions">
               <button class="reveal-button" type="button" id="reveal-button"><svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg><span>Mở dữ kiện</span></button>
@@ -69,7 +71,7 @@
             <form class="guess-form" id="guess-form" autocomplete="off">
               <label class="sr-only" for="guess-input">Chẩn đoán của bạn</label>
               <div class="attempt-track sr-only" id="attempt-track" aria-label="Tiến trình lượt đoán"></div>
-              <div class="guess-row"><input id="guess-input" name="guess" type="text" list="diagnosis-list" placeholder="Chẩn đoán hoặc mã ICD" required /><button type="submit" aria-label="Đoán"><span>Đoán</span></button></div>
+              <div class="guess-row"><input id="guess-input" name="guess" type="text" list="diagnosis-list" placeholder="Tên bệnh hoặc mã ICD" required /><button type="submit" aria-label="Đoán"><span>Đoán</span></button></div>
               <datalist id="diagnosis-list"></datalist>
               <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
             </form>
@@ -77,26 +79,11 @@
               <div class="guesses-head"><h3 id="history-title">Lượt đoán</h3><span id="history-count" class="sr-only">0 / 6</span></div>
               <ul class="history" id="history"></ul>
             </section>
-            <div class="case-bottom"><span id="round-status">Đáp án sẽ mở khi ca kết thúc</span><button class="text-button" type="button" id="new-case-button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle" /></svg>Ca khác</button></div>
-          </article>
-
-          <article class="result hidden" id="result" aria-labelledby="answer">
-            <h2 id="answer" class="answer" tabindex="-1"></h2>
-            <p id="icd-label" class="icd-label"></p>
-            <div class="result-actions"><button class="square-button" type="button" id="copy-share"><svg class="icon" aria-hidden="true"><use href="#i-send" /></svg><span>Chia sẻ</span></button><button class="square-button" type="button" id="copy-anki"><svg class="icon" aria-hidden="true"><use href="#i-copy" /></svg><span>Thẻ Anki</span></button></div>
-            <div id="treatment-explanation-block" class="hidden"><h3>Vì sao kế hoạch này phù hợp?</h3><p id="treatment-explanation"></p><h3>Liên hệ bệnh cảnh lâm sàng</h3></div>
-            <p id="summary"></p>
-            <dl class="pearls" id="pearls"></dl>
-            <div class="differential-block" id="differential-block"><h3>Chẩn đoán phân biệt</h3><ul class="differentials" id="differentials"></ul></div>
-            <div class="result-footer"><button class="primary-button" type="button" id="review-next">Ca tiếp theo<svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></button></div>
+            <div class="case-bottom"><span id="round-status">Đáp án sẽ mở khi ca kết thúc</span><button class="text-button stats-button" type="button" id="stats-button" data-open="result-card"><svg class="icon" aria-hidden="true"><use href="#i-chart" /></svg><span class="when-active">Xem thống kê</span><span class="when-done">Xem kết quả</span></button><button class="text-button" type="button" id="new-case-button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle" /></svg>Ca khác</button></div>
           </article>
         </div>
 
         <aside class="margin" aria-label="Tiến trình và ôn tập">
-          <section class="stats-block" aria-labelledby="session-title">
-            <h2 id="session-title">Thống kê</h2>
-            <dl class="stats"><div><dt>Ca đúng liên tiếp</dt><dd id="streak">0</dd></div><div><dt>Đã chơi</dt><dd id="played">0</dd></div><div><dt>Trả lời đúng</dt><dd id="solved">0</dd></div><div><dt>Tỉ lệ đúng</dt><dd id="accuracy">—</dd></div></dl>
-          </section>
           <section class="tip-block">
             <h2>Cách nhập đáp án</h2>
             <p id="play-tip">Bạn có thể nhập tên bệnh hoặc mã ICD. Không cần gõ đúng dấu tiếng Việt.</p>
@@ -107,9 +94,28 @@
       </main>
 
       <footer class="notes" aria-label="Ghi chú giáo dục"><p>chanle chỉ phục vụ mục đích giải trí và luyện phản xạ học tập, không dùng để chẩn đoán, tư vấn hay điều trị người bệnh thật.</p><span class="footer-brand">chanle</span></footer>
+      <dialog id="result-card" class="result-card" aria-label="Kết quả và thống kê">
+        <div class="modal card">
+          <button class="close" type="button" data-close="result-card" aria-label="Đóng, quay lại ca bệnh"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button>
+          <article class="result hidden" id="result" aria-labelledby="answer">
+            <div class="answer-wrap"><h2 id="answer" class="answer" tabindex="-1"></h2></div>
+            <p id="icd-label" class="icd-label"></p>
+            <div class="result-actions"><button class="square-button" type="button" id="copy-share"><svg class="icon" aria-hidden="true"><use href="#i-send" /></svg><span>Chia sẻ</span></button><button class="square-button" type="button" id="copy-anki"><svg class="icon" aria-hidden="true"><use href="#i-copy" /></svg><span>Thẻ Anki</span></button></div>
+            <div id="treatment-explanation-block" class="hidden"><h3>Vì sao kế hoạch này phù hợp?</h3><p id="treatment-explanation"></p><h3>Liên hệ bệnh cảnh lâm sàng</h3></div>
+            <p id="summary"></p>
+            <dl class="pearls" id="pearls"></dl>
+            <div class="differential-block" id="differential-block"><h3>Chẩn đoán phân biệt</h3><ul class="differentials" id="differentials"></ul></div>
+          </article>
+          <section class="stats-block" aria-labelledby="session-title">
+            <h2 id="session-title">Thống kê</h2>
+            <dl class="stats"><div><dt>Ca đúng liên tiếp</dt><dd id="streak">0</dd></div><div><dt>Đã chơi</dt><dd id="played">0</dd></div><div><dt>Trả lời đúng</dt><dd id="solved">0</dd></div><div><dt>Tỉ lệ đúng</dt><dd id="accuracy">—</dd></div></dl>
+          </section>
+          <div class="result-footer card-footer"><button class="primary-button" type="button" id="review-next">Ca tiếp theo<svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></button></div>
+        </div>
+      </dialog>
     </div>
 
     <dialog id="help" aria-labelledby="help-title"><div class="modal"><button class="close" type="button" data-close="help" aria-label="Đóng"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button><h2 id="help-title">Cách chơi</h2><p>Mỗi ca bắt đầu với một dữ kiện và 6 lượt đoán. Mỗi lần đoán sai hoặc bấm “Mở dữ kiện”, bạn sẽ được xem dữ kiện tiếp theo. Bấm “Bỏ cuộc” để kết thúc ca và xem đáp án cùng giải thích.</p><p>Bạn có thể nhập tên bệnh, tên gọi tương đương hoặc mã ICD được chấp nhận cho ca đó. Không cần phân biệt chữ hoa, chữ thường hay dấu tiếng Việt.</p><p>Mọi độ khó đều có gợi ý tên bệnh, 6 dữ kiện và 6 lượt đoán. Dễ ưu tiên kiến thức thường gặp, Vừa ưu tiên mức trung bình, Khó ưu tiên bệnh hiếm hoặc kiến thức chuyên sâu. Các bệnh vẫn có thể xuất hiện ở mọi mức, với tần suất khác nhau.</p><p>Chọn Kế hoạch điều trị để đoán bệnh từ các bước xử trí, thuốc, thủ thuật và theo dõi. Mỗi kế hoạch cũng có 6 dữ kiện; tên bệnh chỉ hiện sau khi kết thúc. Dữ kiện được mở dần theo luật chơi. Trong thực tế, một số biện pháp cấp cứu cần được thực hiện đồng thời.</p><p>Chọn chuyên khoa để bắt đầu luyện tập trong nhóm đó. Một bệnh có thể thuộc nhiều nhóm. Ca hằng ngày được chọn từ toàn bộ ngân hàng, với ca riêng cho mỗi kiểu dữ kiện và độ khó. Luyện tập tránh lặp lại các ca vừa chơi. Các kế hoạch áp dụng cho bệnh cảnh giả định trong trò chơi, không phải phác đồ dùng cho người bệnh thật.</p></div></dialog>
-    <script src="app.js?v=eef4c256044a" defer></script>
+    <script src="app.js?v=e73abdf20377" defer></script>
   </body>
 </html>
