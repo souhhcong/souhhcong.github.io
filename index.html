@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="icon" href="assets/logo.svg?v=55130148bcd7" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=2f7e0ef737bf" />
+    <link rel="stylesheet" href="styles.css?v=64f3ba58cbc2" />
   </head>
   <body>
     <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -26,6 +26,7 @@
       <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" /><path d="M16 8V3H4v13h4" /></symbol>
       <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
       <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-5m4 5V8m4 8v-3" /></symbol>
+      <symbol id="i-cog" viewBox="0 0 24 24"><path d="M19.45 10.52 L22.13 10.80 L22.13 13.20 L19.45 13.48 L18.32 16.22 L20.01 18.31 L18.31 20.01 L16.22 18.32 L13.48 19.45 L13.20 22.13 L10.80 22.13 L10.52 19.45 L7.78 18.32 L5.69 20.01 L3.99 18.31 L5.68 16.22 L4.55 13.48 L1.87 13.20 L1.87 10.80 L4.55 10.52 L5.68 7.78 L3.99 5.69 L5.69 3.99 L7.78 5.68 L10.52 4.55 L10.80 1.87 L13.20 1.87 L13.48 4.55 L16.22 5.68 L18.31 3.99 L20.01 5.69 L18.32 7.78Z" stroke-linejoin="round" /><circle cx="12" cy="12" r="3.2" /></symbol>
       <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
     </svg>
     <a class="skip-link" href="#game-area">Vào ca bệnh</a>
@@ -36,23 +37,16 @@
           <button class="nav-button active" type="button" data-mode="daily" aria-pressed="true">Hôm nay</button>
           <button class="nav-button" type="button" data-mode="practice" aria-pressed="false">Luyện tập</button>
         </nav>
+        <button class="help-button settings-button" type="button" data-open="settings" aria-label="Cài đặt ván chơi"><svg class="icon" aria-hidden="true"><use href="#i-cog" /></svg></button>
         <button class="help-button" type="button" data-open="help" aria-label="Hướng dẫn">?</button>
       </header>
 
       <main class="sheet">
         <h1 class="sr-only" id="title">Chẩn đoán mỗi ngày</h1>
         <div class="page">
-          <section class="controls" aria-label="Chọn cách ôn tập">
-            <div class="game-switch" role="group" aria-label="Kiểu dữ kiện">
-              <button class="mode-word active" type="button" data-game="clinical" aria-label="Dữ kiện lâm sàng" aria-pressed="true"><span>Lâm sàng</span></button>
-              <button class="mode-word" type="button" data-game="treatment" aria-label="Kế hoạch điều trị" aria-pressed="false"><span>Điều trị</span></button>
-            </div>
-            <div class="meta-row">
-              <label class="select-field" for="difficulty-select"><span class="sr-only">Độ khó</span><span class="select-wrap"><select id="difficulty-select" name="difficulty"><option value="easy">Dễ</option><option value="medium">Vừa</option><option value="hard">Khó</option></select><svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg></span></label>
-              <label class="select-field" for="category-select"><span class="sr-only">Chuyên khoa</span><span class="select-wrap"><select id="category-select" aria-describedby="category-note"><option value="all">Tất cả chuyên khoa</option></select><svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg></span></label>
-              <span class="score"><span id="attempts-left">6</span> lượt còn lại</span>
-            </div>
-            <p id="category-note" class="sr-only"></p>
+          <section class="controls sr-only" aria-label="Ván chơi hiện tại">
+            <p><span id="settings-summary">Lâm sàng · Dễ</span> · <span class="score"><span id="attempts-left">6</span> lượt còn lại</span></p>
+            <p id="category-note"></p>
           </section>
 
           <article class="case" id="game-area" tabindex="-1" aria-labelledby="case-title">
@@ -65,7 +59,7 @@
             <p class="case-prompt"><span class="for-clinical">Chẩn đoán ca bệnh</span><span class="for-treatment">Đoán bệnh từ kế hoạch điều trị</span></p>
             <ol class="clue-list" id="clue-list"></ol>
             <div class="clue-actions">
-              <button class="reveal-button" type="button" id="reveal-button"><svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg><span>Mở dữ kiện</span></button>
+              <button class="reveal-button" type="button" id="reveal-button"><svg class="icon" aria-hidden="true"><use href="#i-plus" /></svg><span>Mở dữ kiện</span><span class="reveal-cost">(tốn 1 lượt)</span></button>
               <button class="give-up-button" type="button" id="give-up-button">Bỏ cuộc</button>
             </div>
             <form class="guess-form" id="guess-form" autocomplete="off">
@@ -83,17 +77,19 @@
           </article>
         </div>
 
-        <aside class="margin" aria-label="Tiến trình và ôn tập">
-          <section class="tip-block">
-            <h2>Cách nhập đáp án</h2>
-            <p id="play-tip">Bạn có thể nhập tên bệnh hoặc mã ICD. Không cần gõ đúng dấu tiếng Việt.</p>
-            <button class="text-button" type="button" data-open="help">Xem cách chơi<svg class="icon" aria-hidden="true"><use href="#i-arrow" /></svg></button>
-          </section>
-          <p class="bank-meta" aria-label="Ngân hàng ôn tập"><strong id="bank-count">—</strong> bệnh cảnh · <strong id="specialty-count">—</strong> chuyên khoa</p>
-        </aside>
       </main>
 
       <footer class="notes" aria-label="Ghi chú giáo dục"><p>chanle chỉ phục vụ mục đích giải trí và luyện phản xạ học tập, không dùng để chẩn đoán, tư vấn hay điều trị người bệnh thật.</p><span class="footer-brand">chanle</span></footer>
+      <dialog id="settings" aria-labelledby="settings-title"><div class="modal"><button class="close" type="button" data-close="settings" aria-label="Đóng"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button><h2 id="settings-title">Cài đặt</h2>
+        <p class="field-label">Kiểu dữ kiện</p>
+        <div class="game-switch" role="group" aria-label="Kiểu dữ kiện">
+              <button class="mode-word active" type="button" data-game="clinical" aria-label="Dữ kiện lâm sàng" aria-pressed="true"><span>Lâm sàng</span></button>
+              <button class="mode-word" type="button" data-game="treatment" aria-label="Kế hoạch điều trị" aria-pressed="false"><span>Điều trị</span></button>
+            </div>
+        <label class="select-field" for="difficulty-select"><span class="field-label">Độ khó</span><span class="select-wrap"><select id="difficulty-select" name="difficulty"><option value="easy">Dễ</option><option value="medium">Vừa</option><option value="hard">Khó</option></select><svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg></span></label>
+        <label class="select-field" for="category-select"><span class="field-label">Chuyên khoa</span><span class="select-wrap"><select id="category-select" aria-describedby="category-note"><option value="all">Tất cả chuyên khoa</option></select><svg class="icon" aria-hidden="true"><use href="#i-chevron" /></svg></span></label>
+        <button class="primary-button settings-done" type="button" data-close="settings">Xong</button>
+      </div></dialog>
       <dialog id="result-card" class="result-card" aria-label="Kết quả và thống kê">
         <div class="modal card">
           <button class="close" type="button" data-close="result-card" aria-label="Đóng, quay lại ca bệnh"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button>
@@ -115,7 +111,7 @@
       </dialog>
     </div>
 
-    <dialog id="help" aria-labelledby="help-title"><div class="modal"><button class="close" type="button" data-close="help" aria-label="Đóng"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button><h2 id="help-title">Cách chơi</h2><p>Mỗi ca bắt đầu với một dữ kiện và 6 lượt đoán. Mỗi lần đoán sai hoặc bấm “Mở dữ kiện”, bạn sẽ được xem dữ kiện tiếp theo. Bấm “Bỏ cuộc” để kết thúc ca và xem đáp án cùng giải thích.</p><p>Bạn có thể nhập tên bệnh, tên gọi tương đương hoặc mã ICD được chấp nhận cho ca đó. Không cần phân biệt chữ hoa, chữ thường hay dấu tiếng Việt.</p><p>Mọi độ khó đều có gợi ý tên bệnh, 6 dữ kiện và 6 lượt đoán. Dễ ưu tiên kiến thức thường gặp, Vừa ưu tiên mức trung bình, Khó ưu tiên bệnh hiếm hoặc kiến thức chuyên sâu. Các bệnh vẫn có thể xuất hiện ở mọi mức, với tần suất khác nhau.</p><p>Chọn Kế hoạch điều trị để đoán bệnh từ các bước xử trí, thuốc, thủ thuật và theo dõi. Mỗi kế hoạch cũng có 6 dữ kiện; tên bệnh chỉ hiện sau khi kết thúc. Dữ kiện được mở dần theo luật chơi. Trong thực tế, một số biện pháp cấp cứu cần được thực hiện đồng thời.</p><p>Chọn chuyên khoa để bắt đầu luyện tập trong nhóm đó. Một bệnh có thể thuộc nhiều nhóm. Ca hằng ngày được chọn từ toàn bộ ngân hàng, với ca riêng cho mỗi kiểu dữ kiện và độ khó. Luyện tập tránh lặp lại các ca vừa chơi. Các kế hoạch áp dụng cho bệnh cảnh giả định trong trò chơi, không phải phác đồ dùng cho người bệnh thật.</p></div></dialog>
-    <script src="app.js?v=3632cf8fece8" defer></script>
+    <dialog id="help" aria-labelledby="help-title"><div class="modal"><button class="close" type="button" data-close="help" aria-label="Đóng"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button><h2 id="help-title">Cách chơi</h2><p id="play-tip">Bạn có thể nhập tên bệnh hoặc mã ICD. Không cần gõ đúng dấu tiếng Việt.</p><p>Mỗi ca bắt đầu với một dữ kiện và 6 lượt đoán. Mỗi lần đoán sai hoặc bấm “Mở dữ kiện”, bạn sẽ được xem dữ kiện tiếp theo. Bấm “Bỏ cuộc” để kết thúc ca và xem đáp án cùng giải thích.</p><p>Mọi độ khó đều có gợi ý tên bệnh, 6 dữ kiện và 6 lượt đoán. Dễ ưu tiên kiến thức thường gặp, Vừa ưu tiên mức trung bình, Khó ưu tiên bệnh hiếm hoặc kiến thức chuyên sâu. Các bệnh vẫn có thể xuất hiện ở mọi mức, với tần suất khác nhau.</p><p>Chọn Kế hoạch điều trị để đoán bệnh từ các bước xử trí, thuốc, thủ thuật và theo dõi. Mỗi kế hoạch cũng có 6 dữ kiện; tên bệnh chỉ hiện sau khi kết thúc. Dữ kiện được mở dần theo luật chơi. Trong thực tế, một số biện pháp cấp cứu cần được thực hiện đồng thời.</p><p>Chọn chuyên khoa để bắt đầu luyện tập trong nhóm đó. Một bệnh có thể thuộc nhiều nhóm. Ca hằng ngày được chọn từ toàn bộ ngân hàng, với ca riêng cho mỗi kiểu dữ kiện và độ khó. Luyện tập tránh lặp lại các ca vừa chơi. Các kế hoạch áp dụng cho bệnh cảnh giả định trong trò chơi, không phải phác đồ dùng cho người bệnh thật.</p></div></dialog>
+    <script src="app.js?v=0308320d5943" defer></script>
   </body>
 </html>

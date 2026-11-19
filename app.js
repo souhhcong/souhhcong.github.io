@@ -257,8 +257,6 @@ async function loadCases() {
 
 const elements = {
   app: $("#app"),
-  bankCount: $("#bank-count"),
-  specialtyCount: $("#specialty-count"),
   clueCount: $("#clue-count"),
   clueProgress: $("#clue-progress"),
   clueSteps: $("#clue-steps"),
@@ -515,6 +513,9 @@ function syncControls() {
   elements.app.setAttribute("data-game-type", gameType);
   elements.category.value = activeCategory();
   elements.difficulty.value = difficulty;
+  const summary = $("#settings-summary");
+  if (summary) summary.textContent = [gameType === "treatment" ? "Điều trị" : "Lâm sàng", DIFFICULTY_LABELS[difficulty],
+    mode === "practice" && practiceCategory !== "all" ? categoryLabel() : null].filter(Boolean).join(" · ");
   elements.categoryNote.textContent = mode === "daily" ? `Ca hằng ngày · ${DIFFICULTY_DESCRIPTIONS[difficulty]} · Tất cả chuyên khoa` :
     `${practicePool().length} bệnh cảnh · ${DIFFICULTY_DESCRIPTIONS[difficulty]}`;
   document.querySelectorAll("[data-mode]").forEach((button) => {
@@ -576,6 +577,7 @@ function render() {
   }).join("");
 
   elements.reveal.disabled = finished || revealed >= activeClues().length;
+  resetGiveUp();
   elements.giveUp.disabled = finished;
   elements.form.querySelector("button").disabled = finished;
   elements.input.disabled = finished;
@@ -638,14 +640,52 @@ function showResult() {
     .join("");
 }
 
+// A picked ICD suggestion reads "CODE — name": judge by the code.
+function guessKey(text) {
+  return normalize(text.match(/^([A-Z]\d{2}(?:\.\d{1,2})?) — /)?.[1] ?? text);
+}
+let nameCases = new Map();
+let codeCases = new Map();
+// Case ids a key stands for. A name or alias is one disease; an ICD code counts only when it is unique.
+function casesFor(key) {
+  if (nameCases.has(key)) return nameCases.get(key);
+  const code = codeCases.get(key);
+  return code?.size === 1 ? code : new Set();
+}
+function guessedKeys() {
+  const direct = attempts.filter((item) => item.kind !== "reveal").map((item) => guessKey(item.text));
+  const keys = new Set(direct);
+  const ids = new Set(direct.flatMap((key) => [...casesFor(key)]));
+  for (const [key, set] of [...nameCases, ...codeCases]) {
+    if ([...casesFor(key)].some((id) => ids.has(id)) && set) keys.add(key);
+  }
+  return keys;
+}
+
 function submitGuess(event) {
   closeSuggestions();
   event.preventDefault();
-  const text = elements.input.value.trim();
-  if (!text || finished) return;
+  const shown = elements.input.value.trim();
+  if (!shown || finished) return;
+  // Judge the code of a picked ICD suggestion, but keep the full label in the history.
+  const text = shown.match(/^([A-Z]\d{2}(?:\.\d{1,2})?) — /)?.[1] ?? shown;
+  if (!allowedGuessKeys.has(normalize(text))) {
+    elements.feedback.textContent = "Hãy chọn một chẩn đoán trong danh sách gợi ý";
+    elements.feedback.className = "feedback bad";
+    updateSuggestions();
+    elements.input.focus();
+    return;
+  }
+
+  if (guessedKeys().has(normalize(text))) {
+    elements.feedback.textContent = "Bạn đã đoán chẩn đoán này rồi";
+    elements.feedback.className = "feedback bad";
+    elements.input.focus();
+    return;
+  }
 
   const correct = isCorrect(text);
-  attempts.push({ text, correct });
+  attempts.push({ text: shown, correct });
   elements.input.value = "";
 
   if (correct) {
@@ -681,8 +721,20 @@ function revealClue() {
   render();
 }
 
+let giveUpArmed = null;
+function resetGiveUp() {
+  giveUpArmed = null;
+  elements.giveUp.textContent = "Bỏ cuộc";
+}
 function giveUp() {
   if (finished) return;
+  if (!giveUpArmed || Date.now() - giveUpArmed > 4000) {
+    elements.giveUp.textContent = "Bấm lại để bỏ cuộc";
+    giveUpArmed = Date.now();
+    globalThis.setTimeout?.(() => { if (giveUpArmed && !finished) resetGiveUp(); }, 4000);
+    return;
+  }
+  resetGiveUp();
   gaveUp = true;
   finish(false);
 }
@@ -714,6 +766,7 @@ function nextCase() {
   if (mode === "daily") switchMode("practice");
   else setCase(randomPracticeCase());
   elements.caseTitle.focus?.();
+  globalThis.scrollTo?.(0, 0);
 }
 
 async function copyText(text, button) {
@@ -794,19 +847,33 @@ function switchDifficulty(nextDifficulty) {
 }
 
 let suggestionNames = [];
+let allowedGuessKeys = new Set();
 let activeSuggestion = -1;
 
 function hydrateDiagnosisList() {
   const names = new Set();
-  (mode === "daily" ? CASES : practicePool()).forEach((item) => {
+  const pool = mode === "daily" ? CASES : practicePool();
+  allowedGuessKeys = new Set(pool.map((item) => normalize(item.icdCode)));
+  nameCases = new Map();
+  codeCases = new Map();
+  const link = (map, key, id) => map.set(key, (map.get(key) ?? new Set()).add(id));
+  pool.forEach((item) => {
     names.add(item.diagnosis);
     item.aliases.forEach((alias) => names.add(alias));
+    [item.diagnosis, ...item.aliases].forEach((name) => link(nameCases, normalize(name), item.id));
+    link(codeCases, normalize(item.icdCode), item.id);
   });
+  names.forEach((name) => allowedGuessKeys.add(normalize(name)));
   suggestionNames = [...names]
     .sort((a, b) => a.localeCompare(b, "vi"))
-    .map((name) => ({name, key: normalize(name)}))
+    .map((name) => ({name, key: normalize(name), label: name}))
     // Drop accentless aliases that only duplicate an accented name.
-    .filter((entry, _, all) => entry.name.toLowerCase() !== entry.key || !all.some((other) => other !== entry && other.key === entry.key));
+    .filter((entry) => entry.name !== entry.key);
+  const codes = new Map();
+  pool.forEach((item) => { if (!codes.has(item.icdCode)) codes.set(item.icdCode, item.icdLabel); });
+  [...codes].sort(([a], [b]) => a.localeCompare(b)).forEach(([code, label]) =>
+    suggestionNames.push({name: code, key: normalize(code), label: `${code} — ${label}`}));
+  suggestionNames.forEach((entry) => allowedGuessKeys.add(entry.key));
   closeSuggestions();
 }
 
@@ -820,6 +887,7 @@ function closeSuggestions() {
 
 function setActiveSuggestion(index) {
   const items = [...elements.suggestions.children];
+  if (items[index]?.getAttribute("aria-disabled") === "true") index = -1;
   activeSuggestion = index;
   items.forEach((item, i) => item.setAttribute("aria-selected", String(i === index)));
   if (items[index]) {
@@ -840,14 +908,16 @@ function updateSuggestions() {
     if (entry.key.startsWith(query)) starts.push(entry);
     else if (entry.key.includes(query)) contains.push(entry);
   }
-  const matches = [...starts, ...contains].slice(0, 6);
+  const guessed = guessedKeys();
+  const matches = [...starts, ...contains].slice(0, 6).map((entry) => ({...entry, used: guessed.has(entry.key)}));
   if (!matches.length) return closeSuggestions();
   elements.suggestions.innerHTML = matches
-    .map((entry, i) => `<li role="option" id="suggestion-${i}" aria-selected="false" data-value="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</li>`)
+    .map((entry, i) => `<li role="option" id="suggestion-${i}" aria-selected="false"${entry.used ? ' aria-disabled="true" class="used"' : ""} data-value="${escapeHtml(entry.label)}">${escapeHtml(entry.label)}</li>`)
     .join("");
   elements.suggestions.hidden = false;
   elements.input.setAttribute("aria-expanded", "true");
   setActiveSuggestion(-1);
+  elements.suggestions.scrollIntoView?.({block: "nearest"});
 }
 
 function pickSuggestion(value) {
@@ -862,8 +932,16 @@ function bindSuggestions() {
   elements.input.addEventListener("keydown", (event) => {
     const count = elements.suggestions.children.length;
     if (elements.suggestions.hidden || !count) return;
-    if (event.key === "ArrowDown") { event.preventDefault(); setActiveSuggestion((activeSuggestion + 1) % count); }
-    else if (event.key === "ArrowUp") { event.preventDefault(); setActiveSuggestion((activeSuggestion - 1 + count) % count); }
+    const step = (dir) => {
+      const items = [...elements.suggestions.children];
+      for (let n = 1; n <= count; n++) {
+        const next = (activeSuggestion + dir * n + count * (n + 1)) % count;
+        if (items[next].getAttribute("aria-disabled") !== "true") return next;
+      }
+      return -1;
+    };
+    if (event.key === "ArrowDown") { event.preventDefault(); setActiveSuggestion(step(1)); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); setActiveSuggestion(step(-1)); }
     else if (event.key === "Escape") closeSuggestions();
     else if (event.key === "Enter" && activeSuggestion >= 0) {
       event.preventDefault();
@@ -875,6 +953,7 @@ function bindSuggestions() {
     const item = event.target.closest("li");
     if (!item) return;
     event.preventDefault();
+    if (item.getAttribute("aria-disabled") === "true") return;
     pickSuggestion(item.dataset.value);
   });
 }
@@ -906,8 +985,6 @@ async function init() {
 
   elements.category.innerHTML = `<option value="all">Tất cả chuyên khoa (${CASES.length})</option>` + CATEGORIES.map((category) =>
     `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)} (${CASES.filter((item) => item.categoryIds.includes(category.id)).length})</option>`).join("");
-  elements.bankCount.textContent = CASES.length;
-  elements.specialtyCount.textContent = CATEGORIES.length;
   const preview = localPreviewOptions();
   if (preview) {
     mode = "practice";
@@ -944,7 +1021,7 @@ async function init() {
   document.querySelectorAll("[data-close]").forEach((button) => {
     button.addEventListener("click", () => $(`#${button.dataset.close}`).close());
   });
-  for (const id of ["#help", "#result-card"]) {
+  for (const id of ["#help", "#result-card", "#settings"]) {
     $(id).addEventListener("click", (event) => {
       if (event.target === $(id)) $(id).close();
     });

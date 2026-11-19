@@ -82,7 +82,7 @@ Deno.test("six wrong treatment guesses reveal the complete plan and finish once"
   await run("init()");
   run("switchGame('treatment')");
   for (let i = 0; i < 6; i++) {
-    nodes.get("#guess-input").value = "not a diagnosis";
+    nodes.get("#guess-input").value = run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name");
     nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
   }
   assert(run("finished && revealed === 6 && attempts.length === 6"),"Losing round not finished");
@@ -213,13 +213,16 @@ Deno.test("missing treatment bank fails visibly instead of mixing incomplete dat
   assert(!nodes.get("#guess-form").listeners.has("submit"),"Game bound with missing data");
 });
 
-Deno.test("guess history renders user input as text", async () => {
+Deno.test("guesses outside the suggestion list are rejected without spending an attempt", async () => {
   const {run,nodes} = loadApp();
   await run("init()");
   nodes.get("#guess-input").value='<img src=x onerror=alert(1)>';
   nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-  const markup=nodes.get("#history").innerHTML;
-  assert(!markup.includes("<img") && markup.includes("&lt;img"),"User guess rendered as markup");
+  assert(run("attempts.length===0") && !nodes.get("#history").innerHTML.includes("<img"),"Free text was accepted or rendered as markup");
+  assert(nodes.get("#feedback").textContent.includes("danh sách gợi ý"),"Off-list guess gave no feedback");
+  nodes.get("#guess-input").value=run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name.toUpperCase()");
+  nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
+  assert(run("attempts.length===1"),"Listed diagnosis in any case was rejected");
 });
 
 function auditFixture() {

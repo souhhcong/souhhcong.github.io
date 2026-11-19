@@ -29,9 +29,9 @@ Deno.test("manual reveals use the shared budget at every difficulty and preserve
 
 Deno.test("mixed guesses and reveals end at six, including a final reveal in an older saved round", async () => {
   const app = loadApp(); await app.run("init()"); app.run("switchMode('practice')");
-  guess(app, "incorrect"); click(app, "#reveal-button");
+  guess(app, app.run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name")); click(app, "#reveal-button");
   assert(app.run("attempts.length===2 && revealed===3 && !finished"), "Mixed actions use separate budgets");
-  for (let i = 0; i < 4; i++) guess(app, "incorrect");
+  for (let i = 0; i < 4; i++) guess(app, app.run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name"));
   assert(app.run("finished && attempts.length===6 && revealed===6"), "Six actions did not end round");
   app.run("setCase(CASES[0]); attempts=Array.from({length:5},()=>({text:'wrong',correct:false})); revealed=2; render()");
   click(app, "#reveal-button");
@@ -43,7 +43,7 @@ Deno.test("give up ends either game as an unsolved round, reveals explanations a
   for (const game of ["clinical", "treatment"]) for (const mode of ["daily", "practice"]) {
     const app = loadApp(); await app.run("init()");
     app.run(`switchGame('${game}'); switchMode('${mode}'); setStats({played:4,solved:3,streak:3})`);
-    click(app, "#give-up-button");
+    click(app, "#give-up-button"); click(app, "#give-up-button");
     assert(app.run("finished && gaveUp && revealed===6 && attempts.length===0"), "Give up fabricated guesses or did not finish");
     assert(app.run("getStats().played===5 && getStats().solved===3 && getStats().streak===0"), "Give up not recorded as unsolved");
     assert(app.nodes.get("#guess-input").disabled && app.nodes.get("#give-up-button").disabled && app.nodes.get("#reveal-button").disabled, "Finished controls remain active");
@@ -64,7 +64,7 @@ Deno.test("daily reveals and give-ups survive reloads and stay isolated across g
     click(first, "#reveal-button");
     const second = loadApp(Object.fromEntries(first.storage)); await second.run("init()");
     assert(second.run("revealed===2 && attempts.length===1 && attempts[0].kind==='reveal' && !finished"), "Paid reveal lost on reload");
-    click(second, "#give-up-button");
+    click(second, "#give-up-button"); click(second, "#give-up-button");
     const third = loadApp(Object.fromEntries(second.storage)); await third.run("init()");
     assert(third.run("finished && gaveUp && revealed===6 && attempts.length===1"), "Give-up save discarded");
     assert(third.run("getStats().played===1 && getStats().solved===0"), "Reload recounted give up");

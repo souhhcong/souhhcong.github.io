@@ -55,7 +55,7 @@ h1, h2, h3, p, dl, dd, ul, ol { margin: 0; padding: 0; }
 .nav-button, .text-button, .reveal-button, .give-up-button, .help-button, .square-button, .primary-button, .mode-word, .close { background: none; border: 0; padding: 0; }
 .nav-button { font-size: 15px; font-weight: 500; color: var(--toner-2); padding: 8px 0 4px; border-bottom: 2px solid transparent; white-space: nowrap; }
 .nav-button.active { color: var(--toner); font-weight: 700; border-bottom-color: var(--toner); }
-.help-button, .close { width: 36px; height: 36px; border: 1px solid var(--toner); display: inline-grid; place-items: center; font-weight: 700; font-size: 16px; flex: none; }
+.help-button, .close { width: 44px; height: 44px; border: 1px solid var(--toner); display: inline-grid; place-items: center; font-weight: 700; font-size: 16px; flex: none; }
 .help-button:hover, .close:hover { background: var(--toner); color: var(--paper); }
 
 /* Game types */
@@ -70,7 +70,7 @@ h1, h2, h3, p, dl, dd, ul, ol { margin: 0; padding: 0; }
 .select-field { display: block; min-width: 0; }
 .select-field:nth-child(2) { order: 3; flex: 1 1 100%; }
 .select-wrap { position: relative; display: block; }
-.select-wrap select { appearance: none; -webkit-appearance: none; background: transparent; border: 0; border-bottom: 1px solid var(--toner); padding: 4px 26px 3px 8px; font-size: 15px; font-weight: 700; width: 100%; min-height: 36px; text-overflow: ellipsis; cursor: pointer; }
+.select-wrap select { appearance: none; -webkit-appearance: none; background: transparent; border: 0; border-bottom: 1px solid var(--toner); padding: 4px 26px 3px 8px; font-size: 15px; font-weight: 700; width: 100%; min-height: 44px; text-overflow: ellipsis; cursor: pointer; }
 .select-wrap .icon { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 16px; }
 .meta-row .score { order: 2; margin-left: auto; white-space: nowrap; }
 @media (min-width: 640px) { .select-field:nth-child(2) { order: 2; flex: 0 1 auto; max-width: 100%; } .meta-row .score { order: 3; } }
@@ -100,9 +100,10 @@ h1, h2, h3, p, dl, dd, ul, ol { margin: 0; padding: 0; }
 @keyframes sweep { from { background-size: 0% 76%; } to { background-size: 100% 76%; } }
 .clue.locked { flex: 1 1 0; display: block; min-width: 0; padding: 6px 8px 4px; border-top: 0; border-bottom: 1px dashed var(--toner-2); color: var(--toner-2); font-size: 13px; font-weight: 500; }
 
+.clue-list { min-height: 0; }
 .clue-actions { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 4px; border-top: 1px solid var(--rule-soft); margin-top: 0; }
-.reveal-button { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 15px; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; min-height: 36px; }
-.give-up-button { color: var(--toner-2); font-size: 14px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; min-height: 36px; }
+.reveal-button { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 15px; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; min-height: 44px; }
+.give-up-button { color: var(--toner-2); font-size: 14px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; min-width: 56px; padding-left: 12px; }
 button:disabled { cursor: not-allowed; opacity: 0.45; }
 .guess-row button:disabled, .primary-button:disabled { opacity: 1; background: #55554f; border-color: #55554f; color: #fafaf8; }
 
@@ -139,7 +140,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .feedback.good { color: var(--toner); font-weight: 700; }
 .feedback.bad { color: var(--toner); }
 .case-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding-top: 6px; border-top: 1px solid var(--rule-soft); font-size: 12px; color: var(--toner-2); }
-.text-button { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; min-height: 40px; color: var(--toner); }
+.text-button { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; color: var(--toner); }
 
 /* Result */
 /* Result card: the finished case slides up over the page as a loose sheet. */
@@ -188,17 +189,11 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .primary-button { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: var(--toner); color: var(--paper); font-weight: 700; font-size: 16px; }
 
 /* Margin column */
-.margin { padding-top: 22px; border-top: 1px solid var(--toner); margin-top: 22px; }
-.margin h2 { font-size: 16px; font-weight: 700; }
 .stats-block { padding-bottom: 18px; }
 .stats { margin-top: 8px; border-top: 1px solid var(--toner); }
 .stats > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 8px; border-bottom: 1px solid var(--rule-soft); }
 .stats dt { font-size: 14px; color: var(--toner); }
 .stats dd { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.tip-block { padding-bottom: 14px; }
-.tip-block p { font-size: 14px; color: var(--toner-2); padding: 6px 0 0; }
-.bank-meta { font-size: 13px; color: var(--toner-2); padding-top: 12px; border-top: 1px solid var(--rule-soft); }
-.bank-meta strong { color: var(--toner); font-weight: 700; }
 
 /* Footer */
 .notes { margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--toner); display: flex; flex-direction: column; gap: 10px; font-size: 12px; color: var(--toner-2); }
@@ -210,7 +205,10 @@ dialog::backdrop { background: rgba(28, 28, 26, 0.4); }
 .modal { position: relative; padding: 24px 20px 20px; }
 .modal h2 { font-size: 26px; font-weight: 900; letter-spacing: -0.04em; padding-right: 48px; }
 .modal p { padding-top: 12px; font-size: 15px; }
-.close { position: absolute; top: 12px; right: 12px; }
+.close { position: absolute; top: 8px; right: 8px; }
+.result-card .close { position: sticky; top: 8px; align-self: flex-end; flex: none; margin: -14px -8px -30px 0; z-index: 5; background: var(--paper); }
+.result-card .answer:focus, .result-card .answer:focus-visible { outline: none; }
+.reveal-cost { font-weight: 500; font-size: 12px; color: var(--toner-2); text-decoration: none; }
 
 @media (min-width: 900px) {
   .shell { padding: 0 32px 40px; }
@@ -219,8 +217,6 @@ dialog::backdrop { background: rgba(28, 28, 26, 0.4); }
   .game-switch { padding-top: 22px; }
   .mode-word { font-size: 27px; }
   .clue-text, .clue { font-size: 17px; }
-  .sheet { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
-  .margin { border-top: 0; margin-top: 0; border-left: 1px solid var(--toner); padding: 24px 0 0 28px; margin-left: 32px; }
   .page { padding-top: 0; }
   .notes { flex-direction: row; justify-content: space-between; align-items: baseline; }
 }
@@ -240,3 +236,17 @@ dialog::backdrop { background: rgba(28, 28, 26, 0.4); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Settings: game type, difficulty and specialty live in a dialog opened from the cog. */
+@media (max-width: 480px) { .masthead { gap: 8px; } .nav { gap: 10px; } .brand { font-size: 21px; } .nav-button { font-size: 14px; } }
+.masthead .settings-button .icon { width: 22px; height: 22px; }
+#settings .modal { display: flex; flex-direction: column; gap: 4px; padding: 24px 20px 20px; }
+#settings .modal p.field-label, #settings .field-label { padding: 14px 0 2px; font-size: 13px; font-weight: 700; color: var(--toner-2); display: block; }
+#settings .select-field { display: block; order: 0; flex: none; }
+#settings .select-wrap select { font-size: 16px; }
+#settings .game-switch { padding: 4px 0 0; }
+#settings .settings-done { align-self: flex-start; margin-top: 22px; }
+.suggestions li.used, .suggestions li.used:hover { color: #6b6b64; background: transparent; text-decoration: line-through; cursor: not-allowed; opacity: 0.6; }
+.nav-button { min-height: 44px; display: inline-flex; align-items: center; padding-top: 0; padding-bottom: 0; }
+.brand { display: inline-flex; align-items: center; min-height: 44px; }
+.mode-word { min-height: 44px; }
