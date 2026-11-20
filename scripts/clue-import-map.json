@@ -67,7 +67,204 @@
     "caseId": 202,
     "note": "rheumatic (organic) mitral regurgitation is primary MR"
   },
+  "VN-MED-0051": {
+    "caseId": 412,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0052": {
+    "caseId": 413,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0053": {
+    "caseId": 414,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0054": {
+    "caseId": 415,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0055": {
+    "caseId": 416,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0056": {
+    "caseId": 417,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0057": {
+    "caseId": 418,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0058": {
+    "caseId": 419,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0059": {
+    "caseId": 420,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0060": {
+    "caseId": 421,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0061": {
+    "caseId": 422,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0062": {
+    "caseId": 423,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0063": {
+    "caseId": 424,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0064": {
+    "caseId": 425,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0065": {
+    "caseId": 426,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0066": {
+    "caseId": 427,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0067": {
+    "caseId": 428,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0068": {
+    "caseId": 429,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0069": {
+    "caseId": 430,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0070": {
+    "caseId": 431,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0071": {
+    "caseId": 432,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0072": {
+    "caseId": 433,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0073": {
+    "caseId": 434,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0074": {
+    "caseId": 435,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0075": {
+    "caseId": 436,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0076": {
+    "caseId": 437,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0077": {
+    "caseId": 438,
+    "note": "new case created for the dataset disease"
+  },
   "VN-MED-0078": {
-    "skip": "game has specific obstructions (187 intussusception, 258 sigmoid volvulus), not generic bowel obstruction"
+    "caseId": 439,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0079": {
+    "caseId": 440,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0080": {
+    "caseId": 441,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0081": {
+    "caseId": 442,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0082": {
+    "caseId": 443,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0083": {
+    "caseId": 444,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0084": {
+    "caseId": 445,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0085": {
+    "caseId": 446,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0086": {
+    "caseId": 447,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0087": {
+    "caseId": 448,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0088": {
+    "caseId": 449,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0089": {
+    "caseId": 450,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0090": {
+    "caseId": 451,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0091": {
+    "caseId": 452,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0092": {
+    "caseId": 453,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0093": {
+    "caseId": 454,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0094": {
+    "caseId": 455,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0095": {
+    "caseId": 456,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0096": {
+    "caseId": 457,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0097": {
+    "caseId": 458,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0098": {
+    "caseId": 459,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0099": {
+    "caseId": 460,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0100": {
+    "caseId": 461,
+    "note": "new case created for the dataset disease"
   }
 }
