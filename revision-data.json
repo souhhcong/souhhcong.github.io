@@ -51,6 +51,14 @@
     {
       "id": "emergency",
       "label": "Cấp cứu – Hồi sức"
+    },
+    {
+      "id": "psychiatry",
+      "label": "Tâm thần"
+    },
+    {
+      "id": "eye_ent",
+      "label": "Mắt – Tai mũi họng"
     }
   ],
   "cases": [
@@ -1056,6 +1064,347 @@
       "caseId": 461,
       "categoryIds": [
         "renal_urology"
+      ]
+    },
+    {
+      "caseId": 462,
+      "categoryIds": [
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 463,
+      "categoryIds": [
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 464,
+      "categoryIds": [
+        "infectious",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 465,
+      "categoryIds": [
+        "gastroenterology",
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 466,
+      "categoryIds": [
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 467,
+      "categoryIds": [
+        "neurology",
+        "psychiatry"
+      ]
+    },
+    {
+      "caseId": 468,
+      "categoryIds": [
+        "psychiatry"
+      ]
+    },
+    {
+      "caseId": 469,
+      "categoryIds": [
+        "gastroenterology"
+      ]
+    },
+    {
+      "caseId": 470,
+      "categoryIds": [
+        "hematology_oncology",
+        "eye_ent"
+      ]
+    },
+    {
+      "caseId": 471,
+      "categoryIds": [
+        "obgyn",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 472,
+      "categoryIds": [
+        "obgyn",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 473,
+      "categoryIds": [
+        "pediatrics",
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 474,
+      "categoryIds": [
+        "pediatrics",
+        "respiratory"
+      ]
+    },
+    {
+      "caseId": 475,
+      "categoryIds": [
+        "musculoskeletal_rheumatology",
+        "neurology"
+      ]
+    },
+    {
+      "caseId": 476,
+      "categoryIds": [
+        "renal_urology"
+      ]
+    },
+    {
+      "caseId": 477,
+      "categoryIds": [
+        "renal_urology",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 478,
+      "categoryIds": [
+        "gastroenterology",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 479,
+      "categoryIds": [
+        "endocrine",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 480,
+      "categoryIds": [
+        "gastroenterology",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 481,
+      "categoryIds": [
+        "musculoskeletal_rheumatology",
+        "endocrine"
+      ]
+    },
+    {
+      "caseId": 482,
+      "categoryIds": [
+        "endocrine",
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 483,
+      "categoryIds": [
+        "gastroenterology",
+        "endocrine"
+      ]
+    },
+    {
+      "caseId": 484,
+      "categoryIds": [
+        "neurology",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 485,
+      "categoryIds": [
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 486,
+      "categoryIds": [
+        "pediatrics",
+        "infectious",
+        "neurology"
+      ]
+    },
+    {
+      "caseId": 487,
+      "categoryIds": [
+        "renal_urology",
+        "endocrine"
+      ]
+    },
+    {
+      "caseId": 488,
+      "categoryIds": [
+        "endocrine"
+      ]
+    },
+    {
+      "caseId": 489,
+      "categoryIds": [
+        "psychiatry"
+      ]
+    },
+    {
+      "caseId": 490,
+      "categoryIds": [
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 491,
+      "categoryIds": [
+        "dermatology",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 492,
+      "categoryIds": [
+        "endocrine",
+        "pediatrics",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 493,
+      "categoryIds": [
+        "infectious",
+        "neurology"
+      ]
+    },
+    {
+      "caseId": 494,
+      "categoryIds": [
+        "pediatrics",
+        "gastroenterology",
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 495,
+      "categoryIds": [
+        "pediatrics"
+      ]
+    },
+    {
+      "caseId": 496,
+      "categoryIds": [
+        "eye_ent"
+      ]
+    },
+    {
+      "caseId": 497,
+      "categoryIds": [
+        "eye_ent",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 498,
+      "categoryIds": [
+        "psychiatry"
+      ]
+    },
+    {
+      "caseId": 499,
+      "categoryIds": [
+        "psychiatry"
+      ]
+    },
+    {
+      "caseId": 500,
+      "categoryIds": [
+        "infectious",
+        "neurology"
+      ]
+    },
+    {
+      "caseId": 501,
+      "categoryIds": [
+        "infectious",
+        "respiratory"
+      ]
+    },
+    {
+      "caseId": 502,
+      "categoryIds": [
+        "infectious",
+        "respiratory"
+      ]
+    },
+    {
+      "caseId": 503,
+      "categoryIds": [
+        "renal_urology",
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 504,
+      "categoryIds": [
+        "pediatrics",
+        "infectious",
+        "eye_ent"
+      ]
+    },
+    {
+      "caseId": 505,
+      "categoryIds": [
+        "pediatrics",
+        "eye_ent"
+      ]
+    },
+    {
+      "caseId": 506,
+      "categoryIds": [
+        "cardiology",
+        "pediatrics",
+        "musculoskeletal_rheumatology"
+      ]
+    },
+    {
+      "caseId": 507,
+      "categoryIds": [
+        "pediatrics",
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 508,
+      "categoryIds": [
+        "pediatrics",
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 509,
+      "categoryIds": [
+        "pediatrics",
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 510,
+      "categoryIds": [
+        "cardiology",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 511,
+      "categoryIds": [
+        "cardiology",
+        "emergency"
       ]
     }
   ]
