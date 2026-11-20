@@ -79,7 +79,7 @@ h1, h2, h3, p, dl, dd, ul, ol { margin: 0; padding: 0; }
 .clue:first-child { border-top-color: var(--toner); }
 .case-prompt { font-size: 15px; font-weight: 700; padding: 6px 0 8px; }
 .clue-number { font-weight: 700; font-size: 13px; padding-top: 2px; }
-.clue-text { min-width: 0; text-wrap: balance; }
+.clue-text { min-width: 0; text-wrap: pretty; }
 .clue .mark { padding: 0.04em 0.15em; margin-left: -0.15em; background-image: linear-gradient(var(--chisel)); background-repeat: no-repeat; background-position: 0 70%; background-size: 0% 76%; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .clue:not(.is-latest) .mark { background-image: none; }
 .clue.is-latest .mark { background-size: 100% 76%; }
