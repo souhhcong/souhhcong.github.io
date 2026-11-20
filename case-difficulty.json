@@ -26,12 +26,20 @@
       "hardness": 1
     },
     {
+      "caseId": 20,
+      "hardness": 2
+    },
+    {
       "caseId": 24,
       "hardness": 1
     },
     {
       "caseId": 27,
       "hardness": 2
+    },
+    {
+      "caseId": 31,
+      "hardness": 1
     },
     {
       "caseId": 32,
@@ -46,6 +54,10 @@
       "hardness": 1
     },
     {
+      "caseId": 35,
+      "hardness": 1
+    },
+    {
       "caseId": 42,
       "hardness": 1
     },
@@ -54,11 +66,19 @@
       "hardness": 2
     },
     {
+      "caseId": 51,
+      "hardness": 1
+    },
+    {
       "caseId": 52,
       "hardness": 1
     },
     {
       "caseId": 53,
+      "hardness": 1
+    },
+    {
+      "caseId": 61,
       "hardness": 1
     },
     {
@@ -118,6 +138,14 @@
       "hardness": 3
     },
     {
+      "caseId": 134,
+      "hardness": 2
+    },
+    {
+      "caseId": 141,
+      "hardness": 1
+    },
+    {
       "caseId": 151,
       "hardness": 1
     },
@@ -127,6 +155,50 @@
     },
     {
       "caseId": 245,
+      "hardness": 1
+    },
+    {
+      "caseId": 401,
+      "hardness": 3
+    },
+    {
+      "caseId": 402,
+      "hardness": 4
+    },
+    {
+      "caseId": 403,
+      "hardness": 1
+    },
+    {
+      "caseId": 404,
+      "hardness": 1
+    },
+    {
+      "caseId": 405,
+      "hardness": 2
+    },
+    {
+      "caseId": 406,
+      "hardness": 1
+    },
+    {
+      "caseId": 407,
+      "hardness": 1
+    },
+    {
+      "caseId": 408,
+      "hardness": 1
+    },
+    {
+      "caseId": 409,
+      "hardness": 3
+    },
+    {
+      "caseId": 410,
+      "hardness": 2
+    },
+    {
+      "caseId": 411,
       "hardness": 1
     }
   ]

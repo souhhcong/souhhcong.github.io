@@ -38,13 +38,13 @@ Deno.test("internal familiarity reviews reject stale ratings, diagnosis context 
   }
 });
 
-Deno.test("all difficulties keep easy-mode titles, suggestions, clues and answer acceptance in both games", async () => {
+Deno.test("all difficulties keep easy-mode titles, suggestions, clues and answer acceptance", async () => {
   const {run,nodes}=loadApp();
   await run("init()");
-  for(const type of ["clinical","treatment"]) for(const level of ["easy","medium","hard"]) {
-    run(`gameType='${type}'; difficulty='${level}'; setCase(CASES.find(item=>item.id===12))`);
+  for(const level of ["easy","medium","hard"]) {
+    run(`difficulty='${level}'; setCase(CASES.find(item=>item.id===12))`);
     assert(nodes.get("#guess-input").getAttribute("role")==="combobox","Suggestions hidden by difficulty");
-    assert(nodes.get("#case-title").textContent === (type==="clinical"?"Ca bệnh #012":"Kế hoạch điều trị #012"),"Case heading differs from easy mode");
+    assert(nodes.get("#case-title").textContent === "Ca bệnh #012","Case heading differs from easy mode");
     assert(run("revealed===1 && activeClues().length===6 && attempts.length===0"),"Rules changed with difficulty");
     assert(nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Guidance still describes old mechanics");
     nodes.get("#guess-input").value=run("currentCase.aliases[0]");
@@ -69,7 +69,7 @@ Deno.test("sustained practice samples familiar, intermediate and uncommon knowle
   run("CASES=Array.from({length:400},(_,i)=>({...CASES[i%CASES.length],id:i+1,hardness:i%5+1}))");
   const results=run(`(() => {
     const results={};
-    for (const type of ['clinical','treatment']) {
+    for (const type of Object.keys(GAME_LABELS)) {
       gameType=type; practiceCategory='all';
       results[type]={};
       for(const level of ['easy','medium','hard']) {
@@ -135,14 +135,14 @@ Deno.test("daily weighted schedules are deterministic, distinct, order-independe
   context.date="2026-10-26";
   const baseline=run("dailySchedule(date)");
   const ids=schedule=>Object.values(schedule).flatMap(levels=>Object.values(levels)).map(item=>item.id);
-  assert(new Set(ids(baseline)).size===6,"Daily types or difficulties share the same question");
+  assert(new Set(ids(baseline)).size===run("Object.keys(GAME_LABELS).length*Object.keys(DIFFICULTY_LABELS).length"),"Daily difficulties share the same question");
   assert(JSON.stringify(ids(baseline))===JSON.stringify(ids(run("dailySchedule(date)"))),"Daily draw changed without input changes");
   run("CASES.reverse()");
   assert(JSON.stringify(ids(baseline))===JSON.stringify(ids(run("dailySchedule(date)"))),"CSV row order changed daily draw");
   context.expected=baseline;
   assert(run(`(() => {
     const slots=Object.keys(GAME_LABELS).flatMap(type=>Object.keys(DIFFICULTY_LABELS).map(level=>[type,level]));
-    for(let mask=0;mask<64;mask++) {
+    for(let mask=0;mask<(1<<slots.length);mask++) {
       const pinned={};
       slots.forEach(([type,level],i)=>{if(mask&(1<<i)){pinned[type]??={};pinned[type][level]=expected[type][level];}});
       const actual=dailySchedule(date,pinned);

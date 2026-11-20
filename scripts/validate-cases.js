@@ -134,7 +134,7 @@ if (import.meta.main) {
       }
     }
   `);
-  console.log(`Validated ${rows.length} cases in both game types: familiarity ratings, categories, six-clue banks, code format, answer collisions and grading in all difficulties.`);
+  console.log(`Validated ${rows.length} cases in clinical mode: familiarity ratings, categories, six-clue banks, code format, answer collisions and grading in all difficulties.`);
   if (Deno.args.includes("--internal")) {
     const ledger = JSON.parse(Deno.readTextFileSync(new URL("../.internal/medical-review.json", import.meta.url)));
     validateInternal(rows, ledger);

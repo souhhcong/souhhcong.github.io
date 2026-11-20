@@ -9,7 +9,8 @@ const PREVIOUS_STATE_KEY = "chanle-daily-state-v3";
 const LEGACY_STATE_KEY = "chanle-daily-state-v2";
 const GAME_KEY = "chanle-game-type-v1";
 const CATEGORY_KEY = "chanle-category-v1";
-const GAME_LABELS = { clinical: "Dữ kiện lâm sàng", treatment: "Kế hoạch điều trị" };
+// Treatment mode is paused; its optional data stays in revision-data.json.
+const GAME_LABELS = { clinical: "Dữ kiện lâm sàng" };
 const DIFFICULTY_KEY = "chanle-difficulty-v1";
 const DIFFICULTY_LABELS = {
   easy: "Dễ",
@@ -200,6 +201,8 @@ function validateRevisionData(data, rows) {
     if (!Array.isArray(item.categoryIds) || !item.categoryIds.length || new Set(item.categoryIds).size !== item.categoryIds.length ||
       item.categoryIds.some((id) => !categories.has(id))) fail(`invalid categories for case ${item.caseId}`);
     item.categoryIds.forEach((id) => used.add(id));
+    // Treatment content is optional while treatment mode is paused, but must be complete when present.
+    if (item.treatmentClues === undefined && item.treatmentExplanation === undefined) continue;
     if (!Array.isArray(item.treatmentClues) || item.treatmentClues.length !== MAX_CLUES ||
       item.treatmentClues.some((clue) => typeof clue !== "string" || !clue.trim()) ||
       typeof item.treatmentExplanation !== "string" || !item.treatmentExplanation.trim()) fail(`incomplete treatment for case ${item.caseId}`);
@@ -272,8 +275,6 @@ const elements = {
   caseKicker: $("#case-kicker"),
   category: $("#category-select"),
   categoryNote: $("#category-note"),
-  treatmentBlock: $("#treatment-explanation-block"),
-  treatmentExplanation: $("#treatment-explanation"),
   difficulty: $("#difficulty-select"),
   attemptsLeft: $("#attempts-left"),
   clueList: $("#clue-list"),
@@ -496,7 +497,7 @@ function setCase(caseData, restore = false) {
 }
 
 function activeClues() {
-  return gameType === "treatment" ? currentCase.treatmentClues : currentCase.clues;
+  return currentCase.clues;
 }
 
 function activeCategory() { return mode === "daily" ? "all" : practiceCategory; }
@@ -511,17 +512,13 @@ function syncControls() {
   elements.category.value = activeCategory();
   elements.difficulty.value = difficulty;
   const summary = $("#settings-summary");
-  if (summary) summary.textContent = [gameType === "treatment" ? "Điều trị" : "Lâm sàng", DIFFICULTY_LABELS[difficulty],
+  if (summary) summary.textContent = [DIFFICULTY_LABELS[difficulty],
     mode === "practice" && practiceCategory !== "all" ? categoryLabel() : null].filter(Boolean).join(" · ");
   elements.categoryNote.textContent = mode === "daily" ? `Ca hằng ngày · ${DIFFICULTY_DESCRIPTIONS[difficulty]} · Tất cả chuyên khoa` :
     `${practicePool().length} bệnh cảnh · ${DIFFICULTY_DESCRIPTIONS[difficulty]}`;
   document.querySelectorAll("[data-mode]").forEach((button) => {
     button.classList.toggle("active", button.dataset.mode === mode);
     button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
-  });
-  document.querySelectorAll("[data-game]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.game === gameType);
-    button.setAttribute("aria-pressed", String(button.dataset.game === gameType));
   });
   hydrateDiagnosisList();
 }
@@ -550,8 +547,8 @@ function render() {
   elements.roundStatus.textContent = gaveUp ? "Đã bỏ cuộc" : finished ? "Ca đã hoàn thành" : "Đáp án sẽ mở khi ca kết thúc";
   elements.playTip.textContent = "Chọn từ gợi ý hoặc tự nhập tên bệnh, tên tương đương hay mã ICD. Không cần gõ đúng dấu tiếng Việt.";
   elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"}\u00a0· ${GAME_LABELS[gameType]}\u00a0· ${DIFFICULTY_LABELS[difficulty]}`;
-  elements.caseKicker.textContent = gameType === "treatment" ? "Đoán bệnh qua điều trị" : "Ca bệnh";
-  elements.caseTitle.textContent = gameType === "treatment" ? (finished ? currentCase.diagnosis : `Kế hoạch điều trị #${String(currentCase.id).padStart(3, "0")}`) : `Ca bệnh #${String(currentCase.id).padStart(3, "0")}`;
+  elements.caseKicker.textContent = "Ca bệnh";
+  elements.caseTitle.textContent = `Ca bệnh #${String(currentCase.id).padStart(3, "0")}`;
   elements.clueList.innerHTML = activeClues()
     .map((clue, index) => {
       const visible = index < revealed;
@@ -625,8 +622,6 @@ function showResult() {
   elements.answer.textContent = currentCase.diagnosis;
   elements.icdLabel.textContent = `ICD-10: ${currentCase.icdCode} — ${currentCase.icdLabel}`;
   elements.summary.textContent = currentCase.summary;
-  elements.treatmentBlock.classList.toggle("hidden", gameType !== "treatment");
-  elements.treatmentExplanation.textContent = gameType === "treatment" ? currentCase.treatmentExplanation : "";
 }
 
 // A picked ICD suggestion reads "CODE — name": judge by the code.
@@ -798,7 +793,6 @@ function ankiText() {
     "",
     `Mặt sau: ${currentCase.diagnosis}`,
     `ICD-10: ${currentCase.icdCode} — ${currentCase.icdLabel}`,
-    ...(gameType === "treatment" ? [currentCase.treatmentExplanation] : []),
     currentCase.summary
   ].join("\n");
 }
@@ -806,14 +800,6 @@ function ankiText() {
 function switchMode(nextMode) {
   if (!["daily", "practice"].includes(nextMode)) return;
   mode = nextMode;
-  syncControls();
-  setCase(mode === "daily" ? dailyCase() : randomPracticeCase(), mode === "daily");
-}
-
-function switchGame(nextGame) {
-  if (!Object.hasOwn(GAME_LABELS, nextGame) || nextGame === gameType) return;
-  gameType = nextGame;
-  localStorage.setItem(GAME_KEY, gameType);
   syncControls();
   setCase(mode === "daily" ? dailyCase() : randomPracticeCase(), mode === "daily");
 }
@@ -951,10 +937,8 @@ function localPreviewOptions() {
   const caseData = CASES.find((item) => item.id === Number(params.get("case")));
   if (!caseData) return null;
   const level = params.get("difficulty");
-  const requestedGame = params.get("game");
   const requestedCategory = params.get("category");
   return {caseData, difficulty:Object.hasOwn(DIFFICULTY_LABELS, level) ? level : difficulty,
-    gameType:Object.hasOwn(GAME_LABELS, requestedGame) ? requestedGame : "clinical",
     category:caseData.categoryIds.includes(requestedCategory) ? requestedCategory : "all"};
 }
 
@@ -976,7 +960,6 @@ async function init() {
   if (preview) {
     mode = "practice";
     difficulty = preview.difficulty;
-    gameType = preview.gameType;
     practiceCategory = preview.category;
   }
   elements.difficulty.value = difficulty;
@@ -995,10 +978,6 @@ async function init() {
   elements.copyAnki.addEventListener("click", () => copyText(ankiText(), elements.copyAnki));
   elements.difficulty.addEventListener("change", () => switchDifficulty(elements.difficulty.value));
   elements.category.addEventListener("change", () => switchCategory(elements.category.value));
-  document.querySelectorAll("[data-game]").forEach((button) => {
-    button.addEventListener("click", () => switchGame(button.dataset.game));
-  });
-
   document.querySelectorAll("[data-mode]").forEach((button) => {
     button.addEventListener("click", () => switchMode(button.dataset.mode));
   });

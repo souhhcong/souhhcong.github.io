@@ -91,11 +91,11 @@ Deno.test("giveaway detection respects word boundaries and allows explanations a
   run("validateRevisionData(safeRevision,caseRows)");
 });
 
-Deno.test("late cases are playable and gradeable in both modes through the local preview", async () => {
-  for (const [id,category,answer,answerText] of [[202,"cardiology","Hở van hai lá","Hở van hai lá"],[245,"hematology_oncology","HCC","tế bào gan"]]) for (const game of ["clinical","treatment"]) {
+Deno.test("late cases are playable and gradeable through the local preview", async () => {
+  for (const [id,category,answer,answerText] of [[245,"hematology_oncology","HCC","tế bào gan"],[411,"respiratory","Tràn dịch màng phổi","Tràn dịch"]]) {
     const {run,context,nodes}=loadApp();
     context.URLSearchParams=URLSearchParams;
-    context.location={hostname:"127.0.0.1",search:`?case=${id}&game=${game}&category=${category}&difficulty=hard`};
+    context.location={hostname:"127.0.0.1",search:`?case=${id}&category=${category}&difficulty=hard`};
     await run("init()");
     assert(run(`currentCase.id===${id} && mode==='practice' && practiceCategory==='${category}'`),"Late case not available");
     assert(run("activeClues().length===6 && revealed===1"),"Incomplete late case");
@@ -108,33 +108,32 @@ Deno.test("late cases are playable and gradeable in both modes through the local
 });
 
 Deno.test("expanding the bank preserves today's saved cases, progress and completion totals", async () => {
-  for (const oldSize of [100,200]) {
+  for (const oldSize of [10,30]) {
   const old=loadApp();
   old.run(`CASES=CASES.slice(0,${oldSize})`);
   await old.run("init()");
-  old.run("revealed=4; attempts=[{text:'wrong',correct:false}]; saveDailyState(); switchGame('treatment')");
-  const clinicalId=old.run("dailyStore().rounds.clinical.easy.caseId");
-  const treatmentId=old.run("currentCase.id");
+  old.run("revealed=4; attempts=[{text:'wrong',correct:false}]; saveDailyState(); switchDifficulty('hard')");
+  const easyId=old.run("dailyStore().rounds.clinical.easy.caseId");
+  const hardId=old.run("currentCase.id");
   old.nodes.get("#guess-input").value=old.run("currentCase.diagnosis");
   old.nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
   const expanded=loadApp(Object.fromEntries(old.storage));
   await expanded.run("init()");
-  assert(expanded.run("currentCase.id")===treatmentId && expanded.run("finished"),"Expansion replaced completed treatment case");
   expanded.run("switchDifficulty('hard')");
-  assert(expanded.run("currentCase.id")!==treatmentId,"New daily difficulty reused the easy case");
+  assert(expanded.run("currentCase.id")===hardId && expanded.run("finished"),"Expansion replaced completed hard case");
+  expanded.run("switchDifficulty('medium')");
+  assert(![hardId,easyId].includes(expanded.run("currentCase.id")),"New daily difficulty reused a pinned case");
   expanded.run("switchDifficulty('easy')");
-  assert(expanded.run("currentCase.id")===treatmentId && expanded.run("finished"),"Returning to easy lost the pinned challenge");
-  expanded.run("switchGame('clinical'); switchDifficulty('easy')");
-  assert(expanded.run("currentCase.id")===clinicalId && expanded.run("revealed===4 && attempts.length===1"),"Expansion lost clinical progress");
+  assert(expanded.run("currentCase.id")===easyId && expanded.run("revealed===4 && attempts.length===1"),"Expansion lost easy progress");
   assert(expanded.run("getStats().played===1 && getStats().solved===1"),"Expansion changed aggregate totals");
   }
 });
 
-Deno.test("small specialties offer focused practice and matching suggestions in both modes", async () => {
+Deno.test("small specialties offer focused practice and matching suggestions", async () => {
   const {run,nodes,context}=loadApp();
   await run("init()");
-  for (const category of ["endocrine","obgyn","musculoskeletal_rheumatology"]) for (const game of ["clinical","treatment"]) {
-    run(`switchCategory('${category}'); switchGame('${game}')`);
+  for (const category of ["endocrine","obgyn","musculoskeletal_rheumatology"]) {
+    run(`switchCategory('${category}')`);
     assert(run(`mode==='practice' && practiceCategory==='${category}' && currentCase.categoryIds.includes('${category}')`),"Specialty did not start focused practice");
     context.suggestions=run("suggestionNames.map((entry)=>entry.name).join('|')");
     assert(run("practicePool().every(item=>suggestions.includes(item.diagnosis))"),"In-category diagnosis missing from suggestions");

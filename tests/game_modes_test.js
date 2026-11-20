@@ -8,11 +8,13 @@ function throws(fn, pattern) {
   throw new Error("Expected invalid data to fail");
 }
 
-Deno.test("every condition has six distinct management clues, category membership and a rationale", () => {
+Deno.test("every condition has category membership; paused treatment data is optional but complete when kept", () => {
   const {revision,rows,run} = loadApp();
   assert(revision.cases.length === rows.length && revision.categories.length,"Incomplete bank");
-  assert(revision.cases.every((item) => new Set(item.treatmentClues).size === 6),"Duplicate treatment step");
-  assert(run(`CASES.every((item) => item.categoryIds.length && item.treatmentClues.length === 6 && item.treatmentExplanation)`),"Unusable merged case");
+  const kept = revision.cases.filter((item) => item.treatmentClues !== undefined);
+  assert(kept.length && kept.length < revision.cases.length,"Expected both kept and absent treatment data");
+  assert(kept.every((item) => new Set(item.treatmentClues).size === 6 && item.treatmentExplanation),"Incomplete kept treatment data");
+  assert(run(`CASES.every((item) => item.categoryIds.length)`),"Unusable merged case");
   assert(revision.cases.some((item) => item.categoryIds.length > 1),"Overlapping groups missing");
 });
 
@@ -27,6 +29,7 @@ Deno.test("revision data rejects partial banks, unknown IDs and invalid categori
     (data) => {data.cases[0].categoryIds.push(data.cases[0].categoryIds[0]);},
     (data) => {data.cases[0].treatmentClues.pop();},
     (data) => {data.cases[0].treatmentExplanation = " ";},
+    (data) => {delete data.cases[0].treatmentExplanation;},
     (data) => {data.cases[0].treatmentClues[0] = "Điều trị sốt xuất huyết Dengue.";},
     (data) => {data.cases[0].treatmentClues[0] = "Phác đồ A91.";},
     (data) => {data.cases[0].source_ids = ["private reference"];},
@@ -42,7 +45,7 @@ Deno.test("revision data rejects partial banks, unknown IDs and invalid categori
   }
 });
 
-Deno.test("both game types accept all configured answers at every difficulty", () => {
+Deno.test("all configured answers are accepted at every difficulty", () => {
   const {run} = loadApp();
   assert(run(`Object.keys(GAME_LABELS).every((type) => {
     gameType = type;
@@ -56,30 +59,18 @@ Deno.test("both game types accept all configured answers at every difficulty", (
   })`),"Answer grading differs between modes");
 });
 
-Deno.test("treatment reveal spends guesses, hides symptom title and shows mode-specific rationale", async () => {
-  const {run,nodes} = loadApp();
+Deno.test("treatment mode is paused: stored or requested treatment play falls back to clinical clues", async () => {
+  const {run,nodes} = loadApp({"chanle-game-type-v1":"treatment"});
   await run("init()");
-  run("switchGame('treatment')");
-  for (let count = 1; count <= 6; count++) {
-    assert(nodes.get("#case-title").textContent.startsWith("Kế hoạch điều trị #"),"Treatment title leaks case");
-    assert(run("revealed") === count && run("attempts.length") === count - 1,"Reveal did not consume one guess");
-    const markup = nodes.get("#clue-list").innerHTML;
-    const visible = run("activeClues().slice(0,revealed).map(escapeHtml)");
-    assert(visible.every((text) => markup.includes(text)),"Wrong clue bank rendered");
-    if (count < 6) nodes.get("#reveal-button").listeners.get("click")();
-  }
-  assert(nodes.get("#reveal-button").disabled,"Reveal did not stop");
-  nodes.get("#guess-input").value = run("currentCase.icdCode");
-  nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-  assert(run("finished && attempts[5].correct"),"Could not win treatment round");
-  assert(nodes.get("#treatment-explanation").textContent === run("currentCase.treatmentExplanation"),"Wrong explanation");
-  assert(nodes.get("#summary").textContent === run("currentCase.summary"),"Clinical link missing");
+  assert(run("gameType === 'clinical' && Object.keys(GAME_LABELS).join() === 'clinical'"),"Treatment mode still selectable");
+  assert(run("typeof switchGame === 'undefined'"),"Game switch still exposed");
+  assert(nodes.get("#case-title").textContent.startsWith("Ca bệnh #"),"Clinical heading missing");
+  assert(run("activeClues() === currentCase.clues"),"Wrong clue bank rendered");
 });
 
-Deno.test("six wrong treatment guesses reveal the complete plan and finish once", async () => {
+Deno.test("six wrong guesses reveal the complete case and finish once", async () => {
   const {run,nodes} = loadApp();
   await run("init()");
-  run("switchGame('treatment')");
   for (let i = 0; i < 6; i++) {
     nodes.get("#guess-input").value = run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name");
     nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
@@ -90,14 +81,12 @@ Deno.test("six wrong treatment guesses reveal the complete plan and finish once"
   assert(run("getStats().played === 1"),"Completed loss counted again");
 });
 
-Deno.test("category selection starts focused practice and overlap is retained in both modes", async () => {
+Deno.test("category selection starts focused practice and overlap is retained", async () => {
   const {run,nodes} = loadApp();
   await run("init()");
   run("switchCategory('cardiology')");
   assert(run("mode === 'practice' && practicePool().length > 1 && practicePool().every(item => item.categoryIds.includes('cardiology')) && currentCase.categoryIds.includes('cardiology')"),"Wrong category pool");
   assert(!run("suggestionNames.map((entry)=>entry.name).join('|')").includes("Hen phế quản"),"Autocomplete escaped selected group");
-  run("switchGame('treatment')");
-  assert(run("currentCase.categoryIds.includes('cardiology') && practiceCategory === 'cardiology'"),"Mode switch lost category");
   assert(run("CASES.find((item)=>item.id===5).categoryIds.includes('infectious')"),"Expected overlap absent");
   run("switchDifficulty('hard')");
   assert(run("attempts.length === 0 && revealed === 1"),"Difficulty did not restart practice case");
@@ -112,22 +101,20 @@ Deno.test("daily difficulties have separate cases and progress and each completi
     nodes.get("#guess-input").value=run("currentCase.diagnosis");
     nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
   };
-  const clinicalId = run("currentCase.id");
-  run("revealed=3; attempts=[{text:'wrong',correct:false}]; render(); switchGame('treatment')");
-  assert(run("currentCase.id") !== clinicalId && run("revealed === 1 && attempts.length === 0"),"Treatment restored clinical round");
+  const easyId = run("currentCase.id");
+  run("revealed=3; attempts=[{text:'wrong',correct:false}]; saveDailyState(); render(); switchDifficulty('hard')");
+  assert(run("currentCase.id") !== easyId && run("revealed === 1 && attempts.length === 0"),"Hard restored easy round");
   win();
-  run("switchDifficulty('hard')");
+  run("switchDifficulty('medium')");
   assert(run("!finished"),"Difficulty restored other difficulty save");
   win();
   assert(run("getStats().played === 2"),"Distinct daily difficulty was not counted");
-  run("switchGame('clinical')");
-  assert(run("revealed === 1"),"Clinical hard should start fresh");
   run("switchDifficulty('easy')");
-  assert(run("revealed === 3 && attempts.length === 1 && !finished"),"Clinical progress not restored");
+  assert(run("revealed === 3 && attempts.length === 1 && !finished"),"Easy progress not restored");
   win();
   assert(run("getStats().played === 3 && getStats().solved === 3"),"Independent daily completion not recorded");
-  run("switchGame('treatment')");
-  assert(run("finished && attempts[0].correct"),"Completed treatment easy save not restored");
+  run("switchDifficulty('hard')");
+  assert(run("finished && attempts[0].correct"),"Completed hard save not restored");
 });
 
 Deno.test("existing clinical daily progress and aggregate stats migrate without double-counting", async () => {
@@ -164,15 +151,15 @@ Deno.test("malformed daily slots do not prevent startup or overwrite clinical an
   assert(run("CASES[0].diagnosis")===rows[0].diagnosis,"Revision extension overwrote clinical diagnosis");
 });
 
-Deno.test("invalid preferences fall back and valid game/category preferences survive reload", async () => {
+Deno.test("invalid preferences fall back and valid category preferences survive reload", async () => {
   const bad = loadApp({"chanle-game-type-v1":"constructor","chanle-category-v1":"missing","chanle-difficulty-v1":"constructor"});
   await bad.run("init()");
   assert(bad.run("gameType==='clinical' && practiceCategory==='all' && difficulty==='easy'"),"Unsafe preference accepted");
-  bad.run("switchCategory('renal_urology'); switchGame('treatment')");
+  bad.run("switchCategory('renal_urology')");
   const restored = loadApp(Object.fromEntries(bad.storage));
   await restored.run("init()");
   restored.run("switchMode('practice')");
-  assert(restored.run("gameType==='treatment' && practiceCategory==='renal_urology' && currentCase.categoryIds.includes('renal_urology')"),"Preferences not restored");
+  assert(restored.run("practiceCategory==='renal_urology' && currentCase.categoryIds.includes('renal_urology')"),"Preferences not restored");
 });
 
 Deno.test("Anki and shares use the chosen mode/category and omit private material", () => {
@@ -183,24 +170,24 @@ Deno.test("Anki and shares use the chosen mode/category and omit private materia
     return activeClues().every((text)=>card.includes(text)) && card.includes(currentCase.diagnosis) &&
       card.includes(categoryLabel()) && share.includes(GAME_LABELS[type]) && share.includes(categoryLabel()) &&
       !share.includes(currentCase.diagnosis) && !/https?:|source_checked|review_note/.test(card) &&
-      (type!=='treatment' || card.includes(currentCase.treatmentExplanation));
+      !card.includes(currentCase.treatmentExplanation);
   })`),"Export content or privacy mismatch");
 });
 
-Deno.test("local preview selects treatment/category; public hosts ignore those controls", async () => {
+Deno.test("local preview selects category, ignores paused treatment mode; public hosts ignore controls", async () => {
   const {context,run,nodes} = loadApp();
   context.URLSearchParams = URLSearchParams;
   context.location={hostname:"localhost",search:"?case=5&game=treatment&category=cardiology&difficulty=hard"};
   await run("init()");
-  assert(run("gameType==='treatment' && practiceCategory==='cardiology' && currentCase.id===5 && attempts.length===0"),"Local type/category ignored");
-  assert(nodes.get("#case-title").textContent === "Kế hoạch điều trị #005","Treatment heading wrong");
-  context.location.search="?case=5&game=constructor&category=unknown";
-  assert(run("localPreviewOptions().gameType==='clinical' && localPreviewOptions().category==='all'"),"Invalid preview values accepted");
+  assert(run("gameType==='clinical' && practiceCategory==='cardiology' && currentCase.id===5 && attempts.length===0"),"Local category ignored or treatment honored");
+  assert(nodes.get("#case-title").textContent === "Ca bệnh #005","Clinical heading wrong");
+  context.location.search="?case=5&category=unknown";
+  assert(run("localPreviewOptions().category==='all'"),"Invalid preview values accepted");
   const publicApp = loadApp();
-  publicApp.context.location={hostname:"souhhcong.github.io",search:"?case=5&game=treatment&category=cardiology"};
+  publicApp.context.location={hostname:"souhhcong.github.io",search:"?case=5&category=cardiology"};
   publicApp.context.URLSearchParams=URLSearchParams;
   await publicApp.run("init()");
-  assert(publicApp.run("gameType==='clinical' && mode==='daily'"),"Public host honored test override");
+  assert(publicApp.run("mode==='daily'"),"Public host honored test override");
 });
 
 Deno.test("missing treatment bank fails visibly instead of mixing incomplete data", async () => {

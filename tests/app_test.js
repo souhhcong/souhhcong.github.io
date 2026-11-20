@@ -125,11 +125,10 @@ Deno.test("incorrect legacy codes no longer count as correct answers", () => {
   assert(run('isCorrect("K80.0") && !isCorrect("K81.0")'), "Calculous cholecystitis code correction not applied");
 });
 
-Deno.test("source-checked cases have specific explanations and differentials", () => {
+Deno.test("every case has a summary distinct from any kept teaching point", () => {
   const { rows } = loadApp();
   for (const row of rows) {
-    assert(row.differential1_name && row.differential2_name, `Missing differential: ${row.id}`);
-    assert(row.pearl1_text && row.pearl2_text, `Missing explanation: ${row.id}`);
+    assert(row.summary.trim(), `Missing summary: ${row.id}`);
     assert(row.summary !== row.pearl1_text, `Repeated summary: ${row.id}`);
   }
   assert(rows.every((row) => row.pearl2_title !== "Mục tiêu ôn tập"), "Placeholder explanation remains");

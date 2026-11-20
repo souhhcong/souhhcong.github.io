@@ -16,10 +16,8 @@ Deno.test("visible clue and guess progress stays in sync through reveals, guesse
   nodes.get("#guess-input").value=run("suggestionNames.find((e)=>!isCorrect(e.name)&&!guessedKeys().has(e.key)).name");
   nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
   assert(run("finished && attempts.length===6") && nodes.get("#feedback").textContent==="Đã hết lượt đoán","Final guess did not end the round");
-  run("switchGame('treatment')");
-  assert(nodes.get("#app").getAttribute("data-game-type")==="treatment","Mode appearance stale");
-  assert(nodes.get("#clue-progress").value===1 && nodes.get("#history-count").textContent==="0 / 6","New mode retained old progress");
   run("switchDifficulty('hard')");
+  assert(nodes.get("#clue-progress").value===1 && nodes.get("#history-count").textContent==="0 / 6","New difficulty retained old progress");
   assert(nodes.get("#guess-input").getAttribute("role")==="combobox" && nodes.get("#play-tip").textContent.includes("Chọn từ gợi ý"),"Difficulty changed easy-mode assistance");
 });
 

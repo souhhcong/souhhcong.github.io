@@ -336,14 +336,14 @@ Deno.test("new conditions require separate supported evidence even with no langu
 Deno.test("complete source review permits a structurally valid new candidate without inventing sign-off", () => {
   const c = structuredClone(condition);
   c.kind = "new";
-  c.caseId = 401;
-  c.clinical.id = "401";
+  c.caseId = 9001;
+  c.clinical.id = "9001";
   c.clinical.diagnosis = "Bệnh thử nghiệm";
   c.clinical.aliases = "Synthetic condition";
   c.clinical.icd_code = "Z99.9";
   c.clinical.icd_label = "Synthetic test only";
-  c.revision.caseId = 401;
-  c.hardness.caseId = 401;
+  c.revision.caseId = 9001;
+  c.hardness.caseId = 9001;
   validateCondition(c, bank, { draft: true });
   const r = reports(c, []), fields = factFieldsFor(c);
   r.facts = {
@@ -353,7 +353,7 @@ Deno.test("complete source review permits a structurally valid new candidate wit
       evidence: [{
         id: "test",
         fields,
-        caseIds: [401],
+        caseIds: [9001],
         title: "Synthetic test only",
         locator: "Test paragraph",
         url: "https://example.org/test",
@@ -365,7 +365,7 @@ Deno.test("complete source review permits a structurally valid new candidate wit
     }),
     output: {
       conditions: [{
-        caseId: 401,
+        caseId: 9001,
         verdict: "supported",
         coveredFields: fields,
         sourceIds: ["test"],

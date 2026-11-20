@@ -1,13 +1,73 @@
 {
-  "VN-MED-0014": { "skip": "case 16 is a bleeding duodenal ulcer; dataset clues show no bleeding" },
-  "VN-MED-0018": { "skip": "case 22 is inferior STEMI; dataset clues do not localise the infarct" },
-  "VN-MED-0019": { "caseId": 102, "note": "rheumatic fever history supports rheumatic mitral stenosis" },
-  "VN-MED-0022": { "caseId": 42, "note": "ischaemic stroke" },
-  "VN-MED-0025": { "skip": "case 145 is thalassaemia major; eligible dataset case describes a carrier" },
-  "VN-MED-0027": { "caseId": 71, "note": "acute gout flare with crystals" },
-  "VN-MED-0031": { "skip": "game splits left (23) and right (28) heart failure" },
-  "VN-MED-0034": { "skip": "ICD K74 matches case 247 (primary biliary cholangitis), not cirrhosis" },
-  "VN-MED-0041": { "skip": "case 113 is adenocarcinoma; dataset clues give no histological type" },
-  "VN-MED-0045": { "caseId": 202, "note": "rheumatic (organic) mitral regurgitation is primary MR" },
-  "VN-MED-0078": { "skip": "game has specific obstructions (187 intussusception, 258 sigmoid volvulus), not generic bowel obstruction" }
+  "VN-MED-0007": {
+    "caseId": 401,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0009": {
+    "caseId": 31,
+    "note": "community-acquired pneumonia; Vietnamese name differs only in wording"
+  },
+  "VN-MED-0011": {
+    "caseId": 402,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0014": {
+    "caseId": 403,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0015": {
+    "caseId": 51,
+    "note": "type 1 diabetes (típ/type spelling)"
+  },
+  "VN-MED-0018": {
+    "caseId": 404,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0019": {
+    "caseId": 102,
+    "note": "rheumatic fever history supports rheumatic mitral stenosis"
+  },
+  "VN-MED-0022": {
+    "caseId": 42,
+    "note": "ischaemic stroke"
+  },
+  "VN-MED-0025": {
+    "caseId": 405,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0027": {
+    "caseId": 71,
+    "note": "acute gout flare with crystals"
+  },
+  "VN-MED-0031": {
+    "caseId": 406,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0034": {
+    "caseId": 407,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0035": {
+    "caseId": 408,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0036": {
+    "caseId": 409,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0041": {
+    "caseId": 410,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0042": {
+    "caseId": 411,
+    "note": "new case created for the dataset disease"
+  },
+  "VN-MED-0045": {
+    "caseId": 202,
+    "note": "rheumatic (organic) mitral regurgitation is primary MR"
+  },
+  "VN-MED-0078": {
+    "skip": "game has specific obstructions (187 intussusception, 258 sigmoid volvulus), not generic bowel obstruction"
+  }
 }

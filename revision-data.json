@@ -148,6 +148,21 @@
       "treatmentExplanation": "Đau kéo dài, dấu viêm và sỏi túi mật phù hợp viêm túi mật cấp do sỏi. Điều trị hướng đến kiểm soát ổ nhiễm bằng cắt túi mật sớm; ERCP không thay thế việc này khi không có sỏi ống mật chủ cần xử trí."
     },
     {
+      "caseId": 20,
+      "categoryIds": [
+        "gastroenterology"
+      ],
+      "treatmentClues": [
+        "Người đau vùng mật và vàng da được giảm đau, đánh giá nhiễm trùng và mức tắc mật.",
+        "Lập kế hoạch lấy vật gây tắc trong ống mật bằng ERCP hoặc phương pháp ngoại khoa phù hợp.",
+        "Cắt cơ vòng và lấy sỏi qua nội soi khi phù hợp; nếu chưa lấy sạch, stent chỉ là giải pháp dẫn lưu tạm.",
+        "Đánh giá túi mật để phối hợp cắt túi mật khi còn sỏi và người bệnh đủ điều kiện.",
+        "Theo dõi biến chứng sau can thiệp, gồm đau bụng, chảy máu hoặc nhiễm trùng.",
+        "Nếu có sốt, rét run hoặc mất ổn định, bổ sung kháng sinh và dẫn lưu khẩn theo mức độ; không giả định ca hiện tại đã có nhiễm trùng."
+      ],
+      "treatmentExplanation": "Điều trị sỏi ống mật chủ tập trung vào lấy sỏi và giải quyết tắc mật. Mức độ khẩn tùy tình trạng nhiễm trùng và huyết động; ca bệnh này có tắc mật nhưng chưa có dữ kiện viêm đường mật."
+    },
+    {
       "caseId": 24,
       "categoryIds": [
         "cardiology"
@@ -176,6 +191,22 @@
         "Đánh giá lại nếu có sốt kéo dài, dịch nhiều hoặc dấu chèn ép; dẫn lưu khi có chỉ định, không chỉ vì thấy ít dịch."
       ],
       "treatmentExplanation": "NSAID hoặc aspirin phối hợp colchicine phù hợp với viêm màng ngoài tim cấp không biến chứng. Troponin trong ca này bình thường và dịch màng tim ít, chưa có dữ kiện để áp dụng điều trị dành cho viêm cơ tim hoặc chèn ép tim."
+    },
+    {
+      "caseId": 31,
+      "categoryIds": [
+        "respiratory",
+        "infectious"
+      ],
+      "treatmentClues": [
+        "Người lớn sốt, ho đàm và tổn thương phổi khu trú được đánh giá độ nặng, oxy hóa và khả năng điều trị ngoại trú.",
+        "Bắt đầu kháng sinh theo bệnh cảnh mắc ngoài bệnh viện, mức độ nặng, dị ứng và kháng thuốc địa phương.",
+        "Amoxicillin có thể phù hợp ở thể nhẹ; thể nặng hoặc nghi tác nhân không điển hình cần lựa chọn khác theo hướng dẫn.",
+        "Bổ sung oxy khi cần và bảo đảm dịch, giảm đau, hạ sốt phù hợp.",
+        "Đánh giá lại đáp ứng; không kéo dài hay mở rộng kháng sinh chỉ vì CRP chưa trở về bình thường.",
+        "Nếu chậm hồi phục, tìm tràn mủ, tác nhân kháng thuốc hoặc chẩn đoán khác; chụp lại phổi khi có chỉ định."
+      ],
+      "treatmentExplanation": "Kế hoạch viêm phổi cộng đồng dựa trên độ nặng và căn nguyên có khả năng, không chỉ màu đàm. Ca gốc chưa xác định vi khuẩn cụ thể nên không dùng một phác đồ cố định bất kể bối cảnh."
     },
     {
       "caseId": 32,
@@ -224,6 +255,22 @@
       "treatmentExplanation": "Điều trị tràn khí màng phổi tùy triệu chứng và ảnh hưởng đến hô hấp, tuần hoàn, không chỉ dựa vào kích thước trên phim. Người bệnh ổn định có thể chưa cần dẫn lưu; tràn khí màng phổi áp lực cần được xử trí ngay."
     },
     {
+      "caseId": 35,
+      "categoryIds": [
+        "respiratory",
+        "infectious"
+      ],
+      "treatmentClues": [
+        "Người bệnh có bằng chứng vi sinh trong đờm được áp dụng kiểm soát lây qua không khí và đăng ký điều trị theo chương trình.",
+        "Đánh giá tính nhạy thuốc, bệnh kèm và các tương tác trước khi chọn phác đồ phối hợp.",
+        "Nếu đủ điều kiện cho phác đồ nhạy thuốc thông thường, giai đoạn đầu phối hợp isoniazid, rifampicin, pyrazinamide và ethambutol.",
+        "Giai đoạn tiếp theo và khả năng dùng phác đồ ngắn hơn phụ thuộc tiêu chuẩn của chương trình, kết quả nhạy thuốc và đáp ứng.",
+        "Theo dõi chức năng gan, biểu hiện thị giác và độc tính khác; hỗ trợ tuân thủ, không tự bỏ từng thuốc.",
+        "Đánh giá đáp ứng vi sinh, truy vết người tiếp xúc và điều chỉnh chuyên khoa nếu phát hiện kháng thuốc."
+      ],
+      "treatmentExplanation": "Điều trị lao phổi cần phối hợp nhiều thuốc và hỗ trợ tuân thủ. Xét nghiệm chưa phát hiện kháng rifampicin không đồng nghĩa đã chứng minh nhạy với mọi thuốc; phác đồ ngắn không phù hợp cho tất cả người bệnh."
+    },
+    {
       "caseId": 42,
       "categoryIds": [
         "neurology",
@@ -255,6 +302,22 @@
       "treatmentExplanation": "Bệnh Parkinson có điều trị triệu chứng bằng thuốc dopaminergic, thường ưu tiên levodopa khi sinh hoạt bị ảnh hưởng. Phục hồi chức năng và triệu chứng ngoài vận động cũng quyết định chất lượng sống."
     },
     {
+      "caseId": 51,
+      "categoryIds": [
+        "endocrine",
+        "pediatrics"
+      ],
+      "treatmentClues": [
+        "Trẻ có tăng glucose kèm triệu chứng được chuyển nhóm chuyên trách trong ngày và kiểm tra ceton, tình trạng toan.",
+        "Ca này chưa có nhiễm toan mất bù, nên lập kế hoạch dùng insulin dưới da; không mặc nhiên áp dụng phác đồ truyền insulin trong hồi sức.",
+        "Dùng chế độ insulin nền và theo bữa, hoặc thiết bị bơm phù hợp được chuyên khoa hướng dẫn.",
+        "Theo dõi glucose bằng cảm biến hoặc đo mao mạch và điều chỉnh theo ăn uống, vận động.",
+        "Hướng dẫn nhận biết, xử trí hạ glucose và kiểm tra ceton khi ốm hoặc glucose tăng bất thường.",
+        "Gia đình được học tính carbohydrate, kỹ thuật tiêm và nguyên tắc không tự bỏ insulin nền khi trẻ ăn kém."
+      ],
+      "treatmentExplanation": "Đái tháo đường type 1 cần thay thế insulin và giáo dục tự quản lý. Ca này không có DKA nên cách khởi trị khác với bệnh cảnh mất nước và toan cần hồi sức."
+    },
+    {
       "caseId": 52,
       "categoryIds": [
         "endocrine"
@@ -283,6 +346,22 @@
         "Theo dõi lâu dài để phát hiện tái phát hoặc thiếu hormone sau điều trị quyết định."
       ],
       "treatmentExplanation": "Thuốc kháng giáp và các biện pháp điều trị triệt để là những lựa chọn trong bệnh Basedow. Người bệnh có lồi mắt, vì vậy cần đánh giá bệnh mắt trước khi cân nhắc iod phóng xạ."
+    },
+    {
+      "caseId": 61,
+      "categoryIds": [
+        "renal_urology",
+        "pediatrics"
+      ],
+      "treatmentClues": [
+        "Trẻ phù và mất đạm qua nước tiểu được đánh giá thể tích tuần hoàn, huyết áp và dấu nhiễm trùng.",
+        "Với đợt đầu điển hình và không có dấu gợi nguyên nhân khác, dùng prednisolone theo phác đồ nhi khoa.",
+        "Hạn chế muối, theo dõi cân nặng, phù và protein niệu để đánh giá đáp ứng.",
+        "Chỉ truyền albumin hoặc dùng lợi tiểu trong những trường hợp có chỉ định dựa trên tình trạng huyết động; albumin máu thấp đơn độc chưa phải chỉ định.",
+        "Theo dõi biến chứng nhiễm trùng, huyết khối và tác dụng bất lợi của steroid.",
+        "Hướng dẫn gia đình theo dõi nước tiểu, nhận biết tái phát và lịch khám; diễn tiến không điển hình cần đánh giá lại."
+      ],
+      "treatmentExplanation": "Trẻ có hội chứng thận hư điển hình thường được điều trị thử bằng corticosteroid dưới sự theo dõi của chuyên khoa. Tuổi và đáp ứng thuốc chưa đủ để khẳng định mô học là bệnh cầu thận thay đổi tối thiểu. Khi truyền albumin hoặc dùng lợi tiểu, cần tránh làm giảm thể tích tuần hoàn."
     },
     {
       "caseId": 63,
@@ -502,6 +581,36 @@
       "treatmentExplanation": "Điều trị tùy phạm vi tổn thương và mức độ hoạt động của bệnh. Cần phân biệt điều trị để đạt lui bệnh với điều trị duy trì, đồng thời nhận biết đợt nặng để xử trí kịp thời."
     },
     {
+      "caseId": 134,
+      "categoryIds": [
+        "renal_urology"
+      ],
+      "treatmentClues": [
+        "Kiểm soát huyết áp và protein niệu theo khả năng dung nạp.",
+        "Dùng thuốc tác động hệ renin–angiotensin và các thuốc bảo vệ thận khi phù hợp.",
+        "Theo dõi kali, creatinin và mức đạm niệu.",
+        "Cân nhắc điều trị hướng bệnh theo nguy cơ tiến triển và hướng dẫn chuyên khoa hiện hành.",
+        "Không kê corticosteroid chỉ vì có một lần tiểu máu sau viêm họng.",
+        "Đánh giá lại nếu chức năng thận giảm nhanh hoặc protein niệu tăng."
+      ],
+      "treatmentExplanation": "Bảo vệ thận và điều trị hướng bệnh theo nguy cơ; sinh thiết và diễn tiến quyết định hơn chỉ hình thức tiểu máu."
+    },
+    {
+      "caseId": 141,
+      "categoryIds": [
+        "endocrine"
+      ],
+      "treatmentClues": [
+        "Lập mục tiêu glucose, cân nặng và nguy cơ tim–thận cá thể hóa.",
+        "Hướng dẫn dinh dưỡng, vận động và hỗ trợ giảm cân phù hợp.",
+        "Chọn thuốc như metformin, SGLT2 hoặc GLP-1 theo bệnh kèm, nguy cơ và khả năng tiếp cận.",
+        "Theo dõi đáp ứng và tác dụng bất lợi, không dựa một quy tắc thuốc cho mọi người.",
+        "Insulin có thể cần khi tăng glucose nặng hoặc thiếu insulin rõ.",
+        "Sàng lọc mắt, thận, bàn chân và nguy cơ tim mạch lâu dài."
+      ],
+      "treatmentExplanation": "Điều trị hiện nay tính mục tiêu tim–thận và cân nặng bên cạnh glucose; lựa chọn thuốc có điều kiện."
+    },
+    {
       "caseId": 151,
       "categoryIds": [
         "neurology",
@@ -547,6 +656,76 @@
         "Theo dõi đáp ứng và tái phát theo kế hoạch."
       ],
       "treatmentExplanation": "Khả năng điều trị phụ thuộc cả khối u lẫn chức năng gan."
+    },
+    {
+      "caseId": 401,
+      "categoryIds": [
+        "renal_urology",
+        "musculoskeletal_rheumatology"
+      ]
+    },
+    {
+      "caseId": 402,
+      "categoryIds": [
+        "gastroenterology"
+      ]
+    },
+    {
+      "caseId": 403,
+      "categoryIds": [
+        "gastroenterology"
+      ]
+    },
+    {
+      "caseId": 404,
+      "categoryIds": [
+        "cardiology",
+        "emergency"
+      ]
+    },
+    {
+      "caseId": 405,
+      "categoryIds": [
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 406,
+      "categoryIds": [
+        "cardiology"
+      ]
+    },
+    {
+      "caseId": 407,
+      "categoryIds": [
+        "gastroenterology"
+      ]
+    },
+    {
+      "caseId": 408,
+      "categoryIds": [
+        "gastroenterology",
+        "infectious"
+      ]
+    },
+    {
+      "caseId": 409,
+      "categoryIds": [
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 410,
+      "categoryIds": [
+        "respiratory",
+        "hematology_oncology"
+      ]
+    },
+    {
+      "caseId": 411,
+      "categoryIds": [
+        "respiratory"
+      ]
     }
   ]
 }

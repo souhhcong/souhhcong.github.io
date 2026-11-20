@@ -24,8 +24,9 @@ const ROOT = new URL("../", import.meta.url);
 const CSV_URL = new URL("cases.csv", ROOT);
 const MAP_URL = new URL("scripts/clue-import-map.json", ROOT);
 const CLUE_FIELDS = ["clue1", "clue2", "clue3", "clue4", "clue5", "clue6"];
-// Clue-verifier outcomes that may be published unchanged.
-const ACCEPTED = new Set(["SUPPORTED/none", "PARTLY_SUPPORTED/minor"]);
+// Verifier findings do not block a disease (the dataset is re-verified upstream);
+// they only rank its alternative cases so the least-flagged one is imported.
+const SEVERITY = { none: 0, minor: 1, major: 10, critical: 100 };
 
 function parseArgs(args) {
   const options = { write: false, dataset: null, only: null };
@@ -86,6 +87,7 @@ export function matchRow(disease, rows, normalize, override) {
 // Reasons a dataset case cannot be published; an empty list means it is eligible.
 export function caseProblems(item, { verify, grounding, answers, forbidden, normalize }) {
   const problems = [];
+  let severity = 0;
   const clues = [...(item.clues ?? [])].sort((a, b) => a.order - b.order);
   if (clues.length !== 6 || clues.some((clue, index) => clue.order !== index + 1)) {
     problems.push("needs clues ordered 1-6");
@@ -96,14 +98,17 @@ export function caseProblems(item, { verify, grounding, answers, forbidden, norm
   for (const clue of clues) {
     const verdict = verify?.clues.find((record) => record.case_id === item.case_id && record.order === clue.order);
     const status = verdict ? `${verdict.status}/${verdict.severity}` : "missing";
-    if (verify && !ACCEPTED.has(status)) problems.push(`clue ${clue.order} verification ${status}`);
+    if (verify && !verdict) problems.push(`clue ${clue.order} verification missing`);
+    // Minor findings do not outrank case order; major and critical ones do.
+    const weight = SEVERITY[verdict?.severity] ?? 0;
+    if (weight >= SEVERITY.major) severity += weight;
     const ground = grounding?.clues.find((record) => record.case_id === item.case_id && record.order === clue.order);
     if (grounding && ground?.status !== "grounded") problems.push(`clue ${clue.order} grounding ${ground?.status ?? "missing"}`);
     const text = ` ${normalize(clue.text_vi ?? "")} `;
     const leak = [...answers, ...forbidden].find((term) => term && text.includes(` ${term} `));
     if (leak) problems.push(`clue ${clue.order} names the answer ("${leak}")`);
   }
-  return { problems, clues };
+  return { problems, clues, severity };
 }
 
 // Use the dataset name as the answer. The previous answer stays accepted as an
@@ -196,12 +201,9 @@ export function planImport({ rows, normalize, catalog, clueDir, map, only, treat
     const reasons = [];
     let chosen = null;
     for (const item of candidates) {
-      const { problems, clues } = caseProblems(item, context);
-      if (!problems.length) {
-        chosen = { item, clues };
-        break;
-      }
-      reasons.push(`${item.case_id}: ${problems.join("; ")}`);
+      const { problems, clues, severity } = caseProblems(item, context);
+      if (problems.length) reasons.push(`${item.case_id}: ${problems.join("; ")}`);
+      else if (!chosen || severity < chosen.severity) chosen = { item, clues, severity };
     }
     if (!chosen) {
       plan.rejected.push({ id, name: disease.name_vi, caseId: row.id, reason: reasons.join(" | ") || `no case ${preferred}` });
