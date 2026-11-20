@@ -7,7 +7,7 @@ export function loadApp(saved = {}) {
   const nodes = new Map();
   const storage = new Map(Object.entries(saved));
   const node = () => ({
-    textContent: "", innerHTML: "", disabled: false, value: "",
+    textContent: "", innerHTML: "", disabled: false, value: "", children: [],
     listeners: new Map(),
     attributes: new Map(),
     addEventListener(event, listener) { this.listeners.set(event, listener); },

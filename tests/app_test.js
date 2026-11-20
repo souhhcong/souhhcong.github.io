@@ -53,18 +53,13 @@ Deno.test("different diagnoses and empty guesses are rejected", () => {
 
 Deno.test("a broad ICD category is not a clinical synonym", () => {
   const { run } = loadApp();
-  run("currentCase = CASES.find((item) => item.id === 7)");
-  assert(run('isCorrect("Hội chứng Goodpasture")'), "Goodpasture synonym rejected");
-  assert(!run("isCorrect(currentCase.icdLabel)"), "Broad angiitis category accepted as equivalent");
-});
-
-Deno.test("common short eponym Kawasaki is accepted in every difficulty", () => {
-  const {run} = loadApp();
-  assert(run(`Object.keys(DIFFICULTY_LABELS).every((level) => {
-    currentCase = CASES.find((item) => item.id === 98);
-    difficulty = level;
-    return isCorrect("Kawasaki") && isCorrect("Bệnh Kawasaki") && !isCorrect("B05.9");
-  })`), "Common disease name rejected or unrelated measles code accepted");
+  run("currentCase = CASES.find((item) => item.id === 53)");
+  assert(run('isCorrect("Bệnh Graves") && isCorrect("Basedow")'), "Graves synonym rejected");
+  assert(run(`CASES.every((item) => {
+    currentCase = item;
+    const own = [item.diagnosis, item.icdCode, ...item.aliases].map(normalize);
+    return own.includes(normalize(item.icdLabel)) || !isCorrect(item.icdLabel);
+  })`), "Broad ICD category accepted as equivalent");
 });
 
 Deno.test("different diagnoses may share a category label without sharing accepted answers", () => {
@@ -77,19 +72,20 @@ Deno.test("different diagnoses may share a category label without sharing accept
 
 Deno.test("result shows clinical diagnosis separately from ICD category", () => {
   const { run, nodes } = loadApp();
-  run("currentCase = CASES.find((item) => item.id === 7); showResult()");
-  assert(nodes.get("#answer").textContent.includes("Goodpasture"), "Clinical answer missing");
-  assert(nodes.get("#icd-label").textContent.includes("M31.0"), "ICD category missing");
+  run("currentCase = CASES.find((item) => item.id === 12); showResult()");
+  assert(nodes.get("#answer").textContent.includes("Viêm túi mật cấp"), "Clinical answer missing");
+  assert(nodes.get("#icd-label").textContent.includes("K80.0"), "ICD category missing");
 });
 
-Deno.test("Anki exports the complete vignette and reasoning without internal metadata", () => {
+Deno.test("Anki exports the vignette and summary without differentials, teaching points or internal metadata", () => {
   const { run } = loadApp();
   assert(run(`CASES.every((item) => {
     currentCase = item;
     const card = ankiText();
     return item.clues.every((clue) => card.includes(clue)) &&
       card.includes(item.diagnosis) && card.includes(item.summary) &&
-      item.differentials.every(([name, note]) => card.includes(name) && card.includes(note)) &&
+      item.differentials.every(([name, note]) => !card.includes(note)) &&
+      Object.values(item.pearls).every((note) => !card.includes(note)) &&
       !card.includes("source_checked") && !card.includes("clinical_reviewer") && !card.includes("https://");
   })`), "Incomplete or private content in Anki export");
 });
@@ -125,12 +121,8 @@ Deno.test("malformed CSV and invalid clinical records fail validation", () => {
 
 Deno.test("incorrect legacy codes no longer count as correct answers", () => {
   const { run } = loadApp();
-  run("currentCase = CASES.find((item) => item.id === 16)");
-  assert(run('isCorrect("K26.4") && !isCorrect("K27.9")'), "Ulcer code correction not applied");
   run("currentCase = CASES.find((item) => item.id === 12)");
   assert(run('isCorrect("K80.0") && !isCorrect("K81.0")'), "Calculous cholecystitis code correction not applied");
-  run("currentCase = CASES.find((item) => item.id === 152)");
-  assert(run('isCorrect("O87.3") && !isCorrect("I67.6")'), "Postpartum CVT must use its specific obstetric code");
 });
 
 Deno.test("source-checked cases have specific explanations and differentials", () => {
@@ -143,18 +135,9 @@ Deno.test("source-checked cases have specific explanations and differentials", (
   assert(rows.every((row) => row.pearl2_title !== "Mục tiêu ôn tập"), "Placeholder explanation remains");
 });
 
-Deno.test("first seizure is accepted without incorrectly declaring epilepsy", () => {
-  const { run } = loadApp();
-  run("currentCase = CASES.find((item) => item.id === 43)");
-  assert(run('isCorrect("Cơn co giật toàn thể") && isCorrect("R56.8")'), "Seizure answers rejected");
-  assert(run('!isCorrect("G40.6") && !isCorrect("Động kinh cơn co cứng co giật")'), "Unsupported epilepsy diagnosis accepted");
-  assert(run('currentCase.summary.includes("Chưa đủ dữ kiện")'), "Missing diagnostic uncertainty");
-});
-
 Deno.test("newly specified ICD codes do not retain incorrect old code aliases", () => {
   const { run, context } = loadApp();
-  context.codeChanges = [[22,"I21.1","I21.3"],[30,"D44.1","D35.0"],[41,"M51.1","M51.2"],
-    [48,"G43.1","G43.9"],[80,"T78.0","T78.2"],[84,"O14.1","O14.9"],[85,"O15.0","O15.9"]];
+  context.codeChanges = [[84,"O14.1","O14.9"]];
   assert(run(`codeChanges.every(([id, code, oldCode]) => {
     currentCase = CASES.find((item) => item.id === id);
     return isCorrect(code) && !isCorrect(oldCode);

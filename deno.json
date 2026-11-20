@@ -2,6 +2,7 @@
   "tasks": {
     "dev": "deno run --allow-read=app.js,cases.csv,revision-data.json,case-difficulty.json,index.html,styles.css,assets,scripts/preview.html --allow-net=127.0.0.1 scripts/serve.js",
     "check": "deno run --allow-read scripts/validate-cases.js && deno test --allow-read tests/",
+    "import:clues": "deno run --allow-read=.,../medical-dataset-claude/work/clues,../medical-dataset-claude/data/catalog.jsonl --allow-write=cases.csv scripts/import-clues.js",
     "check:internal": "deno run --allow-read scripts/validate-cases.js --internal",
     "version:assets": "deno run --allow-read=index.html,styles.css,app.js,assets/logo.svg --allow-write=index.html scripts/version-assets.js",
     "research:difficulty": "deno run --allow-read --allow-write=.internal/condition-difficulty scripts/condition-difficulty.js",

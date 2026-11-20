@@ -132,7 +132,7 @@ export async function main(args) {
   Deno.mkdirSync(".internal",{recursive:true});
   Deno.writeTextFileSync(".internal/google-frequency-plan.json",JSON.stringify({version:1,provider,metric:"estimated matching web pages for Vietnamese diagnosis queries",generatedAt:new Date().toISOString(),queries:plan},null,2)+"\n");
   if(!opts.collect) { console.log(`Prepared ${plan.length} Vietnamese OR queries; no network requests made. Plan: .internal/google-frequency-plan.json`); return; }
-  if(!opts.limit&&!opts.case)throw new Error("Set --limit=5 for a pilot, --limit=400 for the full bank, or --case=<id>");
+  if(!opts.limit&&!opts.case)throw new Error("Set --limit=5 for a pilot, --limit=<case count> for the full bank, or --case=<id>");
   const keyName=provider==="dataforseo"?"DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD":provider==="serper"?"SERPER_API_KEY":"SERPAPI_API_KEY";
   const apiKey=provider==="dataforseo"?(Deno.env.get("DATAFORSEO_LOGIN")&&Deno.env.get("DATAFORSEO_PASSWORD")?{login:Deno.env.get("DATAFORSEO_LOGIN"),password:Deno.env.get("DATAFORSEO_PASSWORD")}:null):Deno.env.get(keyName);
   if(!apiKey)throw new Error(`${keyName} is not set. Save it locally or load ~/.env with Deno --env-file; do not put it in this repository. Search Console credentials cannot supply web-wide counts.`);

@@ -1,10 +1,10 @@
 # chanle
 
-`chanle` is a Vietnamese diagnosis guessing game for medical students. It includes 400 distinct fictional conditions, each with six clinical clues and six treatment clues (2,400 clues per mode), and runs as a static site on GitHub Pages at `https://souhhcong.github.io/`.
+`chanle` is a Vietnamese diagnosis guessing game for medical students. It includes 32 distinct fictional conditions, each with six clinical clues and six treatment clues (192 clues per mode), and runs as a static site on GitHub Pages at `https://souhhcong.github.io/`. The clinical clues come from the source-verified medical dataset.
 
 Choose **Dữ kiện lâm sàng** to guess from a vignette or **Kế hoạch điều trị** to guess from management steps, key drugs, procedures and monitoring. Both types start with one clue and allow six guesses. An incorrect guess reveals another clue; opening a clue manually also spends one guess and is recorded separately in the history. Five manual reveals leave one final guess. **Bỏ cuộc** ends the round as unsolved and opens the full answer and explanation. Daily progress preserves reveals and give-ups across reloads. Shared results show manual reveals as yellow squares. Treatment headings stay neutral until the answer is shown, and treatment explanations connect the plan to the original clinical vignette after completion.
 
-The **Chuyên khoa** picker groups conditions into 16 overlapping specialties, including ophthalmology, ENT and psychiatry. Choosing a specialty starts focused practice in either game type, with matching autocomplete suggestions at every difficulty. A condition can belong to several relevant groups, such as respiratory medicine and paediatrics.
+The **Chuyên khoa** picker groups conditions into 13 overlapping specialties. Choosing a specialty starts focused practice in either game type, with matching autocomplete suggestions at every difficulty. A condition can belong to several relevant groups, such as respiratory medicine and paediatrics.
 
 Daily challenges use all specialties, with a different deterministic weighted question for each game type and difficulty. Progress is saved separately for all six combinations. Today's started cases survive bank or rating changes. Existing v2/v3 progress and aggregate statistics migrate into v4 without recounting a completed disease. Each new daily game/difficulty counts once per date; replaying the same legacy pinned disease does not count twice. Game type, difficulty and practice specialty preferences are remembered.
 
@@ -22,7 +22,7 @@ Sampling weights for hardness 1–5 are `16, 8, 3, 1, 0.25` on Easy; `1, 4, 10, 
 
 Daily selection uses deterministic weighted exponential races seeded by local calendar date, game type, difficulty and case ID. The six new daily questions are distinct when the bank has enough cases. Existing saved questions are pinned before drawing the remaining slots. Row order and the order in which difficulties are played do not change the daily schedule. Switching practice difficulty draws a fresh weighted case; switching daily difficulty restores that slot or selects its scheduled case.
 
-The responsive study dashboard shows a live six-step clue timeline, remaining guesses, guess history and personal accuracy. Clinical and treatment modes use distinct accent colors. New clues animate into view, and completed rounds reveal all six clues with a full-width review of the reasoning, differentials and teaching points. The review receives keyboard focus after completion. Help supports Escape, controls have visible focus styles, and animations respect reduced-motion preferences. The interface uses local SVG icons and system fonts without third-party UI packages or font requests.
+The responsive study dashboard shows a live six-step clue timeline, remaining guesses, guess history and personal accuracy. Clinical and treatment modes use distinct accent colors. New clues animate into view, and completed rounds reveal all six clues with a full-width review of the answer, ICD category and case summary. The review receives keyboard focus after completion. Help supports Escape, controls have visible focus styles, and animations respect reduced-motion preferences. The interface uses local SVG icons and system fonts without third-party UI packages or font requests.
 
 ## Local use
 
@@ -34,7 +34,7 @@ deno task dev
 
 Open `http://127.0.0.1:8000/__preview/` to select game type, specialty, case and difficulty, reset a round, and check phone or tablet widths. Case labels include the authored hardness (H1–H5). Explicit preview links bypass weighted selection so any case can be tested at any difficulty. Open `http://127.0.0.1:8000/` for the game alone. Files are read on each request, so reload after editing them. Stop the server with Ctrl-C; use `deno task dev --port=8001` if port 8000 is occupied.
 
-On localhost only, links such as `http://127.0.0.1:8000/?case=400&game=treatment&category=psychiatry&difficulty=hard` start the chosen case as a fresh practice round. `game` is `clinical` or `treatment`; `category` uses an ID from the revision data and falls back to all specialties if it does not contain that case. These query controls are ignored on the public website.
+On localhost only, links such as `http://127.0.0.1:8000/?case=245&game=treatment&category=hematology_oncology&difficulty=hard` start the chosen case as a fresh practice round. `game` is `clinical` or `treatment`; `category` uses an ID from the revision data and falls back to all specialties if it does not contain that case. These query controls are ignored on the public website.
 
 The preview server binds to this computer's loopback address and serves an explicit list of game files. It does not expose `.internal/`, `.git/`, scripts, tests, or directory listings. Its read permissions also exclude the internal editorial folder. Opening `index.html` directly with `file://` will not reliably load the case CSV.
 
@@ -48,10 +48,12 @@ Important columns:
 - `icd_code`, `icd_label` (the classification category, which may be broader than the clinical answer)
 - `clue1` through `clue6`
 - `summary`
-- `pearl1_title`, `pearl1_text`, `pearl2_title`, `pearl2_text`
-- optional `differential*_name` and `differential*_note`
+- `pearl1_title`, `pearl1_text`, `pearl2_title`, `pearl2_text` (validated and kept in the data, not shown in the game)
+- optional `differential*_name` and `differential*_note` (likewise kept but not shown)
 
-The app validates required fields, unique case IDs and normalized diagnoses, code format, complete explanation pairs, and conflicting accepted answers before starting. Diagnoses, aliases and ICD codes cannot belong to more than one condition; a broad category label may be shared. Code-format checks do not establish that a code is medically appropriate. Anki exports include the selected game type's six clues, explanations, differentials and teaching points. Shared scores identify game type and specialty without including the answer.
+The app validates required fields, unique case IDs and normalized diagnoses, code format, complete explanation pairs, and conflicting accepted answers before starting. Diagnoses, aliases and ICD codes cannot belong to more than one condition; a broad category label may be shared. Code-format checks do not establish that a code is medically appropriate. Anki exports include the selected game type's six clues, answer and summary. Shared scores identify game type and specialty without including the answer.
+
+`deno task import:clues` reads verified patient cases from a sibling `medical-dataset-claude` checkout (`work/clues/VN-MED-XXXX.json` with its `.cverify.json`, `.grounding.json` and `.brief.json`) and, with `--write`, replaces `clue1`–`clue6` of the matching rows and makes the dataset disease name the `diagnosis`. The previous answer and the dataset aliases stay accepted as `aliases`; a name already used by another case or present in that case's treatment clues is refused. It imports a case only when all six clues are grounded, verified as supported (minor partial support allowed) and free of answer terms; it matches diseases by diagnosis or alias, and [scripts/clue-import-map.json](scripts/clue-import-map.json) records manual mappings and exclusions where the game answer is narrower than the dataset disease. Titles, ICD codes, explanations and review records are left unchanged, so summaries need re-checking against the new vignette and the internal ledger reports affected cases as stale until they are reviewed.
 
 `revision-data.json` extends the clinical bank without changing its reviewed CSV rows:
 
@@ -92,7 +94,7 @@ The [condition-difficulty research design](docs/condition-difficulty.md) propose
 
 ## Internal search-frequency research
 
-Prepare Vietnamese diagnosis and synonym queries for all 400 cases without making network requests:
+Prepare Vietnamese diagnosis and synonym queries for all cases without making network requests:
 
 ```sh
 deno task research:frequency
@@ -110,7 +112,7 @@ deno run --env-file="$HOME/.env" --allow-read --allow-write=.internal \
 
 Rerun the same command after a few minutes to retrieve the saved task. Queued tasks and failed retrievals retain their IDs, so retries use GET requests instead of submitting another paid search. The first request uses the real API, not the sandbox's sample data. Records stay in `.internal/google-frequency-dataforseo-results.json`. A valid numeric `se_results_count` is required; wrong tasks, changed queries, locale mismatches, automatic spelling corrections and inconsistent zero counts are rejected. A `did_you_mean` suggestion is recorded separately and accepted only when the reported keyword and Google query URL preserve the original query, with `nfpr=1` in that URL. DataForSEO does not support a strict `lr` page-language filter, so the request uses Vietnamese names, Vietnamese interface language and Vietnam location without claiming every page is Vietnamese. Providers cannot be mixed into a ranking.
 
-The script uses normal priority, depth 10 and one result page, with no extra result features. Requests are spaced by at least 1.25 seconds within a run. The published [base rate](https://dataforseo.com/pricing/google-serp/google-organic-serp-api) is $0.0006 per search, about $0.24 for 400 cases before any applicable charges; new-account [trial credit](https://dataforseo.com/faq) is $1. Start with one case to verify the response before increasing `--limit`. For DataForSEO, `--limit` bounds tasks submitted or retrieved during that run. Successful cached cases are skipped. `--refresh` deliberately creates new paid searches. If a submission's outcome is unknown after a timeout or interruption, collection stops until you check the provider's task history; only use `--refresh` after resolving that ambiguity.
+The script uses normal priority, depth 10 and one result page, with no extra result features. Requests are spaced by at least 1.25 seconds within a run. The published [base rate](https://dataforseo.com/pricing/google-serp/google-organic-serp-api) is $0.0006 per search, about $0.02 for the current 32 cases before any applicable charges; new-account [trial credit](https://dataforseo.com/faq) is $1. Start with one case to verify the response before increasing `--limit`. For DataForSEO, `--limit` bounds tasks submitted or retrieved during that run. Successful cached cases are skipped. `--refresh` deliberately creates new paid searches. If a submission's outcome is unknown after a timeout or interruption, collection stops until you check the provider's task history; only use `--refresh` after resolving that ambiguity.
 
 For a Serper key, save `SERPER_API_KEY` in your local environment or `~/.env`. Check support for total-result counts with **one request** first:
 
@@ -136,7 +138,7 @@ deno run --env-file="$HOME/.env" --allow-read --allow-write=.internal \
   scripts/google-frequency.js --collect --limit=5
 ```
 
-Collection can consume API quota. Use `--case=18` for one case or an explicit `--limit=400` for the full bank. Successful matching queries are reused; `--refresh` requests them again. Collection stops at the first failed, unavailable or corrected-query response. Missing counts remain unknown rather than becoming zero. SerpApi reports and timestamps stay in `.internal/google-frequency-results.json`; other providers use their separate report paths above.
+Collection can consume API quota. Use `--case=18` for one case or an explicit `--limit=32` for the full bank. Successful matching queries are reused; `--refresh` requests them again. Collection stops at the first failed, unavailable or corrected-query response. Missing counts remain unknown rather than becoming zero. SerpApi reports and timestamps stay in `.internal/google-frequency-results.json`; other providers use their separate report paths above.
 
 These are estimated matching web pages, not exact text occurrences or measured student knowledge. Google describes result totals as estimates that [may not be accurate](https://developers.google.com/custom-search/v1/reference/rest/v1/Search). Quoted wording, synonym coverage, news and public interest can affect the comparison. The report produces an inverse-percentile `webFrequencyHardness` only after all cases have comparable valid counts; ties stay together. It never changes `case-difficulty.json`. Private methodology notes are in `.internal/google-frequency-method.md`.
 

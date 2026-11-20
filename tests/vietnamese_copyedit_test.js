@@ -39,13 +39,13 @@ const rejects = async (fn) => {
   throw new Error("invalid input accepted");
 };
 const bank = loadBank();
-const condition = bank.conditions.find((c) => c.caseId === 31);
+const condition = bank.conditions.find((c) => c.caseId === 32);
 const edit = {
   field: "clinical.pearl1_text",
   before: condition.clinical.pearl1_text,
   after: condition.clinical.pearl1_text.replace(
-    "Màu đàm đơn độc chưa đủ để xác định tác nhân hoặc chọn kháng sinh.",
-    "Không thể xác định tác nhân hoặc chọn kháng sinh chỉ dựa vào màu đàm.",
+    "cải thiện sau salbutamol đơn độc chưa đủ để xác nhận.",
+    "chỉ cải thiện sau salbutamol thì chưa đủ để xác nhận.",
   ),
   reason: "More natural wording.",
 };
@@ -148,20 +148,20 @@ Deno.test("copyedit plans match context/model/effort across languages and bind c
 Deno.test("editor rejects omitted IDs, extra keys, protected fields, stale text and duplicate edits", () => {
   const r = reports();
   const bad = [{ conditions: [] }, {
-    conditions: [{ caseId: 31, edits: [], notes: [], extra: true }],
+    conditions: [{ caseId: 32, edits: [], notes: [], extra: true }],
   }, {
     conditions: [{
-      caseId: 31,
+      caseId: 32,
       edits: [{ ...edit, field: "clinical.diagnosis" }],
       notes: [],
     }],
   }, {
     conditions: [{
-      caseId: 31,
+      caseId: 32,
       edits: [{ ...edit, before: "wrong" }],
       notes: [],
     }],
-  }, { conditions: [{ caseId: 31, edits: [edit, edit], notes: [] }] }];
+  }, { conditions: [{ caseId: 32, edits: [edit, edit], notes: [] }] }];
   bad.forEach((o) => {
     // Keep coverage valid so these cases exercise the intended edit guards.
     for (const entry of o.conditions) {
@@ -242,7 +242,7 @@ Deno.test("reviews of different edits or changed source contexts cannot approve 
   throws(() => decideEdits(r2));
 });
 Deno.test("unchanged flagged phrasing remains visible for false-negative review", () => {
-  const flags = languageFlags(bank.conditions.find((c) => c.caseId === 116));
+  const flags = languageFlags(bank.conditions.find((c) => c.caseId === 32));
   assert(flags.some((f) => f.text.includes("đơn độc chưa đủ")));
 });
 Deno.test("editor must account for every field and keep edit/check verdicts consistent", () => {
@@ -271,10 +271,6 @@ Deno.test("winning wording that still needs revision cannot pass the gate", () =
       ),
   );
 });
-Deno.test("accepted onset phrasing is not flagged as a clipped treatment verb", () => {
-  const c = bank.conditions.find((c) => c.caseId === 299);
-  assert(!languageFlags(c).some((f) => f.field === "clinical.clue1"));
-});
 Deno.test("new IDs, exact fields, alias collisions and clue giveaways use real bank validators", () => {
   throws(() =>
     validateCondition({ ...condition, kind: "new" }, bank, { draft: true })
@@ -298,7 +294,7 @@ Deno.test("evidence receipts require snapshots and full in-scope field coverage"
     snapshotSha256: sha("Test source"),
     capturedAt: "2026-10-27T00:00:00Z",
     fields,
-    caseIds: [31],
+    caseIds: [32],
   };
   validateEvidence([receipt]);
   throws(() => validateEvidence([{ ...receipt, snapshotSha256: "fake" }]));
@@ -310,7 +306,7 @@ Deno.test("evidence receipts require snapshots and full in-scope field coverage"
   });
   const output = {
     conditions: [{
-      caseId: 31,
+      caseId: 32,
       verdict: "supported",
       coveredFields: fields,
       sourceIds: [receipt.id],

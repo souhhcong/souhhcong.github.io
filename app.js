@@ -290,9 +290,6 @@ const elements = {
   answer: $("#answer"),
   icdLabel: $("#icd-label"),
   summary: $("#summary"),
-  differentialBlock: $("#differential-block"),
-  differentials: $("#differentials"),
-  pearls: $("#pearls"),
   played: $("#played"),
   solved: $("#solved"),
   streak: $("#streak"),
@@ -630,14 +627,6 @@ function showResult() {
   elements.summary.textContent = currentCase.summary;
   elements.treatmentBlock.classList.toggle("hidden", gameType !== "treatment");
   elements.treatmentExplanation.textContent = gameType === "treatment" ? currentCase.treatmentExplanation : "";
-  const differentials = currentCase.differentials || [];
-  elements.differentialBlock.classList.toggle("hidden", differentials.length === 0);
-  elements.differentials.innerHTML = differentials
-    .map(([name, note]) => `<li><strong>${escapeHtml(name)}</strong><span>${escapeHtml(note)}</span></li>`)
-    .join("");
-  elements.pearls.innerHTML = Object.entries(currentCase.pearls)
-    .map(([term, detail]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(detail)}</dd></div>`)
-    .join("");
 }
 
 // A picked ICD suggestion reads "CODE — name": judge by the code.
@@ -810,9 +799,7 @@ function ankiText() {
     `Mặt sau: ${currentCase.diagnosis}`,
     `ICD-10: ${currentCase.icdCode} — ${currentCase.icdLabel}`,
     ...(gameType === "treatment" ? [currentCase.treatmentExplanation] : []),
-    currentCase.summary,
-    ...currentCase.differentials.map(([name, note]) => `Phân biệt — ${name}: ${note}`),
-    ...Object.entries(currentCase.pearls).map(([title, note]) => `${title}: ${note}`)
+    currentCase.summary
   ].join("\n");
 }
 

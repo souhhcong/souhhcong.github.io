@@ -177,14 +177,6 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .result h3 { font-size: 14px; font-weight: 700; padding: 14px 0 4px; }
 #summary, #treatment-explanation { font-size: 16px; }
 #summary { padding-top: 6px; }
-.pearls > div { display: grid; grid-template-columns: minmax(90px, 30%) 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid var(--rule-soft); }
-.pearls { margin-top: 12px; border-bottom: 1px solid var(--rule-soft); }
-.pearls dt { font-weight: 700; font-size: 14px; }
-.pearls dd { margin: 0; font-size: 15px; }
-.differentials { list-style: none; }
-.differentials li { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--rule-soft); }
-.differentials strong { font-weight: 700; }
-.differentials span { font-size: 15px; color: var(--toner-2); }
 .result-footer { padding-top: 18px; }
 .primary-button { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: var(--toner); color: var(--paper); font-weight: 700; font-size: 16px; }
 

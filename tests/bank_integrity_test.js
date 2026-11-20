@@ -12,9 +12,8 @@ function rejects(fn, pattern) {
 const variants = (text) => [text, text.toUpperCase(), text.normalize("NFD"),
   text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").replace(/[\s.]+/g, " — ")];
 
-Deno.test("expanded bank contains at least 400 unique diagnoses and unambiguous accepted answers", () => {
-  const {rows,run} = loadApp();
-  assert(rows.length >= 400, "Expansion lost conditions");
+Deno.test("bank contains unique diagnoses and unambiguous accepted answers", () => {
+  const {run} = loadApp();
   assert(run(`new Set(CASES.map(item=>normalize(item.diagnosis))).size === CASES.length`), "Repeated diagnosis");
   assert(run(`(() => {
     const owners = new Map();
@@ -65,15 +64,13 @@ Deno.test("all six treatment positions reject diagnosis, English, eponym, short 
   const {rows,revision,run,context} = loadApp();
   const probes=[
     [1,rows.find(row=>row.id==1).diagnosis],
-    [2,"pulmonary embolism"],
-    [2,"PE"],
-    [98,"Kawasaki"],
-    [200,"NEC"],
-    [200,"P77"],
-    [379,"BPPV"],
-    [400,"ADHD"],
-    [400,"F90.0"],
-    [16,"K26.4"],
+    [245,"hepatocellular carcinoma"],
+    [245,"HCC"],
+    [53,"Bệnh Graves"],
+    [121,"GERD"],
+    [151,"ICH"],
+    [33,"COPD"],
+    [12,"K80.0"],
   ];
   for (const [caseId,answer] of probes) for (const variant of variants(answer)) {
     for (let index=0;index<6;index++) {
@@ -87,15 +84,15 @@ Deno.test("all six treatment positions reject diagnosis, English, eponym, short 
 Deno.test("giveaway detection respects word boundaries and allows explanations after reveal", () => {
   const {revision,run,context} = loadApp();
   context.safeRevision=structuredClone(revision);
-  const item=context.safeRevision.cases.find(item=>item.caseId===2);
-  // PE inside an unrelated word is not the standalone accepted abbreviation.
-  item.treatmentClues[0]="Kiểm tra đơn vị chuyên khoa và đáp ứng therapy phù hợp.";
-  item.treatmentExplanation="Thuyên tắc phổi (PE) được giải thích sau khi kết thúc.";
+  const item=context.safeRevision.cases.find(item=>item.caseId===151);
+  // ICH inside an unrelated word is not the standalone accepted abbreviation.
+  item.treatmentClues[0]="Kiểm tra vị trí tiêm chích và đáp ứng điều trị phù hợp.";
+  item.treatmentExplanation="Xuất huyết não (ICH) được giải thích sau khi kết thúc.";
   run("validateRevisionData(safeRevision,caseRows)");
 });
 
-Deno.test("cases 200 and 400 are playable and gradeable in both modes through the local preview", async () => {
-  for (const [id,category,answer,answerText] of [[200,"pediatrics","NEC","hoại tử"],[400,"psychiatry","ADHD","giảm chú ý"]]) for (const game of ["clinical","treatment"]) {
+Deno.test("late cases are playable and gradeable in both modes through the local preview", async () => {
+  for (const [id,category,answer,answerText] of [[202,"cardiology","Hở van hai lá","Hở van hai lá"],[245,"hematology_oncology","HCC","tế bào gan"]]) for (const game of ["clinical","treatment"]) {
     const {run,context,nodes}=loadApp();
     context.URLSearchParams=URLSearchParams;
     context.location={hostname:"127.0.0.1",search:`?case=${id}&game=${game}&category=${category}&difficulty=hard`};
@@ -133,15 +130,15 @@ Deno.test("expanding the bank preserves today's saved cases, progress and comple
   }
 });
 
-Deno.test("new specialties offer focused practice and matching suggestions in both modes", async () => {
+Deno.test("small specialties offer focused practice and matching suggestions in both modes", async () => {
   const {run,nodes,context}=loadApp();
   await run("init()");
-  for (const category of ["ophthalmology","ent","psychiatry"]) for (const game of ["clinical","treatment"]) {
+  for (const category of ["endocrine","obgyn","musculoskeletal_rheumatology"]) for (const game of ["clinical","treatment"]) {
     run(`switchCategory('${category}'); switchGame('${game}')`);
-    assert(run(`mode==='practice' && practiceCategory==='${category}' && currentCase.categoryIds.includes('${category}')`),"New specialty did not start focused practice");
+    assert(run(`mode==='practice' && practiceCategory==='${category}' && currentCase.categoryIds.includes('${category}')`),"Specialty did not start focused practice");
     context.suggestions=run("suggestionNames.map((entry)=>entry.name).join('|')");
     assert(run("practicePool().every(item=>suggestions.includes(item.diagnosis))"),"In-category diagnosis missing from suggestions");
-    assert(!run("suggestionNames.map((entry)=>entry.name).join('|')").includes("Loét tá tràng xuất huyết"),"Unrelated diagnosis offered by new group");
+    assert(run(`!suggestionNames.some((entry)=>entry.name===CASES.find(item=>!item.categoryIds.includes('${category}')).diagnosis)`),"Unrelated diagnosis offered by new group");
     const first=run("currentCase.id");
     nodes.get("#new-case-button").listeners.get("click")();
     assert(run("currentCase.id")!==first,"New specialty repeated immediately");

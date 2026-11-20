@@ -44,10 +44,10 @@ Deno.test("preview blocks private files, traversal, arbitrary methods and nonloc
 Deno.test("local case links select fresh practice rounds and the requested difficulty", async () => {
   for (const hostname of ["127.0.0.1", "localhost"]) {
     const { context, run, nodes } = loadApp();
-    context.location = {hostname, search: "?case=43&difficulty=hard"};
+    context.location = {hostname, search: "?case=42&difficulty=hard"};
     context.URLSearchParams = URLSearchParams;
     await run("init()");
-    assert(run('currentCase.id === 43 && mode === "practice" && difficulty === "hard" && !finished && attempts.length === 0'), "Local case link ignored");
+    assert(run('currentCase.id === 42 && mode === "practice" && difficulty === "hard" && !finished && attempts.length === 0'), "Local case link ignored");
     assert(nodes.get("#case-title").textContent === run('"Ca bệnh #" + String(currentCase.id).padStart(3, "0")'), "Hard preview changed the neutral heading");
     assert(nodes.get("#guess-input").getAttribute("role") === "combobox", "Hard preview lost easy-mode suggestions");
   }
@@ -56,11 +56,11 @@ Deno.test("local case links select fresh practice rounds and the requested diffi
 Deno.test("public hosts ignore preview parameters; invalid local options are safe", async () => {
   const { context, run } = loadApp();
   context.URLSearchParams = URLSearchParams;
-  context.location = {hostname: "souhhcong.github.io", search: "?case=43&difficulty=hard"};
+  context.location = {hostname: "souhhcong.github.io", search: "?case=42&difficulty=hard"};
   await run("init()");
   assert(run('mode === "daily" && difficulty === "easy"'), "Public game honored test controls");
   context.location = {hostname: "localhost", search: "?case=9999&difficulty=hard"};
   assert(run("localPreviewOptions() === null"), "Unknown case accepted");
-  context.location.search = "?case=43&difficulty=constructor";
+  context.location.search = "?case=42&difficulty=constructor";
   assert(run('localPreviewOptions().difficulty === "easy"'), "Invalid difficulty accepted");
 });

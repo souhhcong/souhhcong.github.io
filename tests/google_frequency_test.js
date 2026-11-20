@@ -14,12 +14,12 @@ Deno.test("Vietnamese search terms keep synonyms but exclude English, codes and 
 
 Deno.test("one OR query per disease avoids summing overlapping synonym counts and fixes locale",()=>{
   const {rows}=loadApp();const plan=buildPlan(rows);
-  assert(plan.length===400,"Incomplete query plan");
-  const item=plan.find(p=>p.caseId===7);
-  assert(item.query.includes('" OR "')&&item.terms.length===2,"Synonyms not joined by OR");
+  assert(plan.length===rows.length,"Incomplete query plan");
+  const item=plan.find(p=>p.terms.length===2);
+  assert(item&&item.query.includes('" OR "'),"Synonyms not joined by OR");
   const url=new URL(item.googleUrl);
   assert(url.searchParams.get("lr")==="lang_vi"&&url.searchParams.get("gl")==="vn"&&url.searchParams.get("hl")==="vi","Locale not fixed");
-  const override=buildPlan(rows,{18:["bệnh tả","dịch tả"]}).find(p=>p.caseId===18);
+  const override=buildPlan(rows,{[rows[0].id]:["bệnh tả","dịch tả"]}).find(p=>p.caseId===Number(rows[0].id));
   assert(override.query==='"bệnh tả" OR "dịch tả"',"Explicit synonyms not used");
   rejects(()=>buildPlan(rows,{999:["unknown"]}));
   rejects(()=>vietnameseTerms(rows[0],['disease" OR anything']));
