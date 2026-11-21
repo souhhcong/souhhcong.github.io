@@ -105,14 +105,11 @@ Deno.test("daily difficulties have separate cases and progress and each completi
   run("revealed=3; attempts=[{text:'wrong',correct:false}]; saveDailyState(); render(); switchDifficulty('hard')");
   assert(run("currentCase.id") !== easyId && run("revealed === 1 && attempts.length === 0"),"Hard restored easy round");
   win();
-  run("switchDifficulty('medium')");
-  assert(run("!finished"),"Difficulty restored other difficulty save");
-  win();
-  assert(run("getStats().played === 2"),"Distinct daily difficulty was not counted");
+  assert(run("getStats().played === 1"),"Distinct daily difficulty was not counted");
   run("switchDifficulty('easy')");
   assert(run("revealed === 3 && attempts.length === 1 && !finished"),"Easy progress not restored");
   win();
-  assert(run("getStats().played === 3 && getStats().solved === 3"),"Independent daily completion not recorded");
+  assert(run("getStats().played === 2 && getStats().solved === 2"),"Independent daily completion not recorded");
   run("switchDifficulty('hard')");
   assert(run("finished && attempts[0].correct"),"Completed hard save not restored");
 });

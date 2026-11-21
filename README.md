@@ -13,12 +13,11 @@ Clinical diagnosis names are shown separately from ICD-10 category labels. Vietn
 All difficulties use the same presentation and rules as the original easy mode: autocomplete suggestions, a neutral case heading (the clinical title stays hidden so it cannot hint at the diagnosis), six progressive clues, six guesses, and identical accepted answers. Treatment titles remain neutral until completion. Difficulty changes which questions are drawn:
 
 - `Dễ`: favors familiar undergraduate knowledge and common conditions.
-- `Vừa`: favors intermediate familiarity.
 - `Khó`: favors rarer conditions and more specialised recognition.
 
-`case-difficulty.json` assigns every case an integer `hardness` from 1 (very familiar core knowledge) to 5 (rare or specialised knowledge). Ratings are editorial estimates of expected familiarity for Vietnamese medical students across clinical rotations, rather than measured learner performance or disease severity. Local relevance and classic teaching patterns matter: an uncommon but high-yield emergency can be easier than an obscure inherited disorder. Calibration sources and individual rationales stay internal.
+`case-difficulty.json` assigns every case an integer `hardness` from 1 (very familiar core knowledge) to 5 (rare or specialised knowledge). Ratings come from the `difficulty_ratings.json` report in the medical dataset (average clues a model needed across year levels, where 1.0 means solved on the first clue), banded as ≤1.3 → 1, ≤2.0 → 2, ≤2.9 → 3, ≤3.9 → 4 and above → 5; they are not measured learner performance or disease severity. Local relevance and classic teaching patterns matter: an uncommon but high-yield emergency can be easier than an obscure inherited disorder. Calibration sources and individual rationales stay internal.
 
-Sampling weights for hardness 1–5 are `16, 8, 3, 1, 0.25` on Easy; `1, 4, 10, 4, 1` on Medium; and `0.25, 1, 3, 8, 16` on Hard. All cases remain eligible. Practice uses weighted random draws within the selected specialty, excluding the current case and a recent-history window of up to 12 cases (one quarter of a group's size, rounded down, with at least one for groups of two or more). Histories are separate by game type and specialty and retained across difficulty changes. A one-case group can repeat. This replaces the old full-bank shuffle so sustained practice retains the chosen difficulty bias.
+Sampling weights for hardness 1–5 are `16, 8, 3, 1, 0.25` on Easy and `0.25, 1, 3, 8, 16` on Hard. All cases remain eligible. Practice uses weighted random draws within the selected specialty, excluding the current case and a recent-history window of up to 12 cases (one quarter of a group's size, rounded down, with at least one for groups of two or more). Histories are separate by game type and specialty and retained across difficulty changes. A one-case group can repeat. This replaces the old full-bank shuffle so sustained practice retains the chosen difficulty bias.
 
 Daily selection uses deterministic weighted exponential races seeded by local calendar date, game type, difficulty and case ID. The daily questions are distinct when the bank has enough cases. Existing saved questions are pinned before drawing the remaining slots. Row order and the order in which difficulties are played do not change the daily schedule. Switching practice difficulty draws a fresh weighted case; switching daily difficulty restores that slot or selects its scheduled case.
 
@@ -145,6 +144,14 @@ These are estimated matching web pages, not exact text occurrences or measured s
 ## Vietnamese language review
 
 For automated Vietnamese language review and source-backed new-condition intake, see the [copyediting workflow](scripts/language/README.md). It includes native Luna/Terra handoffs, an optional API runner and blinded English-versus-Vietnamese prompt comparisons. Candidates remain private until the separate release checks pass.
+
+## Source-only medical knowledge
+
+The [medical knowledge workflow](docs/medical-knowledge.md) builds one private reference record per disease, using exact extracts from official documents for presentations, epidemiology, investigations, diagnostic criteria, differentials and treatments. Unsupported fields stay empty. ICD mappings require an exact Vietnamese label match to the official catalogue with coding restrictions preserved; other lookups remain separate candidates. Local records and source snapshots are in `.internal/medical-knowledge/`, with a readable `COVERAGE.md` index. This bank supplies evidence for future clue writing; it does not generate or replace game clues.
+
+The [source discovery workflow](docs/medical-source-discovery.md) automates gap-directed Vietnamese searches, new institutional host discovery and public document retrieval. It preserves raw search responses, source originals, URL/redirect receipts and hashes, with an offline verifier. Candidates remain separate from accepted medical passages.
+
+The [central source list](scripts/medical-knowledge/source-sites.json) indexes source sites and collections. The offline `scripts/medical-source-inventory.py` command builds a private readable index and a condition-by-source ledger, distinguishing unsearched sources, grouped searches, retrieved candidates and accepted original-language fields.
 
 ## Deploy to GitHub Pages
 

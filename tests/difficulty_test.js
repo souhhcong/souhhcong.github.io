@@ -41,7 +41,7 @@ Deno.test("internal familiarity reviews reject stale ratings, diagnosis context 
 Deno.test("all difficulties keep easy-mode titles, suggestions, clues and answer acceptance", async () => {
   const {run,nodes}=loadApp();
   await run("init()");
-  for(const level of ["easy","medium","hard"]) {
+  for(const level of ["easy","hard"]) {
     run(`difficulty='${level}'; setCase(CASES.find(item=>item.id===12))`);
     assert(nodes.get("#guess-input").getAttribute("role")==="combobox","Suggestions hidden by difficulty");
     assert(nodes.get("#case-title").textContent === "Ca bệnh #012","Case heading differs from easy mode");
@@ -59,7 +59,7 @@ Deno.test("weighted draws respect probability boundaries and every hardness rema
   assert(run("weightedCase(pool,'easy',()=>0.98).id===1 && weightedCase(pool,'easy',()=>0.99).id===2"),"Easy weights ignored");
   assert(run("weightedCase(pool,'hard',()=>0.01).id===1 && weightedCase(pool,'hard',()=>0.02).id===2"),"Hard weights ignored");
   assert(run("Object.keys(DIFFICULTY_LABELS).every(level=>[1,2,3,4,5].every(h=>caseWeight({hardness:h},level)>0))"),"Some cases unreachable");
-  assert(run("weightedCase(pool,'medium',()=>0).id===1 && weightedCase(pool,'medium',()=>0.999999).id===2"),"Sampling boundaries incorrect");
+  assert(run("weightedCase(pool,'hard',()=>0).id===1 && weightedCase(pool,'hard',()=>0.999999).id===2"),"Sampling boundaries incorrect");
 });
 
 Deno.test("sustained practice samples familiar, intermediate and uncommon knowledge differently in both games", () => {
@@ -72,7 +72,7 @@ Deno.test("sustained practice samples familiar, intermediate and uncommon knowle
     for (const type of Object.keys(GAME_LABELS)) {
       gameType=type; practiceCategory='all';
       results[type]={};
-      for(const level of ['easy','medium','hard']) {
+      for(const level of ['easy','hard']) {
         difficulty=level; practiceHistory.clear(); currentCase=undefined;
         let seed=123456789, sum=0, uncommon=0;
         const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
@@ -88,8 +88,7 @@ Deno.test("sustained practice samples familiar, intermediate and uncommon knowle
   })()`);
   for(const [type,levels] of Object.entries(results)) {
     assert(levels.easy.mean<2.1,`${type}: easy no longer favours familiar knowledge`);
-    assert(levels.medium.mean>levels.easy.mean+0.6,`${type}: medium indistinguishable from easy`);
-    assert(levels.hard.mean>levels.medium.mean+0.35,`${type}: hard indistinguishable from medium`);
+    assert(levels.hard.mean>levels.easy.mean+1.5,`${type}: hard indistinguishable from easy`);
     assert(levels.hard.uncommon>0.4 && levels.easy.uncommon<0.06,`${type}: rare conditions not weighted as intended`);
   }
 });
@@ -152,19 +151,23 @@ Deno.test("daily weighted schedules are deterministic, distinct, order-independe
   })()`),"Playing difficulties in a different order changes the remaining daily questions");
 });
 
-Deno.test("daily schedules follow the same familiarity bias across many dates", () => {
+Deno.test("daily cases never repeat within a full cycle of the bank", () => {
   const {run}=loadApp();
-  run("CASES.forEach((item,i)=>{item.hardness=i%5+1;})");
-  const means=run(`(() => {
-    const totals={easy:0,medium:0,hard:0};
-    for(let day=0;day<400;day++) {
-      const date=new Date(Date.UTC(2026,0,1)+day*86400000).toISOString().slice(0,10);
+  const ok=run(`(() => {
+    const seen={};
+    const base=Math.ceil(Date.UTC(2026,0,1)/86400000/CASES.length)*CASES.length;
+    for(let day=0;day<CASES.length;day++) {
+      const date=new Date((base+day)*86400000).toISOString().slice(0,10);
       const schedule=dailySchedule(date);
-      for(const type of Object.keys(GAME_LABELS)) for(const level of Object.keys(DIFFICULTY_LABELS))totals[level]+=schedule[type][level].hardness;
+      for(const type of Object.keys(GAME_LABELS)) for(const level of Object.keys(DIFFICULTY_LABELS)) {
+        const key=type+level; seen[key]??=new Set();
+        if(seen[key].has(schedule[type][level].id)) return false;
+        seen[key].add(schedule[type][level].id);
+      }
     }
-    return Object.fromEntries(Object.entries(totals).map(([key,sum])=>[key,sum/800]));
+    return true;
   })()`);
-  assert(means.medium>means.easy+0.6 && means.hard>means.medium+0.35,"Daily selection ignores difficulty weights");
+  assert(ok,"Daily case repeated before the whole bank was used");
 });
 
 Deno.test("v3 progress and totals migrate without counting an already completed disease again", async () => {
@@ -178,13 +181,10 @@ Deno.test("v3 progress and totals migrate without counting an already completed 
   app.nodes.get("#guess-input").value="A91";
   app.nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
   assert(app.run("getStats().played===12"),"Same legacy disease counted a second time");
-  app.run("switchDifficulty('medium')");
-  assert(app.run("currentCase.id!==1"),"New daily difficulty duplicated a migrated case");
-  app.nodes.get("#guess-input").value=app.run("currentCase.diagnosis");
-  app.nodes.get("#guess-form").listeners.get("submit")({preventDefault(){}});
-  assert(app.run("getStats().played===13"),"New daily difficulty did not count");
+  app.run("switchDifficulty('easy')");
+  assert(app.run("currentCase.id===1 && finished && getStats().played===12"),"Completed legacy easy round was recounted");
   const restored=loadApp(Object.fromEntries(app.storage)); await restored.run("init()");
-  assert(restored.run("finished && getStats().played===13"),"Reload changed completion totals");
+  assert(restored.run("finished && getStats().played===12"),"Reload changed completion totals");
 });
 
 Deno.test("old saves cannot be revived on a new v4 day and missing ratings fail startup", async () => {

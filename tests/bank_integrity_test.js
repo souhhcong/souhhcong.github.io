@@ -121,8 +121,7 @@ Deno.test("expanding the bank preserves today's saved cases, progress and comple
   await expanded.run("init()");
   expanded.run("switchDifficulty('hard')");
   assert(expanded.run("currentCase.id")===hardId && expanded.run("finished"),"Expansion replaced completed hard case");
-  expanded.run("switchDifficulty('medium')");
-  assert(![hardId,easyId].includes(expanded.run("currentCase.id")),"New daily difficulty reused a pinned case");
+  assert(hardId!==easyId,"Daily difficulties reused a pinned case");
   expanded.run("switchDifficulty('easy')");
   assert(expanded.run("currentCase.id")===easyId && expanded.run("revealed===4 && attempts.length===1"),"Expansion lost easy progress");
   assert(expanded.run("getStats().played===1 && getStats().solved===1"),"Expansion changed aggregate totals");

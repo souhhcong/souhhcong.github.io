@@ -10,7 +10,7 @@ const guess = (app, text) => {
 Deno.test("manual reveals use the shared budget at every difficulty and preserve a final guess", async () => {
   const app = loadApp();
   await app.run("init()");
-  for (const level of ["easy", "medium", "hard"]) {
+  for (const level of ["easy", "hard"]) {
     app.run(`mode='practice'; difficulty='${level}'; setCase(CASES[0])`);
     for (let i = 1; i <= 5; i++) {
       click(app, "#reveal-button");
@@ -51,6 +51,7 @@ Deno.test("give up ends the game as an unsolved round, reveals explanations and 
     assert(app.nodes.get("#summary").textContent === app.run("currentCase.summary"), "Explanation missing");
     click(app, "#give-up-button"); click(app, "#reveal-button"); guess(app, app.run("currentCase.diagnosis")); app.run("finish(false)");
     assert(app.run("getStats().played===5 && getStats().solved===3"), "Repeated actions recounted round");
+    if (mode === "daily") { assert(app.nodes.get("#review-next").disabled && app.nodes.get("#new-case-button").disabled, "Daily next case not disabled"); continue; }
     click(app, "#review-next");
     assert(app.run("!finished && !gaveUp && revealed===1 && attempts.length===0"), "Next round retained give-up state");
     assert(!app.nodes.get("#give-up-button").disabled, "Give up disabled in new round");

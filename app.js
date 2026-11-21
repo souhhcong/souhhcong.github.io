@@ -14,18 +14,15 @@ const GAME_LABELS = { clinical: "Dữ kiện lâm sàng" };
 const DIFFICULTY_KEY = "chanle-difficulty-v1";
 const DIFFICULTY_LABELS = {
   easy: "Dễ",
-  medium: "Vừa",
   hard: "Khó"
 };
 // Relative sampling weights for authored familiarity scores 1 (core) to 5 (rare).
 const DIFFICULTY_WEIGHTS = {
   easy: [16, 8, 3, 1, 0.25],
-  medium: [1, 4, 10, 4, 1],
   hard: [0.25, 1, 3, 8, 16]
 };
 const DIFFICULTY_DESCRIPTIONS = {
   easy: "Ưu tiên kiến thức thường gặp",
-  medium: "Ưu tiên kiến thức mức trung bình",
   hard: "Ưu tiên bệnh hiếm và kiến thức chuyên sâu"
 };
 
@@ -358,25 +355,38 @@ function hashUnit(text) {
   return ((hash >>> 0) + 1) / 4294967297;
 }
 
+function dayNumber(date) {
+  const [year, month, day] = date.split("-").map(Number);
+  return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+}
+
 function dailySchedule(date, pinned = {}) {
   const reserved = new Set(Object.values(pinned).flatMap(levels => Object.values(levels)).map(item => item.id));
   let available = CASES.filter(item => !reserved.has(item.id));
   const result = {};
+  const day = dayNumber(date);
+  const cycle = Math.floor(day / CASES.length);
+  const levels = Object.keys(DIFFICULTY_LABELS);
   for (const type of Object.keys(GAME_LABELS)) {
     result[type] = {};
-    for (const level of Object.keys(DIFFICULTY_LABELS)) {
+    // One shuffle of the whole bank per cycle, independent of row order. Each day advances one position,
+    // so no case repeats until the bank is used up; levels sit a third of the bank apart, so they never collide.
+    const order = CASES.map(item => ({item, score: hashUnit(`${cycle}:${type}:${item.id}`)}))
+      .sort((a, b) => a.score - b.score || a.item.id - b.item.id).map(entry => entry.item);
+    levels.forEach((level, levelIndex) => {
       let selected = pinned[type]?.[level];
       if (!selected) {
-        // Exponential race: deterministic weighted sampling, independent of row order.
-        let best = Infinity;
-        for (const item of available.length ? available : CASES) {
-          const score = -Math.log(hashUnit(`${date}:${type}:${level}:${item.id}`)) / caseWeight(item, level);
-          if (score < best || (score === best && item.id < selected.id)) { best = score; selected = item; }
+        const open = new Set(available.map(item => item.id));
+        const start = day + levelIndex * Math.floor(order.length / levels.length);
+        for (let i = 0; i < order.length && !selected; i++) {
+          const candidate = order[(start + i) % order.length];
+          if (open.has(candidate.id)) selected = candidate;
         }
+        selected ??= order[start % order.length];
         available = available.filter(item => item.id !== selected.id);
       }
       result[type][level] = selected;
-    }
+    });
   }
   return result;
 }
@@ -547,6 +557,15 @@ function render() {
   elements.roundStatus.textContent = gaveUp ? "Đã bỏ cuộc" : finished ? "Ca đã hoàn thành" : "Đáp án sẽ mở khi ca kết thúc";
   elements.playTip.textContent = "Chọn từ gợi ý hoặc tự nhập tên bệnh, tên tương đương hay mã ICD. Không cần gõ đúng dấu tiếng Việt.";
   elements.modeLabel.textContent = `${mode === "daily" ? "Ca hằng ngày" : "Luyện tập"}\u00a0· ${GAME_LABELS[gameType]}\u00a0· ${DIFFICULTY_LABELS[difficulty]}`;
+  elements.next.disabled = elements.reviewNext.disabled = mode === "daily";
+  // Also covers an unsolved round restored from a saved daily state.
+  if (finished && !attempts.some((item) => item.correct)) {
+    const lead = gaveUp ? "Đã bỏ cuộc" : "Đã hết lượt đoán";
+    elements.feedback.innerHTML = mode === "daily"
+      ? `${lead}, thử <a href="#practice" data-practice>chế độ luyện tập</a>`
+      : `${lead}, thử <a href="#next" data-next>ca khác</a>`;
+    elements.feedback.className = "feedback bad";
+  }
   elements.caseKicker.textContent = "Ca bệnh";
   elements.caseTitle.textContent = `Ca bệnh #${String(currentCase.id).padStart(3, "0")}`;
   elements.clueList.innerHTML = activeClues()
@@ -746,9 +765,9 @@ function randomPracticeCase(random = Math.random) {
 }
 
 function nextCase() {
+  if (mode === "daily") return;
   elements.resultCard.close?.();
-  if (mode === "daily") switchMode("practice");
-  else setCase(randomPracticeCase());
+  setCase(randomPracticeCase());
   elements.caseTitle.focus?.();
   globalThis.scrollTo?.(0, 0);
 }
@@ -973,6 +992,15 @@ async function init() {
   elements.reveal.addEventListener("click", revealClue);
   elements.giveUp.addEventListener("click", giveUp);
   elements.next.addEventListener("click", nextCase);
+  elements.feedback.addEventListener("click", (event) => {
+    const target = event.target;
+    const toNext = target?.closest?.("[data-next]");
+    if (!toNext && !target?.closest?.("[data-practice]")) return;
+    event.preventDefault();
+    elements.resultCard.close?.();
+    if (toNext) nextCase();
+    else switchMode("practice");
+  });
   elements.reviewNext.addEventListener("click", nextCase);
   elements.copyShare.addEventListener("click", () => copyText(shareText(), elements.copyShare));
   elements.copyAnki.addEventListener("click", () => copyText(ankiText(), elements.copyAnki));
