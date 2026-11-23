@@ -742,21 +742,39 @@ function giveUp() {
   finish(false);
 }
 
+// Practice avoids the last N cases per game and specialty. The history survives reloads so a refresh
+// cannot bring recent cases straight back; N is a few dozen cases, not a handful.
+const PRACTICE_HISTORY_KEY = "chanle-practice-history-v1";
+const hydratedHistory = new Set();
+
 function practiceRepeatWindow(size = practicePool().length) {
-  return size > 1 ? Math.min(12, Math.max(1, Math.floor(size / 4))) : 0;
+  return size > 1 ? Math.min(60, Math.max(1, Math.floor(size / 3))) : 0;
+}
+
+function practiceHistoryFor(key) {
+  if (!hydratedHistory.has(key)) {
+    hydratedHistory.add(key);
+    const saved = readStored(PRACTICE_HISTORY_KEY, {})?.[key];
+    if (Array.isArray(saved) && !practiceHistory.has(key)) practiceHistory.set(key, saved.filter(Number.isInteger));
+  }
+  return practiceHistory.get(key) || [];
 }
 
 function rememberPracticeCase(item) {
   const key = `${gameType}:${practiceCategory}`;
-  const history = [...(practiceHistory.get(key) || []), item.id];
+  const history = [...practiceHistoryFor(key), item.id];
   const size = practiceRepeatWindow();
   practiceHistory.set(key, size ? history.slice(-size) : []);
+  try {
+    const stored = readStored(PRACTICE_HISTORY_KEY, {});
+    localStorage.setItem(PRACTICE_HISTORY_KEY, JSON.stringify({...stored, [key]: practiceHistory.get(key)}));
+  } catch { /* storage unavailable: history stays in memory */ }
 }
 
 function randomPracticeCase(random = Math.random) {
   const pool = practicePool();
   const key = `${gameType}:${practiceCategory}`;
-  const recent = new Set(practiceHistory.get(key) || []);
+  const recent = new Set(practiceHistoryFor(key));
   let eligible = pool.filter(item => item.id !== currentCase?.id && !recent.has(item.id));
   if (!eligible.length) eligible = pool.filter(item => item.id !== currentCase?.id);
   const item = weightedCase(eligible.length ? eligible : pool, difficulty, random);
